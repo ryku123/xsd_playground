@@ -24,18 +24,18 @@ _id.set_OrgId(_orgId)
 # create PartyIdentification
 initgPty = pain001.PartyIdentification32_CH_NameAndIdSub()
 
-# add tag: Nm
+# tag: Nm
 # initgPty.set_Nm("String")   # error! if any thing other than "None"
 initgPty.set_Id(_id)
 initgPty.set_CtctDtls(None)
 
-# add tag: InitgPty
+# tag: InitgPty
 grphdr.set_InitgPty(initgPty)
 
-# tag CstmrCdtTrfInitn
+# tag: CstmrCdtTrfInitn
 cst = pain001.CustomerCreditTransferInitiationV03_CHSub(GrpHdr=grphdr, PmtInf=None)
 
-# tag Document
+# tag: Document
 doc = pain001.DocumentSub(cst)
 
 doc.export(sys.stdout, 0)
