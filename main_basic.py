@@ -1,13 +1,13 @@
-from xsd import pain001_sub as pain001
+from xsd import pain001_basicSub as pain001
 import sys
 from datetime import datetime
 
 
 #create Group Header
 grphdr = pain001.GroupHeader32_CHSub()
-grphdr.set_MsgId("SomeMessageID")   # no validation!
+grphdr.set_MsgId("SomeMessageIDnnnnnnmklkkkklkjkljlkjkljlkjkljkljlkjlkjlkkkkkkkkkkkkkkkkk")   # no validation!
 grphdr.set_CreDtTm(datetime.strptime("2010-02-15T07:30:00", '%Y-%m-%dT%H:%M:%S'))
-grphdr.set_NbOfTxs("11")
+grphdr.set_NbOfTxs("12345678901236666666666666666666666666666")
 grphdr.set_CtrlSum(3949.75)
 
 
@@ -25,7 +25,7 @@ _id.set_OrgId(_orgId)
 initgPty = pain001.PartyIdentification32_CH_NameAndIdSub()
 
 # tag: Nm
-# initgPty.set_Nm("String")   # error! if any thing other than "None"
+# initgPty.set_Nm(None)
 initgPty.set_Id(_id)
 initgPty.set_CtctDtls(None)
 

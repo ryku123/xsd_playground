@@ -1,13 +1,13 @@
-from xsd import pain001_newSub as pain001
+from xsd import pain001_modSub as pain001
 import sys
 from datetime import datetime
 
 
 #create Group Header
 grphdr = pain001.GroupHeader32_CHSub()
-grphdr.set_MsgId("SomeMessageIDnnnnnnmklkkkklkjkljlkjkljlkjkljkljlkjlkjlkkkkkkkkkkkkkkkkk")   # no validation!
-grphdr.set_CreDtTm(datetime.strptime("2010-02-15T07:30:00", '%Y-%m-%dT%H:%M:%S'))
-grphdr.set_NbOfTxs("11")
+grphdr.set_MsgId("12311111111111111111111111111111111111111111111")   # no validation!
+# grphdr.set_CreDtTm(datetime.strptime("2010-02-15T07:30:00", '%Y-%m-%dT%H:%M:%S'))
+# grphdr.set_NbOfTxs("12345678901236666666666666666666666666666")
 grphdr.set_CtrlSum(3949.75)
 
 
@@ -17,7 +17,7 @@ _id.set_PrvtId(None)
 
 # create OrganisationIdentification (tag BiCOrBEI)
 _orgId = pain001.OrganisationIdentification4_CHSub()
-_orgId.set_BICOrBEI("4_*(!&(*$&!@)(*#&)!@(*#56AaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaSD")    # no validation!
+_orgId.set_BICOrBEI("ASD123123123")    # no validation!
 _id.set_OrgId(_orgId)
 
 

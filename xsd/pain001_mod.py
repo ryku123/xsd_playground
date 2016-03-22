@@ -2,20 +2,20 @@
 # -*- coding: utf-8 -*-
 
 #
-# Generated Mon Mar 21 22:01:05 2016 by generateDS.py version 2.20a.
+# Generated Tue Mar 22 09:09:26 2016 by generateDS.py version 2.20a.
 #
 # Command line options:
-#   ('-o', 'pain001_new.py')
-#   ('-s', 'pain001_newSub.py')
-#   ('--super', 'pain001_new')
+#   ('-o', 'pain001_mod.py')
+#   ('-s', 'pain001_modSub.py')
+#   ('--super', 'pain001_mod')
 #   ('--member-specs', 'dict')
-#   ('--export', 'write etree literal')
+#   ('--export', 'write etree')
 #
 # Command line arguments:
-#   pain.001.001.03.ch.02.xsd
+#   pain.001.001.03.ch.02_mod.xsd
 #
 # Command line:
-#   /usr/local/bin/generateDS.py -o "pain001_new.py" -s "pain001_newSub.py" --super="pain001_new" --member-specs="dict" --export="write etree literal" pain.001.001.03.ch.02.xsd
+#   c:\Python27\Scripts\generateDS.py -o "pain001_mod.py" -s "pain001_modSub.py" --super="pain001_mod" --member-specs="dict" --export="write etree" pain.001.001.03.ch.02_mod.xsd
 #
 # Current working directory (os.getcwd()):
 #   xsd
@@ -27,6 +27,7 @@ import base64
 import datetime as datetime_
 import warnings as warnings_
 from lxml import etree as etree_
+
 
 Validate_simpletypes_ = True
 if sys.version_info.major == 2:
@@ -43,7 +44,6 @@ def parsexml_(infile, parser=None, **kwargs):
     doc = etree_.parse(infile, parser=parser, **kwargs)
     return doc
 
-
 #
 # User methods
 #
@@ -57,45 +57,33 @@ except ImportError as exp:
 
     class GeneratedsSuper(object):
         tzoff_pattern = re_.compile(r'(\+|-)((0\d|1[0-3]):[0-5]\d|14:00)$')
-
         class _FixedOffsetTZ(datetime_.tzinfo):
             def __init__(self, offset, name):
                 self.__offset = datetime_.timedelta(minutes=offset)
                 self.__name = name
-
             def utcoffset(self, dt):
                 return self.__offset
-
             def tzname(self, dt):
                 return self.__name
-
             def dst(self, dt):
                 return None
-
         def gds_format_string(self, input_data, input_name=''):
             return input_data
-
         def gds_validate_string(self, input_data, node=None, input_name=''):
             if not input_data:
                 return ''
             else:
                 return input_data
-
         def gds_format_base64(self, input_data, input_name=''):
             return base64.b64encode(input_data)
-
         def gds_validate_base64(self, input_data, node=None, input_name=''):
             return input_data
-
         def gds_format_integer(self, input_data, input_name=''):
             return '%d' % input_data
-
         def gds_validate_integer(self, input_data, node=None, input_name=''):
             return input_data
-
         def gds_format_integer_list(self, input_data, input_name=''):
             return '%s' % ' '.join(input_data)
-
         def gds_validate_integer_list(
                 self, input_data, node=None, input_name=''):
             values = input_data.split()
@@ -105,16 +93,12 @@ except ImportError as exp:
                 except (TypeError, ValueError):
                     raise_parse_error(node, 'Requires sequence of integers')
             return values
-
         def gds_format_float(self, input_data, input_name=''):
             return ('%.15f' % input_data).rstrip('0')
-
         def gds_validate_float(self, input_data, node=None, input_name=''):
             return input_data
-
         def gds_format_float_list(self, input_data, input_name=''):
             return '%s' % ' '.join(input_data)
-
         def gds_validate_float_list(
                 self, input_data, node=None, input_name=''):
             values = input_data.split()
@@ -124,16 +108,12 @@ except ImportError as exp:
                 except (TypeError, ValueError):
                     raise_parse_error(node, 'Requires sequence of floats')
             return values
-
         def gds_format_double(self, input_data, input_name=''):
             return '%e' % input_data
-
         def gds_validate_double(self, input_data, node=None, input_name=''):
             return input_data
-
         def gds_format_double_list(self, input_data, input_name=''):
             return '%s' % ' '.join(input_data)
-
         def gds_validate_double_list(
                 self, input_data, node=None, input_name=''):
             values = input_data.split()
@@ -143,30 +123,24 @@ except ImportError as exp:
                 except (TypeError, ValueError):
                     raise_parse_error(node, 'Requires sequence of doubles')
             return values
-
         def gds_format_boolean(self, input_data, input_name=''):
             return ('%s' % input_data).lower()
-
         def gds_validate_boolean(self, input_data, node=None, input_name=''):
             return input_data
-
         def gds_format_boolean_list(self, input_data, input_name=''):
             return '%s' % ' '.join(input_data)
-
         def gds_validate_boolean_list(
                 self, input_data, node=None, input_name=''):
             values = input_data.split()
             for value in values:
-                if value not in ('true', '1', 'false', '0',):
+                if value not in ('true', '1', 'false', '0', ):
                     raise_parse_error(
                         node,
                         'Requires sequence of booleans '
                         '("true", "1", "false", "0")')
             return values
-
         def gds_validate_datetime(self, input_data, node=None, input_name=''):
             return input_data
-
         def gds_format_datetime(self, input_data, input_name=''):
             if input_data.microsecond == 0:
                 _svalue = '%04d-%02d-%02dT%02d:%02d:%02d' % (
@@ -203,7 +177,6 @@ except ImportError as exp:
                         minutes = (total_seconds - (hours * 3600)) // 60
                         _svalue += '{0:02d}:{1:02d}'.format(hours, minutes)
             return _svalue
-
         @classmethod
         def gds_parse_datetime(cls, input_data):
             tz = None
@@ -223,7 +196,7 @@ except ImportError as exp:
             time_parts = input_data.split('.')
             if len(time_parts) > 1:
                 micro_seconds = int(float('0.' + time_parts[1]) * 1000000)
-                input_data = '%s.%s' % (time_parts[0], micro_seconds,)
+                input_data = '%s.%s' % (time_parts[0], micro_seconds, )
                 dt = datetime_.datetime.strptime(
                     input_data, '%Y-%m-%dT%H:%M:%S.%f')
             else:
@@ -231,10 +204,8 @@ except ImportError as exp:
                     input_data, '%Y-%m-%dT%H:%M:%S')
             dt = dt.replace(tzinfo=tz)
             return dt
-
         def gds_validate_date(self, input_data, node=None, input_name=''):
             return input_data
-
         def gds_format_date(self, input_data, input_name=''):
             _svalue = '%04d-%02d-%02d' % (
                 input_data.year,
@@ -261,7 +232,6 @@ except ImportError as exp:
             except AttributeError:
                 pass
             return _svalue
-
         @classmethod
         def gds_parse_date(cls, input_data):
             tz = None
@@ -281,10 +251,8 @@ except ImportError as exp:
             dt = datetime_.datetime.strptime(input_data, '%Y-%m-%d')
             dt = dt.replace(tzinfo=tz)
             return dt.date()
-
         def gds_validate_time(self, input_data, node=None, input_name=''):
             return input_data
-
         def gds_format_time(self, input_data, input_name=''):
             if input_data.microsecond == 0:
                 _svalue = '%02d:%02d:%02d' % (
@@ -315,7 +283,6 @@ except ImportError as exp:
                         minutes = (total_seconds - (hours * 3600)) // 60
                         _svalue += '{0:02d}:{1:02d}'.format(hours, minutes)
             return _svalue
-
         def gds_validate_simple_patterns(self, patterns, target):
             # pat is a list of lists of strings/patterns.  We should:
             # - AND the outer elements
@@ -331,7 +298,6 @@ except ImportError as exp:
                     found1 = False
                     break
             return found1
-
         @classmethod
         def gds_parse_time(cls, input_data):
             tz = None
@@ -354,19 +320,15 @@ except ImportError as exp:
                 dt = datetime_.datetime.strptime(input_data, '%H:%M:%S')
             dt = dt.replace(tzinfo=tz)
             return dt.time()
-
         def gds_str_lower(self, instring):
             return instring.lower()
-
         def get_path_(self, node):
             path_list = []
             self.get_path_list_(node, path_list)
             path_list.reverse()
             path = '/'.join(path_list)
             return path
-
         Tag_strip_pattern_ = re_.compile(r'\{.*\}')
-
         def get_path_list_(self, node, path_list):
             if node is None:
                 return
@@ -374,7 +336,6 @@ except ImportError as exp:
             if tag:
                 path_list.append(tag)
             self.get_path_list_(node.getparent(), path_list)
-
         def get_class_obj_(self, node, default_class=None):
             class_obj1 = default_class
             if 'xsi' in node.nsmap:
@@ -387,21 +348,17 @@ except ImportError as exp:
                     if class_obj2 is not None:
                         class_obj1 = class_obj2
             return class_obj1
-
         def gds_build_any(self, node, type_name=None):
             return None
-
         @classmethod
         def gds_reverse_node_mapping(cls, mapping):
             return dict(((v, k) for k, v in mapping.iteritems()))
-
         @staticmethod
         def gds_encode(instring):
             if sys.version_info.major == 2:
                 return instring.encode(ExternalEncoding)
             else:
                 return instring
-
 
     def getSubclassFromModule_(module, class_):
         '''Get the subclass of a class from a specific module.'''
@@ -440,7 +397,6 @@ CDATA_pattern_ = re_.compile(r"<!\[CDATA\[.*?\]\]>", re_.DOTALL)
 # Change this to redirect the generated superclass module to use a
 # specific subclass module.
 CurrentSubclassModule_ = None
-
 
 #
 # Support/utility functions.
@@ -530,7 +486,7 @@ def find_attr_value_(attr_name, node):
         prefix, name = attr_parts
         namespace = node.nsmap.get(prefix)
         if namespace is not None:
-            value = attrs.get('{%s}%s' % (namespace, name,))
+            value = attrs.get('{%s}%s' % (namespace, name, ))
     return value
 
 
@@ -539,7 +495,7 @@ class GDSParseError(Exception):
 
 
 def raise_parse_error(node, msg):
-    msg = '%s (element %s/line %d)' % (msg, node.tag, node.sourceline,)
+    msg = '%s (element %s/line %d)' % (msg, node.tag, node.sourceline, )
     raise GDSParseError(msg)
 
 
@@ -559,25 +515,19 @@ class MixedContainer:
     TypeDouble = 6
     TypeBoolean = 7
     TypeBase64 = 8
-
     def __init__(self, category, content_type, name, value):
         self.category = category
         self.content_type = content_type
         self.name = name
         self.value = value
-
     def getCategory(self):
         return self.category
-
     def getContenttype(self, content_type):
         return self.content_type
-
     def getValue(self):
         return self.value
-
     def getName(self):
         return self.name
-
     def export(self, outfile, level, name, namespace, pretty_print=True):
         if self.category == MixedContainer.CategoryText:
             # Prevent exporting empty content as empty lines.
@@ -585,19 +535,18 @@ class MixedContainer:
                 outfile.write(self.value)
         elif self.category == MixedContainer.CategorySimple:
             self.exportSimple(outfile, level, name)
-        else:  # category == MixedContainer.CategoryComplex
+        else:    # category == MixedContainer.CategoryComplex
             self.value.export(outfile, level, namespace, name, pretty_print)
-
     def exportSimple(self, outfile, level, name):
         if self.content_type == MixedContainer.TypeString:
             outfile.write('<%s>%s</%s>' % (
                 self.name, self.value, self.name))
         elif self.content_type == MixedContainer.TypeInteger or \
-                        self.content_type == MixedContainer.TypeBoolean:
+                self.content_type == MixedContainer.TypeBoolean:
             outfile.write('<%s>%d</%s>' % (
                 self.name, self.value, self.name))
         elif self.content_type == MixedContainer.TypeFloat or \
-                        self.content_type == MixedContainer.TypeDecimal:
+                self.content_type == MixedContainer.TypeDecimal:
             outfile.write('<%s>%f</%s>' % (
                 self.name, self.value, self.name))
         elif self.content_type == MixedContainer.TypeDouble:
@@ -606,7 +555,6 @@ class MixedContainer:
         elif self.content_type == MixedContainer.TypeBase64:
             outfile.write('<%s>%s</%s>' % (
                 self.name, base64.b64encode(self.value), self.name))
-
     def to_etree(self, element):
         if self.category == MixedContainer.CategoryText:
             # Prevent exporting empty content as empty lines.
@@ -624,24 +572,22 @@ class MixedContainer:
         elif self.category == MixedContainer.CategorySimple:
             subelement = etree_.SubElement(element, '%s' % self.name)
             subelement.text = self.to_etree_simple()
-        else:  # category == MixedContainer.CategoryComplex
+        else:    # category == MixedContainer.CategoryComplex
             self.value.to_etree(element)
-
     def to_etree_simple(self):
         if self.content_type == MixedContainer.TypeString:
             text = self.value
         elif (self.content_type == MixedContainer.TypeInteger or
-                      self.content_type == MixedContainer.TypeBoolean):
+                self.content_type == MixedContainer.TypeBoolean):
             text = '%d' % self.value
         elif (self.content_type == MixedContainer.TypeFloat or
-                      self.content_type == MixedContainer.TypeDecimal):
+                self.content_type == MixedContainer.TypeDecimal):
             text = '%f' % self.value
         elif self.content_type == MixedContainer.TypeDouble:
             text = '%g' % self.value
         elif self.content_type == MixedContainer.TypeBase64:
             text = '%s' % base64.b64encode(self.value)
         return text
-
     def exportLiteral(self, outfile, level, name):
         if self.category == MixedContainer.CategoryText:
             showIndent(outfile, level)
@@ -653,7 +599,7 @@ class MixedContainer:
             outfile.write(
                 'model_.MixedContainer(%d, %d, "%s", "%s"),\n' % (
                     self.category, self.content_type, self.name, self.value))
-        else:  # category == MixedContainer.CategoryComplex
+        else:    # category == MixedContainer.CategoryComplex
             showIndent(outfile, level)
             outfile.write(
                 'model_.MixedContainer(%d, %d, "%s",\n' % (
@@ -668,19 +614,10 @@ class MemberSpec_(object):
         self.name = name
         self.data_type = data_type
         self.container = container
-
-    def set_name(self, name):
-        self.name = name
-
-    def get_name(self):
-        return self.name
-
-    def set_data_type(self, data_type):
-        self.data_type = data_type
-
-    def get_data_type_chain(self):
-        return self.data_type
-
+    def set_name(self, name): self.name = name
+    def get_name(self): return self.name
+    def set_data_type(self, data_type): self.data_type = data_type
+    def get_data_type_chain(self): return self.data_type
     def get_data_type(self):
         if isinstance(self.data_type, list):
             if len(self.data_type) > 0:
@@ -689,19 +626,14 @@ class MemberSpec_(object):
                 return 'xs:string'
         else:
             return self.data_type
-
-    def set_container(self, container):
-        self.container = container
-
-    def get_container(self):
-        return self.container
+    def set_container(self, container): self.container = container
+    def get_container(self): return self.container
 
 
 def _cast(typ, value):
     if typ is None or value is None:
         return value
     return typ(value)
-
 
 #
 # Data representation classes.
@@ -715,13 +647,11 @@ class AccountIdentification4Choice_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, IBAN=None, Othr=None):
         self.original_tagname_ = None
         self.IBAN = IBAN
         self.validate_IBAN2007Identifier(self.IBAN)
         self.Othr = Othr
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -732,42 +662,27 @@ class AccountIdentification4Choice_CH(GeneratedsSuper):
             return AccountIdentification4Choice_CH.subclass(*args_, **kwargs_)
         else:
             return AccountIdentification4Choice_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_IBAN(self):
-        return self.IBAN
-
-    def set_IBAN(self, IBAN):
-        self.IBAN = IBAN
-
-    def get_Othr(self):
-        return self.Othr
-
-    def set_Othr(self, Othr):
-        self.Othr = Othr
-
+    def get_IBAN(self): return self.IBAN
+    def set_IBAN(self, IBAN): self.IBAN = IBAN
+    def get_Othr(self): return self.Othr
+    def set_Othr(self, Othr): self.Othr = Othr
     def validate_IBAN2007Identifier(self, value):
         # Validate type IBAN2007Identifier, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_IBAN2007Identifier_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_IBAN2007Identifier_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_IBAN2007Identifier_patterns_, ))
     validate_IBAN2007Identifier_patterns_ = [['^[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}$']]
-
     def hasContent_(self):
         if (
-                        self.IBAN is not None or
-                        self.Othr is not None
+            self.IBAN is not None or
+            self.Othr is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='AccountIdentification4Choice-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='AccountIdentification4Choice-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -775,75 +690,42 @@ class AccountIdentification4Choice_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='AccountIdentification4Choice-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='AccountIdentification4Choice-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='AccountIdentification4Choice-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='AccountIdentification4Choice-CH'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='AccountIdentification4Choice-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='AccountIdentification4Choice-CH',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='AccountIdentification4Choice-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.IBAN is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sIBAN>%s</%sIBAN>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.IBAN), input_name='IBAN')), namespace_,
-            eol_))
+            outfile.write('<%sIBAN>%s</%sIBAN>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.IBAN), input_name='IBAN')), namespace_, eol_))
         if self.Othr is not None:
             self.Othr.export(outfile, level, namespace_, name_='Othr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='AccountIdentification4Choice-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.IBAN is not None:
             IBAN_ = self.IBAN
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}IBAN').text = self.gds_format_string(
-                IBAN_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}IBAN').text = self.gds_format_string(IBAN_)
         if self.Othr is not None:
             Othr_ = self.Othr
             Othr_.to_etree(element, name_='Othr', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='AccountIdentification4Choice-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.IBAN is not None:
-            showIndent(outfile, level)
-            outfile.write('IBAN=%s,\n' % self.gds_encode(quote_python(self.IBAN)))
-        if self.Othr is not None:
-            showIndent(outfile, level)
-            outfile.write('Othr=model_.GenericAccountIdentification1_CH(\n')
-            self.Othr.exportLiteral(outfile, level, name_='Othr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -851,10 +733,8 @@ class AccountIdentification4Choice_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'IBAN':
             IBAN_ = child_.text
@@ -867,8 +747,6 @@ class AccountIdentification4Choice_CH(GeneratedsSuper):
             obj_.build(child_)
             self.Othr = obj_
             obj_.original_tagname_ = 'Othr'
-
-
 # end class AccountIdentification4Choice_CH
 
 
@@ -879,12 +757,10 @@ class ActiveOrHistoricCurrencyAndAmount(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Ccy=None, valueOf_=None):
         self.original_tagname_ = None
         self.Ccy = _cast(None, Ccy)
         self.valueOf_ = valueOf_
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -895,41 +771,26 @@ class ActiveOrHistoricCurrencyAndAmount(GeneratedsSuper):
             return ActiveOrHistoricCurrencyAndAmount.subclass(*args_, **kwargs_)
         else:
             return ActiveOrHistoricCurrencyAndAmount(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Ccy(self):
-        return self.Ccy
-
-    def set_Ccy(self, Ccy):
-        self.Ccy = Ccy
-
-    def get_valueOf_(self):
-        return self.valueOf_
-
-    def set_valueOf_(self, valueOf_):
-        self.valueOf_ = valueOf_
-
+    def get_Ccy(self): return self.Ccy
+    def set_Ccy(self, Ccy): self.Ccy = Ccy
+    def get_valueOf_(self): return self.valueOf_
+    def set_valueOf_(self, valueOf_): self.valueOf_ = valueOf_
     def validate_ActiveOrHistoricCurrencyCode(self, value):
         # Validate type ActiveOrHistoricCurrencyCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_ActiveOrHistoricCurrencyCode_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_ActiveOrHistoricCurrencyCode_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_ActiveOrHistoricCurrencyCode_patterns_, ))
     validate_ActiveOrHistoricCurrencyCode_patterns_ = [['^[A-Z]{3,3}$']]
-
     def hasContent_(self):
         if (
-                1 if type(self.valueOf_) in [int, float] else self.valueOf_
+            1 if type(self.valueOf_) in [int,float] else self.valueOf_
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='ActiveOrHistoricCurrencyAndAmount', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='ActiveOrHistoricCurrencyAndAmount', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -937,35 +798,27 @@ class ActiveOrHistoricCurrencyAndAmount(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='ActiveOrHistoricCurrencyAndAmount')
         if self.hasContent_():
             outfile.write('>')
-            outfile.write(
-                (quote_xml(self.valueOf_) if type(self.valueOf_) is str else self.gds_encode(str(self.valueOf_))))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='ActiveOrHistoricCurrencyAndAmount',
-                                pretty_print=pretty_print)
+            outfile.write((quote_xml(self.valueOf_) if type(self.valueOf_) is str else self.gds_encode(str(self.valueOf_))))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='ActiveOrHistoricCurrencyAndAmount', pretty_print=pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='ActiveOrHistoricCurrencyAndAmount'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ActiveOrHistoricCurrencyAndAmount'):
         if self.Ccy is not None and 'Ccy' not in already_processed:
             already_processed.add('Ccy')
-            outfile.write(' Ccy=%s' % (quote_attrib(self.Ccy),))
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ActiveOrHistoricCurrencyAndAmount',
-                       fromsubclass_=False, pretty_print=True):
+            outfile.write(' Ccy=%s' % (quote_attrib(self.Ccy), ))
+    def exportChildren(self, outfile, level, namespace_='', name_='ActiveOrHistoricCurrencyAndAmount', fromsubclass_=False, pretty_print=True):
         pass
-
     def to_etree(self, parent_element=None, name_='ActiveOrHistoricCurrencyAndAmount', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Ccy is not None:
             element.set('Ccy', self.Ccy)
         if self.hasContent_():
@@ -973,25 +826,6 @@ class ActiveOrHistoricCurrencyAndAmount(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ActiveOrHistoricCurrencyAndAmount'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-        showIndent(outfile, level)
-        outfile.write('valueOf_ = """%s""",\n' % (self.valueOf_,))
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        if self.Ccy is not None and 'Ccy' not in already_processed:
-            already_processed.add('Ccy')
-            showIndent(outfile, level)
-            outfile.write('Ccy="%s",\n' % (self.Ccy,))
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        pass
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -1000,18 +834,14 @@ class ActiveOrHistoricCurrencyAndAmount(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         value = find_attr_value_('Ccy', node)
         if value is not None and 'Ccy' not in already_processed:
             already_processed.add('Ccy')
             self.Ccy = value
-            self.validate_ActiveOrHistoricCurrencyCode(self.Ccy)  # validate type ActiveOrHistoricCurrencyCode
-
+            self.validate_ActiveOrHistoricCurrencyCode(self.Ccy)    # validate type ActiveOrHistoricCurrencyCode
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         pass
-
-
 # end class ActiveOrHistoricCurrencyAndAmount
 
 
@@ -1022,12 +852,10 @@ class AmountType3Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, InstdAmt=None, EqvtAmt=None):
         self.original_tagname_ = None
         self.InstdAmt = InstdAmt
         self.EqvtAmt = EqvtAmt
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -1038,30 +866,19 @@ class AmountType3Choice(GeneratedsSuper):
             return AmountType3Choice.subclass(*args_, **kwargs_)
         else:
             return AmountType3Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_InstdAmt(self):
-        return self.InstdAmt
-
-    def set_InstdAmt(self, InstdAmt):
-        self.InstdAmt = InstdAmt
-
-    def get_EqvtAmt(self):
-        return self.EqvtAmt
-
-    def set_EqvtAmt(self, EqvtAmt):
-        self.EqvtAmt = EqvtAmt
-
+    def get_InstdAmt(self): return self.InstdAmt
+    def set_InstdAmt(self, InstdAmt): self.InstdAmt = InstdAmt
+    def get_EqvtAmt(self): return self.EqvtAmt
+    def set_EqvtAmt(self, EqvtAmt): self.EqvtAmt = EqvtAmt
     def hasContent_(self):
         if (
-                        self.InstdAmt is not None or
-                        self.EqvtAmt is not None
+            self.InstdAmt is not None or
+            self.EqvtAmt is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='AmountType3Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -1070,22 +887,19 @@ class AmountType3Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='AmountType3Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='AmountType3Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='AmountType3Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='AmountType3Choice', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='AmountType3Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -1094,13 +908,11 @@ class AmountType3Choice(GeneratedsSuper):
             self.InstdAmt.export(outfile, level, namespace_, name_='InstdAmt', pretty_print=pretty_print)
         if self.EqvtAmt is not None:
             self.EqvtAmt.export(outfile, level, namespace_, name_='EqvtAmt', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='AmountType3Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.InstdAmt is not None:
             InstdAmt_ = self.InstdAmt
             InstdAmt_.to_etree(element, name_='InstdAmt', mapping_=mapping_)
@@ -1110,31 +922,6 @@ class AmountType3Choice(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='AmountType3Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.InstdAmt is not None:
-            showIndent(outfile, level)
-            outfile.write('InstdAmt=model_.ActiveOrHistoricCurrencyAndAmount(\n')
-            self.InstdAmt.exportLiteral(outfile, level, name_='InstdAmt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.EqvtAmt is not None:
-            showIndent(outfile, level)
-            outfile.write('EqvtAmt=model_.EquivalentAmount2(\n')
-            self.EqvtAmt.exportLiteral(outfile, level, name_='EqvtAmt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -1142,10 +929,8 @@ class AmountType3Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'InstdAmt':
             obj_ = ActiveOrHistoricCurrencyAndAmount.factory()
@@ -1157,8 +942,6 @@ class AmountType3Choice(GeneratedsSuper):
             obj_.build(child_)
             self.EqvtAmt = obj_
             obj_.original_tagname_ = 'EqvtAmt'
-
-
 # end class AmountType3Choice
 
 
@@ -1169,12 +952,10 @@ class BranchAndFinancialInstitutionIdentification4(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, FinInstnId=None, BrnchId=None):
         self.original_tagname_ = None
         self.FinInstnId = FinInstnId
         self.BrnchId = BrnchId
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -1185,32 +966,20 @@ class BranchAndFinancialInstitutionIdentification4(GeneratedsSuper):
             return BranchAndFinancialInstitutionIdentification4.subclass(*args_, **kwargs_)
         else:
             return BranchAndFinancialInstitutionIdentification4(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_FinInstnId(self):
-        return self.FinInstnId
-
-    def set_FinInstnId(self, FinInstnId):
-        self.FinInstnId = FinInstnId
-
-    def get_BrnchId(self):
-        return self.BrnchId
-
-    def set_BrnchId(self, BrnchId):
-        self.BrnchId = BrnchId
-
+    def get_FinInstnId(self): return self.FinInstnId
+    def set_FinInstnId(self, FinInstnId): self.FinInstnId = FinInstnId
+    def get_BrnchId(self): return self.BrnchId
+    def set_BrnchId(self, BrnchId): self.BrnchId = BrnchId
     def hasContent_(self):
         if (
-                        self.FinInstnId is not None or
-                        self.BrnchId is not None
+            self.FinInstnId is not None or
+            self.BrnchId is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4',
-               namespacedef_='', pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -1218,25 +987,19 @@ class BranchAndFinancialInstitutionIdentification4(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='BranchAndFinancialInstitutionIdentification4')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='BranchAndFinancialInstitutionIdentification4')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='BranchAndFinancialInstitutionIdentification4',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='BranchAndFinancialInstitutionIdentification4', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='BranchAndFinancialInstitutionIdentification4'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='BranchAndFinancialInstitutionIdentification4'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -1245,13 +1008,11 @@ class BranchAndFinancialInstitutionIdentification4(GeneratedsSuper):
             self.FinInstnId.export(outfile, level, namespace_, name_='FinInstnId', pretty_print=pretty_print)
         if self.BrnchId is not None:
             self.BrnchId.export(outfile, level, namespace_, name_='BrnchId', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='BranchAndFinancialInstitutionIdentification4', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.FinInstnId is not None:
             FinInstnId_ = self.FinInstnId
             FinInstnId_.to_etree(element, name_='FinInstnId', mapping_=mapping_)
@@ -1261,31 +1022,6 @@ class BranchAndFinancialInstitutionIdentification4(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='BranchAndFinancialInstitutionIdentification4'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.FinInstnId is not None:
-            showIndent(outfile, level)
-            outfile.write('FinInstnId=model_.FinancialInstitutionIdentification7(\n')
-            self.FinInstnId.exportLiteral(outfile, level, name_='FinInstnId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.BrnchId is not None:
-            showIndent(outfile, level)
-            outfile.write('BrnchId=model_.BranchData2(\n')
-            self.BrnchId.exportLiteral(outfile, level, name_='BrnchId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -1293,10 +1029,8 @@ class BranchAndFinancialInstitutionIdentification4(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'FinInstnId':
             obj_ = FinancialInstitutionIdentification7.factory()
@@ -1308,8 +1042,6 @@ class BranchAndFinancialInstitutionIdentification4(GeneratedsSuper):
             obj_.build(child_)
             self.BrnchId = obj_
             obj_.original_tagname_ = 'BrnchId'
-
-
 # end class BranchAndFinancialInstitutionIdentification4
 
 
@@ -1319,11 +1051,9 @@ class BranchAndFinancialInstitutionIdentification4_CH_BicOrClrId(GeneratedsSuper
     }
     subclass = None
     superclass = None
-
     def __init__(self, FinInstnId=None):
         self.original_tagname_ = None
         self.FinInstnId = FinInstnId
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -1334,25 +1064,17 @@ class BranchAndFinancialInstitutionIdentification4_CH_BicOrClrId(GeneratedsSuper
             return BranchAndFinancialInstitutionIdentification4_CH_BicOrClrId.subclass(*args_, **kwargs_)
         else:
             return BranchAndFinancialInstitutionIdentification4_CH_BicOrClrId(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_FinInstnId(self):
-        return self.FinInstnId
-
-    def set_FinInstnId(self, FinInstnId):
-        self.FinInstnId = FinInstnId
-
+    def get_FinInstnId(self): return self.FinInstnId
+    def set_FinInstnId(self, FinInstnId): self.FinInstnId = FinInstnId
     def hasContent_(self):
         if (
-                    self.FinInstnId is not None
+            self.FinInstnId is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId',
-               namespacedef_='', pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -1360,66 +1082,36 @@ class BranchAndFinancialInstitutionIdentification4_CH_BicOrClrId(GeneratedsSuper
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='',
-                                name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='',
-                       name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.FinInstnId is not None:
             self.FinInstnId.export(outfile, level, namespace_, name_='FinInstnId', pretty_print=pretty_print)
-
-    def to_etree(self, parent_element=None, name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId',
-                 mapping_=None):
+    def to_etree(self, parent_element=None, name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.FinInstnId is not None:
             FinInstnId_ = self.FinInstnId
             FinInstnId_.to_etree(element, name_='FinInstnId', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='BranchAndFinancialInstitutionIdentification4-CH_BicOrClrId'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.FinInstnId is not None:
-            showIndent(outfile, level)
-            outfile.write('FinInstnId=model_.FinancialInstitutionIdentification7_CH_BicOrClrId(\n')
-            self.FinInstnId.exportLiteral(outfile, level, name_='FinInstnId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -1427,18 +1119,14 @@ class BranchAndFinancialInstitutionIdentification4_CH_BicOrClrId(GeneratedsSuper
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'FinInstnId':
             obj_ = FinancialInstitutionIdentification7_CH_BicOrClrId.factory()
             obj_.build(child_)
             self.FinInstnId = obj_
             obj_.original_tagname_ = 'FinInstnId'
-
-
 # end class BranchAndFinancialInstitutionIdentification4_CH_BicOrClrId
 
 
@@ -1448,11 +1136,9 @@ class BranchAndFinancialInstitutionIdentification4_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, FinInstnId=None):
         self.original_tagname_ = None
         self.FinInstnId = FinInstnId
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -1463,25 +1149,17 @@ class BranchAndFinancialInstitutionIdentification4_CH(GeneratedsSuper):
             return BranchAndFinancialInstitutionIdentification4_CH.subclass(*args_, **kwargs_)
         else:
             return BranchAndFinancialInstitutionIdentification4_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_FinInstnId(self):
-        return self.FinInstnId
-
-    def set_FinInstnId(self, FinInstnId):
-        self.FinInstnId = FinInstnId
-
+    def get_FinInstnId(self): return self.FinInstnId
+    def set_FinInstnId(self, FinInstnId): self.FinInstnId = FinInstnId
     def hasContent_(self):
         if (
-                    self.FinInstnId is not None
+            self.FinInstnId is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH',
-               namespacedef_='', pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -1489,63 +1167,36 @@ class BranchAndFinancialInstitutionIdentification4_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='BranchAndFinancialInstitutionIdentification4-CH')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='BranchAndFinancialInstitutionIdentification4-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='',
-                                name_='BranchAndFinancialInstitutionIdentification4-CH', pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='BranchAndFinancialInstitutionIdentification4-CH'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='BranchAndFinancialInstitutionIdentification4-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.FinInstnId is not None:
             self.FinInstnId.export(outfile, level, namespace_, name_='FinInstnId', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='BranchAndFinancialInstitutionIdentification4-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.FinInstnId is not None:
             FinInstnId_ = self.FinInstnId
             FinInstnId_.to_etree(element, name_='FinInstnId', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='BranchAndFinancialInstitutionIdentification4-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.FinInstnId is not None:
-            showIndent(outfile, level)
-            outfile.write('FinInstnId=model_.FinancialInstitutionIdentification7_CH(\n')
-            self.FinInstnId.exportLiteral(outfile, level, name_='FinInstnId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -1553,18 +1204,14 @@ class BranchAndFinancialInstitutionIdentification4_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'FinInstnId':
             obj_ = FinancialInstitutionIdentification7_CH.factory()
             obj_.build(child_)
             self.FinInstnId = obj_
             obj_.original_tagname_ = 'FinInstnId'
-
-
 # end class BranchAndFinancialInstitutionIdentification4_CH
 
 
@@ -1576,7 +1223,6 @@ class BranchData2(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Id=None, Nm=None, PstlAdr=None):
         self.original_tagname_ = None
         self.Id = Id
@@ -1584,7 +1230,6 @@ class BranchData2(GeneratedsSuper):
         self.Nm = Nm
         self.validate_Max140Text(self.Nm)
         self.PstlAdr = PstlAdr
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -1595,71 +1240,44 @@ class BranchData2(GeneratedsSuper):
             return BranchData2.subclass(*args_, **kwargs_)
         else:
             return BranchData2(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
-    def get_Nm(self):
-        return self.Nm
-
-    def set_Nm(self, Nm):
-        self.Nm = Nm
-
-    def get_PstlAdr(self):
-        return self.PstlAdr
-
-    def set_PstlAdr(self, PstlAdr):
-        self.PstlAdr = PstlAdr
-
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
+    def get_Nm(self): return self.Nm
+    def set_Nm(self, Nm): self.Nm = Nm
+    def get_PstlAdr(self): return self.PstlAdr
+    def set_PstlAdr(self, PstlAdr): self.PstlAdr = PstlAdr
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_Max140Text(self, value):
         # Validate type Max140Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 140:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max140Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max140Text_patterns_,))
-
-    validate_Max140Text_patterns_ = [[
-                                         u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max140Text_patterns_, ))
+    validate_Max140Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                            self.Id is not None or
-                            self.Nm is not None or
-                        self.PstlAdr is not None
+            self.Id is not None or
+            self.Nm is not None or
+            self.PstlAdr is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='BranchData2', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -1668,22 +1286,19 @@ class BranchData2(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='BranchData2')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='BranchData2', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='BranchData2'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='BranchData2', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='BranchData2', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -1694,13 +1309,11 @@ class BranchData2(GeneratedsSuper):
             self.Nm.export(outfile, level, namespace_, name_='Nm', pretty_print=pretty_print)
         if self.PstlAdr is not None:
             self.PstlAdr.export(outfile, level, namespace_, name_='PstlAdr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='BranchData2', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Id is not None:
             Id_ = self.Id
             Id_.to_etree(element, name_='Id', mapping_=mapping_)
@@ -1713,37 +1326,6 @@ class BranchData2(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='BranchData2'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.xs_BasicText_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Nm is not None:
-            showIndent(outfile, level)
-            outfile.write('Nm=model_.xs_BasicText_CH(\n')
-            self.Nm.exportLiteral(outfile, level, name_='Nm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PstlAdr is not None:
-            showIndent(outfile, level)
-            outfile.write('PstlAdr=model_.PostalAddress6(\n')
-            self.PstlAdr.exportLiteral(outfile, level, name_='PstlAdr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -1751,10 +1333,8 @@ class BranchData2(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Id':
             obj_ = None
@@ -1773,8 +1353,6 @@ class BranchData2(GeneratedsSuper):
             obj_.build(child_)
             self.PstlAdr = obj_
             obj_.original_tagname_ = 'PstlAdr'
-
-
 # end class BranchData2
 
 
@@ -1785,13 +1363,11 @@ class CashAccount16_CH_IdAndCurrency(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Id=None, Ccy=None):
         self.original_tagname_ = None
         self.Id = Id
         self.Ccy = Ccy
         self.validate_ActiveOrHistoricCurrencyCode(self.Ccy)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -1802,42 +1378,27 @@ class CashAccount16_CH_IdAndCurrency(GeneratedsSuper):
             return CashAccount16_CH_IdAndCurrency.subclass(*args_, **kwargs_)
         else:
             return CashAccount16_CH_IdAndCurrency(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
-    def get_Ccy(self):
-        return self.Ccy
-
-    def set_Ccy(self, Ccy):
-        self.Ccy = Ccy
-
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
+    def get_Ccy(self): return self.Ccy
+    def set_Ccy(self, Ccy): self.Ccy = Ccy
     def validate_ActiveOrHistoricCurrencyCode(self, value):
         # Validate type ActiveOrHistoricCurrencyCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_ActiveOrHistoricCurrencyCode_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_ActiveOrHistoricCurrencyCode_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_ActiveOrHistoricCurrencyCode_patterns_, ))
     validate_ActiveOrHistoricCurrencyCode_patterns_ = [['^[A-Z]{3,3}$']]
-
     def hasContent_(self):
         if (
-                        self.Id is not None or
-                        self.Ccy is not None
+            self.Id is not None or
+            self.Ccy is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='CashAccount16-CH_IdAndCurrency', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='CashAccount16-CH_IdAndCurrency', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -1845,24 +1406,19 @@ class CashAccount16_CH_IdAndCurrency(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='CashAccount16-CH_IdAndCurrency')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='CashAccount16-CH_IdAndCurrency',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='CashAccount16-CH_IdAndCurrency', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='CashAccount16-CH_IdAndCurrency'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='CashAccount16-CH_IdAndCurrency'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='CashAccount16-CH_IdAndCurrency', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='CashAccount16-CH_IdAndCurrency', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -1871,49 +1427,21 @@ class CashAccount16_CH_IdAndCurrency(GeneratedsSuper):
             self.Id.export(outfile, level, namespace_, name_='Id', pretty_print=pretty_print)
         if self.Ccy is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCcy>%s</%sCcy>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ccy), input_name='Ccy')), namespace_,
-            eol_))
-
+            outfile.write('<%sCcy>%s</%sCcy>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ccy), input_name='Ccy')), namespace_, eol_))
     def to_etree(self, parent_element=None, name_='CashAccount16-CH_IdAndCurrency', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Id is not None:
             Id_ = self.Id
             Id_.to_etree(element, name_='Id', mapping_=mapping_)
         if self.Ccy is not None:
             Ccy_ = self.Ccy
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ccy').text = self.gds_format_string(
-                Ccy_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ccy').text = self.gds_format_string(Ccy_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='CashAccount16-CH_IdAndCurrency'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.AccountIdentification4Choice_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Ccy is not None:
-            showIndent(outfile, level)
-            outfile.write('Ccy=%s,\n' % self.gds_encode(quote_python(self.Ccy)))
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -1921,10 +1449,8 @@ class CashAccount16_CH_IdAndCurrency(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Id':
             obj_ = AccountIdentification4Choice_CH.factory()
@@ -1937,8 +1463,6 @@ class CashAccount16_CH_IdAndCurrency(GeneratedsSuper):
             self.Ccy = Ccy_
             # validate type ActiveOrHistoricCurrencyCode
             self.validate_ActiveOrHistoricCurrencyCode(self.Ccy)
-
-
 # end class CashAccount16_CH_IdAndCurrency
 
 
@@ -1950,14 +1474,12 @@ class CashAccount16_CH_IdTpCcy(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Id=None, Tp=None, Ccy=None):
         self.original_tagname_ = None
         self.Id = Id
         self.Tp = Tp
         self.Ccy = Ccy
         self.validate_ActiveOrHistoricCurrencyCode(self.Ccy)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -1968,49 +1490,30 @@ class CashAccount16_CH_IdTpCcy(GeneratedsSuper):
             return CashAccount16_CH_IdTpCcy.subclass(*args_, **kwargs_)
         else:
             return CashAccount16_CH_IdTpCcy(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
-    def get_Tp(self):
-        return self.Tp
-
-    def set_Tp(self, Tp):
-        self.Tp = Tp
-
-    def get_Ccy(self):
-        return self.Ccy
-
-    def set_Ccy(self, Ccy):
-        self.Ccy = Ccy
-
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
+    def get_Tp(self): return self.Tp
+    def set_Tp(self, Tp): self.Tp = Tp
+    def get_Ccy(self): return self.Ccy
+    def set_Ccy(self, Ccy): self.Ccy = Ccy
     def validate_ActiveOrHistoricCurrencyCode(self, value):
         # Validate type ActiveOrHistoricCurrencyCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_ActiveOrHistoricCurrencyCode_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_ActiveOrHistoricCurrencyCode_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_ActiveOrHistoricCurrencyCode_patterns_, ))
     validate_ActiveOrHistoricCurrencyCode_patterns_ = [['^[A-Z]{3,3}$']]
-
     def hasContent_(self):
         if (
-                            self.Id is not None or
-                            self.Tp is not None or
-                        self.Ccy is not None
+            self.Id is not None or
+            self.Tp is not None or
+            self.Ccy is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='CashAccount16-CH_IdTpCcy', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='CashAccount16-CH_IdTpCcy', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -2018,23 +1521,19 @@ class CashAccount16_CH_IdTpCcy(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='CashAccount16-CH_IdTpCcy')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='CashAccount16-CH_IdTpCcy',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='CashAccount16-CH_IdTpCcy', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='CashAccount16-CH_IdTpCcy'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='CashAccount16-CH_IdTpCcy', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='CashAccount16-CH_IdTpCcy', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -2045,16 +1544,12 @@ class CashAccount16_CH_IdTpCcy(GeneratedsSuper):
             self.Tp.export(outfile, level, namespace_, name_='Tp', pretty_print=pretty_print)
         if self.Ccy is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCcy>%s</%sCcy>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ccy), input_name='Ccy')), namespace_,
-            eol_))
-
+            outfile.write('<%sCcy>%s</%sCcy>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ccy), input_name='Ccy')), namespace_, eol_))
     def to_etree(self, parent_element=None, name_='CashAccount16-CH_IdTpCcy', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Id is not None:
             Id_ = self.Id
             Id_.to_etree(element, name_='Id', mapping_=mapping_)
@@ -2063,40 +1558,10 @@ class CashAccount16_CH_IdTpCcy(GeneratedsSuper):
             Tp_.to_etree(element, name_='Tp', mapping_=mapping_)
         if self.Ccy is not None:
             Ccy_ = self.Ccy
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ccy').text = self.gds_format_string(
-                Ccy_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ccy').text = self.gds_format_string(Ccy_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='CashAccount16-CH_IdTpCcy'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.AccountIdentification4Choice_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Tp is not None:
-            showIndent(outfile, level)
-            outfile.write('Tp=model_.CashAccountType2(\n')
-            self.Tp.exportLiteral(outfile, level, name_='Tp')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Ccy is not None:
-            showIndent(outfile, level)
-            outfile.write('Ccy=%s,\n' % self.gds_encode(quote_python(self.Ccy)))
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -2104,10 +1569,8 @@ class CashAccount16_CH_IdTpCcy(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Id':
             obj_ = AccountIdentification4Choice_CH.factory()
@@ -2125,8 +1588,6 @@ class CashAccount16_CH_IdTpCcy(GeneratedsSuper):
             self.Ccy = Ccy_
             # validate type ActiveOrHistoricCurrencyCode
             self.validate_ActiveOrHistoricCurrencyCode(self.Ccy)
-
-
 # end class CashAccount16_CH_IdTpCcy
 
 
@@ -2136,11 +1597,9 @@ class CashAccount16_CH_Id(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Id=None):
         self.original_tagname_ = None
         self.Id = Id
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -2151,23 +1610,16 @@ class CashAccount16_CH_Id(GeneratedsSuper):
             return CashAccount16_CH_Id.subclass(*args_, **kwargs_)
         else:
             return CashAccount16_CH_Id(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
     def hasContent_(self):
         if (
-                    self.Id is not None
+            self.Id is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='CashAccount16-CH_Id', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -2176,61 +1628,36 @@ class CashAccount16_CH_Id(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='CashAccount16-CH_Id')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='CashAccount16-CH_Id',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='CashAccount16-CH_Id', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='CashAccount16-CH_Id'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='CashAccount16-CH_Id', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='CashAccount16-CH_Id', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Id is not None:
             self.Id.export(outfile, level, namespace_, name_='Id', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='CashAccount16-CH_Id', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Id is not None:
             Id_ = self.Id
             Id_.to_etree(element, name_='Id', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='CashAccount16-CH_Id'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.AccountIdentification4Choice_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -2238,18 +1665,14 @@ class CashAccount16_CH_Id(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Id':
             obj_ = AccountIdentification4Choice_CH.factory()
             obj_.build(child_)
             self.Id = obj_
             obj_.original_tagname_ = 'Id'
-
-
 # end class CashAccount16_CH_Id
 
 
@@ -2260,14 +1683,12 @@ class CashAccountType2(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, Prtry=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_CashAccountType4Code(self.Cd)
         self.Prtry = Prtry
         self.validate_Max35Text(self.Prtry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -2278,63 +1699,42 @@ class CashAccountType2(GeneratedsSuper):
             return CashAccountType2.subclass(*args_, **kwargs_)
         else:
             return CashAccountType2(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Prtry(self):
-        return self.Prtry
-
-    def set_Prtry(self, Prtry):
-        self.Prtry = Prtry
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Prtry(self): return self.Prtry
+    def set_Prtry(self, Prtry): self.Prtry = Prtry
     def validate_CashAccountType4Code(self, value):
         # Validate type CashAccountType4Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['CASH', 'CHAR', 'COMM', 'TAXE', 'CISH', 'TRAS', 'SACC', 'CACC', 'SVGS', 'ONDP', 'MGLD',
-                            'NREX', 'MOMA', 'LOAN', 'SLRY', 'ODFT']
+            enumerations = ['CASH', 'CHAR', 'COMM', 'TAXE', 'CISH', 'TRAS', 'SACC', 'CACC', 'SVGS', 'ONDP', 'MGLD', 'NREX', 'MOMA', 'LOAN', 'SLRY', 'ODFT']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd enumeration restriction on CashAccountType4Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on CashAccountType4Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.Prtry is not None
+            self.Cd is not None or
+            self.Prtry is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='CashAccountType2', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -2343,72 +1743,42 @@ class CashAccountType2(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='CashAccountType2')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='CashAccountType2', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='CashAccountType2'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='CashAccountType2', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='CashAccountType2', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.Prtry is not None:
             self.Prtry.export(outfile, level, namespace_, name_='Prtry', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='CashAccountType2', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.Prtry is not None:
             Prtry_ = self.Prtry
             Prtry_.to_etree(element, name_='Prtry', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='CashAccountType2'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.Prtry is not None:
-            showIndent(outfile, level)
-            outfile.write('Prtry=model_.xs_BasicText_CH(\n')
-            self.Prtry.exportLiteral(outfile, level, name_='Prtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -2416,10 +1786,8 @@ class CashAccountType2(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -2433,8 +1801,6 @@ class CashAccountType2(GeneratedsSuper):
             obj_.original_tagname_ = 'Prtry'
             # validate type Max35Text
             self.validate_Max35Text(self.Prtry)
-
-
 # end class CashAccountType2
 
 
@@ -2444,12 +1810,10 @@ class CategoryPurpose1_CH_Code(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_ExternalCategoryPurpose1Code(self.Cd)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -2460,37 +1824,24 @@ class CategoryPurpose1_CH_Code(GeneratedsSuper):
             return CategoryPurpose1_CH_Code.subclass(*args_, **kwargs_)
         else:
             return CategoryPurpose1_CH_Code(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
     def validate_ExternalCategoryPurpose1Code(self, value):
         # Validate type ExternalCategoryPurpose1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if len(value) > 4:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on ExternalCategoryPurpose1Code' % {
-                        "value": value.encode("utf-8")})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on ExternalCategoryPurpose1Code' % {"value" : value.encode("utf-8")} )
             if len(value) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on ExternalCategoryPurpose1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on ExternalCategoryPurpose1Code' % {"value" : value.encode("utf-8")} )
     def hasContent_(self):
         if (
-                    self.Cd is not None
+            self.Cd is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='CategoryPurpose1-CH_Code', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='CategoryPurpose1-CH_Code', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -2498,62 +1849,37 @@ class CategoryPurpose1_CH_Code(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='CategoryPurpose1-CH_Code')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='CategoryPurpose1-CH_Code',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='CategoryPurpose1-CH_Code', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='CategoryPurpose1-CH_Code'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='CategoryPurpose1-CH_Code', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='CategoryPurpose1-CH_Code', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
-
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
     def to_etree(self, parent_element=None, name_='CategoryPurpose1-CH_Code', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='CategoryPurpose1-CH_Code'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -2561,10 +1887,8 @@ class CategoryPurpose1_CH_Code(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -2572,8 +1896,6 @@ class CategoryPurpose1_CH_Code(GeneratedsSuper):
             self.Cd = Cd_
             # validate type ExternalCategoryPurpose1Code
             self.validate_ExternalCategoryPurpose1Code(self.Cd)
-
-
 # end class CategoryPurpose1_CH_Code
 
 
@@ -2584,13 +1906,11 @@ class Cheque6_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, ChqTp=None, DlvryMtd=None):
         self.original_tagname_ = None
         self.ChqTp = ChqTp
         self.validate_ChequeType2Code(self.ChqTp)
         self.DlvryMtd = DlvryMtd
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -2601,21 +1921,11 @@ class Cheque6_CH(GeneratedsSuper):
             return Cheque6_CH.subclass(*args_, **kwargs_)
         else:
             return Cheque6_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_ChqTp(self):
-        return self.ChqTp
-
-    def set_ChqTp(self, ChqTp):
-        self.ChqTp = ChqTp
-
-    def get_DlvryMtd(self):
-        return self.DlvryMtd
-
-    def set_DlvryMtd(self, DlvryMtd):
-        self.DlvryMtd = DlvryMtd
-
+    def get_ChqTp(self): return self.ChqTp
+    def set_ChqTp(self, ChqTp): self.ChqTp = ChqTp
+    def get_DlvryMtd(self): return self.DlvryMtd
+    def set_DlvryMtd(self, DlvryMtd): self.DlvryMtd = DlvryMtd
     def validate_ChequeType2Code(self, value):
         # Validate type ChequeType2Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -2627,18 +1937,15 @@ class Cheque6_CH(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on ChequeType2Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on ChequeType2Code' % {"value" : value.encode("utf-8")} )
     def hasContent_(self):
         if (
-                        self.ChqTp is not None or
-                        self.DlvryMtd is not None
+            self.ChqTp is not None or
+            self.DlvryMtd is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='Cheque6-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -2647,20 +1954,18 @@ class Cheque6_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='Cheque6-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='Cheque6-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Cheque6-CH'):
         pass
-
     def exportChildren(self, outfile, level, namespace_='', name_='Cheque6-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -2668,51 +1973,23 @@ class Cheque6_CH(GeneratedsSuper):
             eol_ = ''
         if self.ChqTp is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sChqTp>%s</%sChqTp>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.ChqTp), input_name='ChqTp')), namespace_,
-            eol_))
+            outfile.write('<%sChqTp>%s</%sChqTp>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.ChqTp), input_name='ChqTp')), namespace_, eol_))
         if self.DlvryMtd is not None:
             self.DlvryMtd.export(outfile, level, namespace_, name_='DlvryMtd', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='Cheque6-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.ChqTp is not None:
             ChqTp_ = self.ChqTp
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}ChqTp').text = self.gds_format_string(
-                ChqTp_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}ChqTp').text = self.gds_format_string(ChqTp_)
         if self.DlvryMtd is not None:
             DlvryMtd_ = self.DlvryMtd
             DlvryMtd_.to_etree(element, name_='DlvryMtd', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='Cheque6-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.ChqTp is not None:
-            showIndent(outfile, level)
-            outfile.write('ChqTp=%s,\n' % self.gds_encode(quote_python(self.ChqTp)))
-        if self.DlvryMtd is not None:
-            showIndent(outfile, level)
-            outfile.write('DlvryMtd=model_.ChequeDeliveryMethod1Choice(\n')
-            self.DlvryMtd.exportLiteral(outfile, level, name_='DlvryMtd')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -2720,10 +1997,8 @@ class Cheque6_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'ChqTp':
             ChqTp_ = child_.text
@@ -2736,8 +2011,6 @@ class Cheque6_CH(GeneratedsSuper):
             obj_.build(child_)
             self.DlvryMtd = obj_
             obj_.original_tagname_ = 'DlvryMtd'
-
-
 # end class Cheque6_CH
 
 
@@ -2748,14 +2021,12 @@ class ChequeDeliveryMethod1Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, Prtry=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_ChequeDelivery1Code(self.Cd)
         self.Prtry = Prtry
         self.validate_Max35Text(self.Prtry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -2766,64 +2037,43 @@ class ChequeDeliveryMethod1Choice(GeneratedsSuper):
             return ChequeDeliveryMethod1Choice.subclass(*args_, **kwargs_)
         else:
             return ChequeDeliveryMethod1Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Prtry(self):
-        return self.Prtry
-
-    def set_Prtry(self, Prtry):
-        self.Prtry = Prtry
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Prtry(self): return self.Prtry
+    def set_Prtry(self, Prtry): self.Prtry = Prtry
     def validate_ChequeDelivery1Code(self, value):
         # Validate type ChequeDelivery1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['MLDB', 'MLCD', 'MLFA', 'CRDB', 'CRCD', 'CRFA', 'PUDB', 'PUCD', 'PUFA', 'RGDB', 'RGCD',
-                            'RGFA']
+            enumerations = ['MLDB', 'MLCD', 'MLFA', 'CRDB', 'CRCD', 'CRFA', 'PUDB', 'PUCD', 'PUFA', 'RGDB', 'RGCD', 'RGFA']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on ChequeDelivery1Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on ChequeDelivery1Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.Prtry is not None
+            self.Cd is not None or
+            self.Prtry is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='ChequeDeliveryMethod1Choice', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='ChequeDeliveryMethod1Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -2831,73 +2081,42 @@ class ChequeDeliveryMethod1Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='ChequeDeliveryMethod1Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='ChequeDeliveryMethod1Choice',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='ChequeDeliveryMethod1Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ChequeDeliveryMethod1Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ChequeDeliveryMethod1Choice', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='ChequeDeliveryMethod1Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.Prtry is not None:
             self.Prtry.export(outfile, level, namespace_, name_='Prtry', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='ChequeDeliveryMethod1Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.Prtry is not None:
             Prtry_ = self.Prtry
             Prtry_.to_etree(element, name_='Prtry', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ChequeDeliveryMethod1Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.Prtry is not None:
-            showIndent(outfile, level)
-            outfile.write('Prtry=model_.xs_BasicText_CH(\n')
-            self.Prtry.exportLiteral(outfile, level, name_='Prtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -2905,10 +2124,8 @@ class ChequeDeliveryMethod1Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -2922,8 +2139,6 @@ class ChequeDeliveryMethod1Choice(GeneratedsSuper):
             obj_.original_tagname_ = 'Prtry'
             # validate type Max35Text
             self.validate_Max35Text(self.Prtry)
-
-
 # end class ChequeDeliveryMethod1Choice
 
 
@@ -2934,14 +2149,12 @@ class ClearingSystemIdentification2Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, Prtry=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_ExternalClearingSystemIdentification1Code(self.Cd)
         self.Prtry = Prtry
         self.validate_Max35Text(self.Prtry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -2952,61 +2165,38 @@ class ClearingSystemIdentification2Choice(GeneratedsSuper):
             return ClearingSystemIdentification2Choice.subclass(*args_, **kwargs_)
         else:
             return ClearingSystemIdentification2Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Prtry(self):
-        return self.Prtry
-
-    def set_Prtry(self, Prtry):
-        self.Prtry = Prtry
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Prtry(self): return self.Prtry
+    def set_Prtry(self, Prtry): self.Prtry = Prtry
     def validate_ExternalClearingSystemIdentification1Code(self, value):
         # Validate type ExternalClearingSystemIdentification1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if len(value) > 5:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on ExternalClearingSystemIdentification1Code' % {
-                        "value": value.encode("utf-8")})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on ExternalClearingSystemIdentification1Code' % {"value" : value.encode("utf-8")} )
             if len(value) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on ExternalClearingSystemIdentification1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on ExternalClearingSystemIdentification1Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.Prtry is not None
+            self.Cd is not None or
+            self.Prtry is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='ClearingSystemIdentification2Choice', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='ClearingSystemIdentification2Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -3014,75 +2204,42 @@ class ClearingSystemIdentification2Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='ClearingSystemIdentification2Choice')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='ClearingSystemIdentification2Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='ClearingSystemIdentification2Choice',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='ClearingSystemIdentification2Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='ClearingSystemIdentification2Choice'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ClearingSystemIdentification2Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ClearingSystemIdentification2Choice',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='ClearingSystemIdentification2Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.Prtry is not None:
             self.Prtry.export(outfile, level, namespace_, name_='Prtry', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='ClearingSystemIdentification2Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.Prtry is not None:
             Prtry_ = self.Prtry
             Prtry_.to_etree(element, name_='Prtry', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ClearingSystemIdentification2Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.Prtry is not None:
-            showIndent(outfile, level)
-            outfile.write('Prtry=model_.xs_BasicText_CH(\n')
-            self.Prtry.exportLiteral(outfile, level, name_='Prtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -3090,10 +2247,8 @@ class ClearingSystemIdentification2Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -3107,8 +2262,6 @@ class ClearingSystemIdentification2Choice(GeneratedsSuper):
             obj_.original_tagname_ = 'Prtry'
             # validate type Max35Text
             self.validate_Max35Text(self.Prtry)
-
-
 # end class ClearingSystemIdentification2Choice
 
 
@@ -3119,13 +2272,11 @@ class ClearingSystemMemberIdentification2(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, ClrSysId=None, MmbId=None):
         self.original_tagname_ = None
         self.ClrSysId = ClrSysId
         self.MmbId = MmbId
         self.validate_Max35Text(self.MmbId)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -3136,49 +2287,31 @@ class ClearingSystemMemberIdentification2(GeneratedsSuper):
             return ClearingSystemMemberIdentification2.subclass(*args_, **kwargs_)
         else:
             return ClearingSystemMemberIdentification2(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_ClrSysId(self):
-        return self.ClrSysId
-
-    def set_ClrSysId(self, ClrSysId):
-        self.ClrSysId = ClrSysId
-
-    def get_MmbId(self):
-        return self.MmbId
-
-    def set_MmbId(self, MmbId):
-        self.MmbId = MmbId
-
+    def get_ClrSysId(self): return self.ClrSysId
+    def set_ClrSysId(self, ClrSysId): self.ClrSysId = ClrSysId
+    def get_MmbId(self): return self.MmbId
+    def set_MmbId(self, MmbId): self.MmbId = MmbId
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.ClrSysId is not None or
-                        self.MmbId is not None
+            self.ClrSysId is not None or
+            self.MmbId is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='ClearingSystemMemberIdentification2', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='ClearingSystemMemberIdentification2', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -3186,25 +2319,19 @@ class ClearingSystemMemberIdentification2(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='ClearingSystemMemberIdentification2')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='ClearingSystemMemberIdentification2')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='ClearingSystemMemberIdentification2',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='ClearingSystemMemberIdentification2', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='ClearingSystemMemberIdentification2'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ClearingSystemMemberIdentification2'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ClearingSystemMemberIdentification2',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='ClearingSystemMemberIdentification2', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -3213,13 +2340,11 @@ class ClearingSystemMemberIdentification2(GeneratedsSuper):
             self.ClrSysId.export(outfile, level, namespace_, name_='ClrSysId', pretty_print=pretty_print)
         if self.MmbId is not None:
             self.MmbId.export(outfile, level, namespace_, name_='MmbId', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='ClearingSystemMemberIdentification2', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.ClrSysId is not None:
             ClrSysId_ = self.ClrSysId
             ClrSysId_.to_etree(element, name_='ClrSysId', mapping_=mapping_)
@@ -3229,31 +2354,6 @@ class ClearingSystemMemberIdentification2(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ClearingSystemMemberIdentification2'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.ClrSysId is not None:
-            showIndent(outfile, level)
-            outfile.write('ClrSysId=model_.ClearingSystemIdentification2Choice(\n')
-            self.ClrSysId.exportLiteral(outfile, level, name_='ClrSysId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.MmbId is not None:
-            showIndent(outfile, level)
-            outfile.write('MmbId=model_.xs_BasicText_CH(\n')
-            self.MmbId.exportLiteral(outfile, level, name_='MmbId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -3261,10 +2361,8 @@ class ClearingSystemMemberIdentification2(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'ClrSysId':
             obj_ = ClearingSystemIdentification2Choice.factory()
@@ -3277,8 +2375,6 @@ class ClearingSystemMemberIdentification2(GeneratedsSuper):
             obj_.original_tagname_ = 'MmbId'
             # validate type Max35Text
             self.validate_Max35Text(self.MmbId)
-
-
 # end class ClearingSystemMemberIdentification2
 
 
@@ -3294,7 +2390,6 @@ class ContactDetails2(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, NmPrfx=None, Nm=None, PhneNb=None, MobNb=None, FaxNb=None, EmailAdr=None, Othr=None):
         self.original_tagname_ = None
         self.NmPrfx = NmPrfx
@@ -3311,7 +2406,6 @@ class ContactDetails2(GeneratedsSuper):
         self.validate_Max2048Text(self.EmailAdr)
         self.Othr = Othr
         self.validate_Max35Text(self.Othr)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -3322,51 +2416,21 @@ class ContactDetails2(GeneratedsSuper):
             return ContactDetails2.subclass(*args_, **kwargs_)
         else:
             return ContactDetails2(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_NmPrfx(self):
-        return self.NmPrfx
-
-    def set_NmPrfx(self, NmPrfx):
-        self.NmPrfx = NmPrfx
-
-    def get_Nm(self):
-        return self.Nm
-
-    def set_Nm(self, Nm):
-        self.Nm = Nm
-
-    def get_PhneNb(self):
-        return self.PhneNb
-
-    def set_PhneNb(self, PhneNb):
-        self.PhneNb = PhneNb
-
-    def get_MobNb(self):
-        return self.MobNb
-
-    def set_MobNb(self, MobNb):
-        self.MobNb = MobNb
-
-    def get_FaxNb(self):
-        return self.FaxNb
-
-    def set_FaxNb(self, FaxNb):
-        self.FaxNb = FaxNb
-
-    def get_EmailAdr(self):
-        return self.EmailAdr
-
-    def set_EmailAdr(self, EmailAdr):
-        self.EmailAdr = EmailAdr
-
-    def get_Othr(self):
-        return self.Othr
-
-    def set_Othr(self, Othr):
-        self.Othr = Othr
-
+    def get_NmPrfx(self): return self.NmPrfx
+    def set_NmPrfx(self, NmPrfx): self.NmPrfx = NmPrfx
+    def get_Nm(self): return self.Nm
+    def set_Nm(self, Nm): self.Nm = Nm
+    def get_PhneNb(self): return self.PhneNb
+    def set_PhneNb(self, PhneNb): self.PhneNb = PhneNb
+    def get_MobNb(self): return self.MobNb
+    def set_MobNb(self, MobNb): self.MobNb = MobNb
+    def get_FaxNb(self): return self.FaxNb
+    def set_FaxNb(self, FaxNb): self.FaxNb = FaxNb
+    def get_EmailAdr(self): return self.EmailAdr
+    def set_EmailAdr(self, EmailAdr): self.EmailAdr = EmailAdr
+    def get_Othr(self): return self.Othr
+    def set_Othr(self, Othr): self.Othr = Othr
     def validate_NamePrefix1Code(self, value):
         # Validate type NamePrefix1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -3378,84 +2442,60 @@ class ContactDetails2(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on NamePrefix1Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on NamePrefix1Code' % {"value" : value.encode("utf-8")} )
     def validate_Max140Text(self, value):
         # Validate type Max140Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 140:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max140Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max140Text_patterns_,))
-
-    validate_Max140Text_patterns_ = [[
-                                         u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max140Text_patterns_, ))
+    validate_Max140Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_PhoneNumber(self, value):
         # Validate type PhoneNumber, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_PhoneNumber_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_PhoneNumber_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_PhoneNumber_patterns_, ))
     validate_PhoneNumber_patterns_ = [['^\\+[0-9]{1,3}-[0-9()+\\-]{1,30}$']]
-
     def validate_Max2048Text(self, value):
         # Validate type Max2048Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 2048:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max2048Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max2048Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max2048Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max2048Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max2048Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max2048Text_patterns_,))
-
-    validate_Max2048Text_patterns_ = [[
-                                          u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max2048Text_patterns_, ))
+    validate_Max2048Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                                            self.NmPrfx is not None or
-                                            self.Nm is not None or
-                                        self.PhneNb is not None or
-                                    self.MobNb is not None or
-                                self.FaxNb is not None or
-                            self.EmailAdr is not None or
-                        self.Othr is not None
+            self.NmPrfx is not None or
+            self.Nm is not None or
+            self.PhneNb is not None or
+            self.MobNb is not None or
+            self.FaxNb is not None or
+            self.EmailAdr is not None or
+            self.Othr is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='ContactDetails2', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -3464,82 +2504,61 @@ class ContactDetails2(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='ContactDetails2')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='ContactDetails2', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ContactDetails2'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ContactDetails2', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='ContactDetails2', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.NmPrfx is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sNmPrfx>%s</%sNmPrfx>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.NmPrfx), input_name='NmPrfx')),
-            namespace_, eol_))
+            outfile.write('<%sNmPrfx>%s</%sNmPrfx>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.NmPrfx), input_name='NmPrfx')), namespace_, eol_))
         if self.Nm is not None:
             self.Nm.export(outfile, level, namespace_, name_='Nm', pretty_print=pretty_print)
         if self.PhneNb is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sPhneNb>%s</%sPhneNb>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.PhneNb), input_name='PhneNb')),
-            namespace_, eol_))
+            outfile.write('<%sPhneNb>%s</%sPhneNb>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.PhneNb), input_name='PhneNb')), namespace_, eol_))
         if self.MobNb is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sMobNb>%s</%sMobNb>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.MobNb), input_name='MobNb')), namespace_,
-            eol_))
+            outfile.write('<%sMobNb>%s</%sMobNb>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.MobNb), input_name='MobNb')), namespace_, eol_))
         if self.FaxNb is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sFaxNb>%s</%sFaxNb>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.FaxNb), input_name='FaxNb')), namespace_,
-            eol_))
+            outfile.write('<%sFaxNb>%s</%sFaxNb>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.FaxNb), input_name='FaxNb')), namespace_, eol_))
         if self.EmailAdr is not None:
             self.EmailAdr.export(outfile, level, namespace_, name_='EmailAdr', pretty_print=pretty_print)
         if self.Othr is not None:
             self.Othr.export(outfile, level, namespace_, name_='Othr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='ContactDetails2', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.NmPrfx is not None:
             NmPrfx_ = self.NmPrfx
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}NmPrfx').text = self.gds_format_string(
-                NmPrfx_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}NmPrfx').text = self.gds_format_string(NmPrfx_)
         if self.Nm is not None:
             Nm_ = self.Nm
             Nm_.to_etree(element, name_='Nm', mapping_=mapping_)
         if self.PhneNb is not None:
             PhneNb_ = self.PhneNb
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}PhneNb').text = self.gds_format_string(
-                PhneNb_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}PhneNb').text = self.gds_format_string(PhneNb_)
         if self.MobNb is not None:
             MobNb_ = self.MobNb
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}MobNb').text = self.gds_format_string(
-                MobNb_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}MobNb').text = self.gds_format_string(MobNb_)
         if self.FaxNb is not None:
             FaxNb_ = self.FaxNb
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}FaxNb').text = self.gds_format_string(
-                FaxNb_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}FaxNb').text = self.gds_format_string(FaxNb_)
         if self.EmailAdr is not None:
             EmailAdr_ = self.EmailAdr
             EmailAdr_.to_etree(element, name_='EmailAdr', mapping_=mapping_)
@@ -3549,49 +2568,6 @@ class ContactDetails2(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ContactDetails2'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.NmPrfx is not None:
-            showIndent(outfile, level)
-            outfile.write('NmPrfx=%s,\n' % self.gds_encode(quote_python(self.NmPrfx)))
-        if self.Nm is not None:
-            showIndent(outfile, level)
-            outfile.write('Nm=model_.xs_BasicText_CH(\n')
-            self.Nm.exportLiteral(outfile, level, name_='Nm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PhneNb is not None:
-            showIndent(outfile, level)
-            outfile.write('PhneNb=%s,\n' % self.gds_encode(quote_python(self.PhneNb)))
-        if self.MobNb is not None:
-            showIndent(outfile, level)
-            outfile.write('MobNb=%s,\n' % self.gds_encode(quote_python(self.MobNb)))
-        if self.FaxNb is not None:
-            showIndent(outfile, level)
-            outfile.write('FaxNb=%s,\n' % self.gds_encode(quote_python(self.FaxNb)))
-        if self.EmailAdr is not None:
-            showIndent(outfile, level)
-            outfile.write('EmailAdr=model_.xs_BasicText_CH(\n')
-            self.EmailAdr.exportLiteral(outfile, level, name_='EmailAdr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Othr is not None:
-            showIndent(outfile, level)
-            outfile.write('Othr=model_.xs_BasicText_CH(\n')
-            self.Othr.exportLiteral(outfile, level, name_='Othr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -3599,10 +2575,8 @@ class ContactDetails2(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'NmPrfx':
             NmPrfx_ = child_.text
@@ -3646,8 +2620,6 @@ class ContactDetails2(GeneratedsSuper):
             obj_.original_tagname_ = 'Othr'
             # validate type Max35Text
             self.validate_Max35Text(self.Othr)
-
-
 # end class ContactDetails2
 
 
@@ -3658,14 +2630,12 @@ class ContactDetails2_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Nm=None, Othr=None):
         self.original_tagname_ = None
         self.Nm = Nm
         self.validate_Max70Text(self.Nm)
         self.Othr = Othr
         self.validate_Max35Text(self.Othr)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -3676,64 +2646,41 @@ class ContactDetails2_CH(GeneratedsSuper):
             return ContactDetails2_CH.subclass(*args_, **kwargs_)
         else:
             return ContactDetails2_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Nm(self):
-        return self.Nm
-
-    def set_Nm(self, Nm):
-        self.Nm = Nm
-
-    def get_Othr(self):
-        return self.Othr
-
-    def set_Othr(self, Othr):
-        self.Othr = Othr
-
+    def get_Nm(self): return self.Nm
+    def set_Nm(self, Nm): self.Nm = Nm
+    def get_Othr(self): return self.Othr
+    def set_Othr(self, Othr): self.Othr = Othr
     def validate_Max70Text(self, value):
         # Validate type Max70Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 70:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max70Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max70Text_patterns_,))
-
-    validate_Max70Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max70Text_patterns_, ))
+    validate_Max70Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Nm is not None or
-                        self.Othr is not None
+            self.Nm is not None or
+            self.Othr is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='ContactDetails2-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -3742,23 +2689,19 @@ class ContactDetails2_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='ContactDetails2-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='ContactDetails2-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='ContactDetails2-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ContactDetails2-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ContactDetails2-CH', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='ContactDetails2-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -3767,13 +2710,11 @@ class ContactDetails2_CH(GeneratedsSuper):
             self.Nm.export(outfile, level, namespace_, name_='Nm', pretty_print=pretty_print)
         if self.Othr is not None:
             self.Othr.export(outfile, level, namespace_, name_='Othr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='ContactDetails2-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Nm is not None:
             Nm_ = self.Nm
             Nm_.to_etree(element, name_='Nm', mapping_=mapping_)
@@ -3783,31 +2724,6 @@ class ContactDetails2_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ContactDetails2-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Nm is not None:
-            showIndent(outfile, level)
-            outfile.write('Nm=model_.xs_BasicText_CH(\n')
-            self.Nm.exportLiteral(outfile, level, name_='Nm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Othr is not None:
-            showIndent(outfile, level)
-            outfile.write('Othr=model_.xs_BasicText_CH(\n')
-            self.Othr.exportLiteral(outfile, level, name_='Othr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -3815,10 +2731,8 @@ class ContactDetails2_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Nm':
             obj_ = None
@@ -3832,8 +2746,6 @@ class ContactDetails2_CH(GeneratedsSuper):
             obj_.original_tagname_ = 'Othr'
             # validate type Max35Text
             self.validate_Max35Text(self.Othr)
-
-
 # end class ContactDetails2_CH
 
 
@@ -3859,10 +2771,7 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
-    def __init__(self, PmtId=None, PmtTpInf=None, Amt=None, XchgRateInf=None, ChrgBr=None, ChqInstr=None,
-                 UltmtDbtr=None, IntrmyAgt1=None, CdtrAgt=None, Cdtr=None, CdtrAcct=None, UltmtCdtr=None,
-                 InstrForCdtrAgt=None, InstrForDbtrAgt=None, Purp=None, RgltryRptg=None, RmtInf=None):
+    def __init__(self, PmtId=None, PmtTpInf=None, Amt=None, XchgRateInf=None, ChrgBr=None, ChqInstr=None, UltmtDbtr=None, IntrmyAgt1=None, CdtrAgt=None, Cdtr=None, CdtrAcct=None, UltmtCdtr=None, InstrForCdtrAgt=None, InstrForDbtrAgt=None, Purp=None, RgltryRptg=None, RmtInf=None):
         self.original_tagname_ = None
         self.PmtId = PmtId
         self.PmtTpInf = PmtTpInf
@@ -3889,7 +2798,6 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
         else:
             self.RgltryRptg = RgltryRptg
         self.RmtInf = RmtInf
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -3900,129 +2808,47 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
             return CreditTransferTransactionInformation10_CH.subclass(*args_, **kwargs_)
         else:
             return CreditTransferTransactionInformation10_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_PmtId(self):
-        return self.PmtId
-
-    def set_PmtId(self, PmtId):
-        self.PmtId = PmtId
-
-    def get_PmtTpInf(self):
-        return self.PmtTpInf
-
-    def set_PmtTpInf(self, PmtTpInf):
-        self.PmtTpInf = PmtTpInf
-
-    def get_Amt(self):
-        return self.Amt
-
-    def set_Amt(self, Amt):
-        self.Amt = Amt
-
-    def get_XchgRateInf(self):
-        return self.XchgRateInf
-
-    def set_XchgRateInf(self, XchgRateInf):
-        self.XchgRateInf = XchgRateInf
-
-    def get_ChrgBr(self):
-        return self.ChrgBr
-
-    def set_ChrgBr(self, ChrgBr):
-        self.ChrgBr = ChrgBr
-
-    def get_ChqInstr(self):
-        return self.ChqInstr
-
-    def set_ChqInstr(self, ChqInstr):
-        self.ChqInstr = ChqInstr
-
-    def get_UltmtDbtr(self):
-        return self.UltmtDbtr
-
-    def set_UltmtDbtr(self, UltmtDbtr):
-        self.UltmtDbtr = UltmtDbtr
-
-    def get_IntrmyAgt1(self):
-        return self.IntrmyAgt1
-
-    def set_IntrmyAgt1(self, IntrmyAgt1):
-        self.IntrmyAgt1 = IntrmyAgt1
-
-    def get_CdtrAgt(self):
-        return self.CdtrAgt
-
-    def set_CdtrAgt(self, CdtrAgt):
-        self.CdtrAgt = CdtrAgt
-
-    def get_Cdtr(self):
-        return self.Cdtr
-
-    def set_Cdtr(self, Cdtr):
-        self.Cdtr = Cdtr
-
-    def get_CdtrAcct(self):
-        return self.CdtrAcct
-
-    def set_CdtrAcct(self, CdtrAcct):
-        self.CdtrAcct = CdtrAcct
-
-    def get_UltmtCdtr(self):
-        return self.UltmtCdtr
-
-    def set_UltmtCdtr(self, UltmtCdtr):
-        self.UltmtCdtr = UltmtCdtr
-
-    def get_InstrForCdtrAgt(self):
-        return self.InstrForCdtrAgt
-
-    def set_InstrForCdtrAgt(self, InstrForCdtrAgt):
-        self.InstrForCdtrAgt = InstrForCdtrAgt
-
-    def add_InstrForCdtrAgt(self, value):
-        self.InstrForCdtrAgt.append(value)
-
-    def insert_InstrForCdtrAgt_at(self, index, value):
-        self.InstrForCdtrAgt.insert(index, value)
-
-    def replace_InstrForCdtrAgt_at(self, index, value):
-        self.InstrForCdtrAgt[index] = value
-
-    def get_InstrForDbtrAgt(self):
-        return self.InstrForDbtrAgt
-
-    def set_InstrForDbtrAgt(self, InstrForDbtrAgt):
-        self.InstrForDbtrAgt = InstrForDbtrAgt
-
-    def get_Purp(self):
-        return self.Purp
-
-    def set_Purp(self, Purp):
-        self.Purp = Purp
-
-    def get_RgltryRptg(self):
-        return self.RgltryRptg
-
-    def set_RgltryRptg(self, RgltryRptg):
-        self.RgltryRptg = RgltryRptg
-
-    def add_RgltryRptg(self, value):
-        self.RgltryRptg.append(value)
-
-    def insert_RgltryRptg_at(self, index, value):
-        self.RgltryRptg.insert(index, value)
-
-    def replace_RgltryRptg_at(self, index, value):
-        self.RgltryRptg[index] = value
-
-    def get_RmtInf(self):
-        return self.RmtInf
-
-    def set_RmtInf(self, RmtInf):
-        self.RmtInf = RmtInf
-
+    def get_PmtId(self): return self.PmtId
+    def set_PmtId(self, PmtId): self.PmtId = PmtId
+    def get_PmtTpInf(self): return self.PmtTpInf
+    def set_PmtTpInf(self, PmtTpInf): self.PmtTpInf = PmtTpInf
+    def get_Amt(self): return self.Amt
+    def set_Amt(self, Amt): self.Amt = Amt
+    def get_XchgRateInf(self): return self.XchgRateInf
+    def set_XchgRateInf(self, XchgRateInf): self.XchgRateInf = XchgRateInf
+    def get_ChrgBr(self): return self.ChrgBr
+    def set_ChrgBr(self, ChrgBr): self.ChrgBr = ChrgBr
+    def get_ChqInstr(self): return self.ChqInstr
+    def set_ChqInstr(self, ChqInstr): self.ChqInstr = ChqInstr
+    def get_UltmtDbtr(self): return self.UltmtDbtr
+    def set_UltmtDbtr(self, UltmtDbtr): self.UltmtDbtr = UltmtDbtr
+    def get_IntrmyAgt1(self): return self.IntrmyAgt1
+    def set_IntrmyAgt1(self, IntrmyAgt1): self.IntrmyAgt1 = IntrmyAgt1
+    def get_CdtrAgt(self): return self.CdtrAgt
+    def set_CdtrAgt(self, CdtrAgt): self.CdtrAgt = CdtrAgt
+    def get_Cdtr(self): return self.Cdtr
+    def set_Cdtr(self, Cdtr): self.Cdtr = Cdtr
+    def get_CdtrAcct(self): return self.CdtrAcct
+    def set_CdtrAcct(self, CdtrAcct): self.CdtrAcct = CdtrAcct
+    def get_UltmtCdtr(self): return self.UltmtCdtr
+    def set_UltmtCdtr(self, UltmtCdtr): self.UltmtCdtr = UltmtCdtr
+    def get_InstrForCdtrAgt(self): return self.InstrForCdtrAgt
+    def set_InstrForCdtrAgt(self, InstrForCdtrAgt): self.InstrForCdtrAgt = InstrForCdtrAgt
+    def add_InstrForCdtrAgt(self, value): self.InstrForCdtrAgt.append(value)
+    def insert_InstrForCdtrAgt_at(self, index, value): self.InstrForCdtrAgt.insert(index, value)
+    def replace_InstrForCdtrAgt_at(self, index, value): self.InstrForCdtrAgt[index] = value
+    def get_InstrForDbtrAgt(self): return self.InstrForDbtrAgt
+    def set_InstrForDbtrAgt(self, InstrForDbtrAgt): self.InstrForDbtrAgt = InstrForDbtrAgt
+    def get_Purp(self): return self.Purp
+    def set_Purp(self, Purp): self.Purp = Purp
+    def get_RgltryRptg(self): return self.RgltryRptg
+    def set_RgltryRptg(self, RgltryRptg): self.RgltryRptg = RgltryRptg
+    def add_RgltryRptg(self, value): self.RgltryRptg.append(value)
+    def insert_RgltryRptg_at(self, index, value): self.RgltryRptg.insert(index, value)
+    def replace_RgltryRptg_at(self, index, value): self.RgltryRptg[index] = value
+    def get_RmtInf(self): return self.RmtInf
+    def set_RmtInf(self, RmtInf): self.RmtInf = RmtInf
     def validate_ChargeBearerType1Code(self, value):
         # Validate type ChargeBearerType1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -4034,53 +2860,42 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd enumeration restriction on ChargeBearerType1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on ChargeBearerType1Code' % {"value" : value.encode("utf-8")} )
     def validate_Max140Text(self, value):
         # Validate type Max140Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 140:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max140Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max140Text_patterns_,))
-
-    validate_Max140Text_patterns_ = [[
-                                         u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max140Text_patterns_, ))
+    validate_Max140Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                                                                                    self.PmtId is not None or
-                                                                                    self.PmtTpInf is not None or
-                                                                                self.Amt is not None or
-                                                                            self.XchgRateInf is not None or
-                                                                        self.ChrgBr is not None or
-                                                                    self.ChqInstr is not None or
-                                                                self.UltmtDbtr is not None or
-                                                            self.IntrmyAgt1 is not None or
-                                                        self.CdtrAgt is not None or
-                                                    self.Cdtr is not None or
-                                                self.CdtrAcct is not None or
-                                            self.UltmtCdtr is not None or
-                                    self.InstrForCdtrAgt or
-                                    self.InstrForDbtrAgt is not None or
-                                self.Purp is not None or
-                        self.RgltryRptg or
-                        self.RmtInf is not None
+            self.PmtId is not None or
+            self.PmtTpInf is not None or
+            self.Amt is not None or
+            self.XchgRateInf is not None or
+            self.ChrgBr is not None or
+            self.ChqInstr is not None or
+            self.UltmtDbtr is not None or
+            self.IntrmyAgt1 is not None or
+            self.CdtrAgt is not None or
+            self.Cdtr is not None or
+            self.CdtrAcct is not None or
+            self.UltmtCdtr is not None or
+            self.InstrForCdtrAgt or
+            self.InstrForDbtrAgt is not None or
+            self.Purp is not None or
+            self.RgltryRptg or
+            self.RmtInf is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='CreditTransferTransactionInformation10-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='CreditTransferTransactionInformation10-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -4088,25 +2903,19 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='CreditTransferTransactionInformation10-CH')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='CreditTransferTransactionInformation10-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='CreditTransferTransactionInformation10-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='CreditTransferTransactionInformation10-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='CreditTransferTransactionInformation10-CH'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='CreditTransferTransactionInformation10-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='CreditTransferTransactionInformation10-CH',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='CreditTransferTransactionInformation10-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -4121,9 +2930,7 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
             self.XchgRateInf.export(outfile, level, namespace_, name_='XchgRateInf', pretty_print=pretty_print)
         if self.ChrgBr is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sChrgBr>%s</%sChrgBr>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.ChrgBr), input_name='ChrgBr')),
-            namespace_, eol_))
+            outfile.write('<%sChrgBr>%s</%sChrgBr>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.ChrgBr), input_name='ChrgBr')), namespace_, eol_))
         if self.ChqInstr is not None:
             self.ChqInstr.export(outfile, level, namespace_, name_='ChqInstr', pretty_print=pretty_print)
         if self.UltmtDbtr is not None:
@@ -4148,13 +2955,11 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
             RgltryRptg_.export(outfile, level, namespace_, name_='RgltryRptg', pretty_print=pretty_print)
         if self.RmtInf is not None:
             self.RmtInf.export(outfile, level, namespace_, name_='RmtInf', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='CreditTransferTransactionInformation10-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.PmtId is not None:
             PmtId_ = self.PmtId
             PmtId_.to_etree(element, name_='PmtId', mapping_=mapping_)
@@ -4169,9 +2974,7 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
             XchgRateInf_.to_etree(element, name_='XchgRateInf', mapping_=mapping_)
         if self.ChrgBr is not None:
             ChrgBr_ = self.ChrgBr
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}ChrgBr').text = self.gds_format_string(
-                ChrgBr_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}ChrgBr').text = self.gds_format_string(ChrgBr_)
         if self.ChqInstr is not None:
             ChqInstr_ = self.ChqInstr
             ChqInstr_.to_etree(element, name_='ChqInstr', mapping_=mapping_)
@@ -4209,130 +3012,6 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='CreditTransferTransactionInformation10-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.PmtId is not None:
-            showIndent(outfile, level)
-            outfile.write('PmtId=model_.PaymentIdentification1(\n')
-            self.PmtId.exportLiteral(outfile, level, name_='PmtId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PmtTpInf is not None:
-            showIndent(outfile, level)
-            outfile.write('PmtTpInf=model_.PaymentTypeInformation19_CH(\n')
-            self.PmtTpInf.exportLiteral(outfile, level, name_='PmtTpInf')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Amt is not None:
-            showIndent(outfile, level)
-            outfile.write('Amt=model_.AmountType3Choice(\n')
-            self.Amt.exportLiteral(outfile, level, name_='Amt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.XchgRateInf is not None:
-            showIndent(outfile, level)
-            outfile.write('XchgRateInf=model_.ExchangeRateInformation1(\n')
-            self.XchgRateInf.exportLiteral(outfile, level, name_='XchgRateInf')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.ChrgBr is not None:
-            showIndent(outfile, level)
-            outfile.write('ChrgBr=%s,\n' % self.gds_encode(quote_python(self.ChrgBr)))
-        if self.ChqInstr is not None:
-            showIndent(outfile, level)
-            outfile.write('ChqInstr=model_.Cheque6_CH(\n')
-            self.ChqInstr.exportLiteral(outfile, level, name_='ChqInstr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.UltmtDbtr is not None:
-            showIndent(outfile, level)
-            outfile.write('UltmtDbtr=model_.PartyIdentification32_CH(\n')
-            self.UltmtDbtr.exportLiteral(outfile, level, name_='UltmtDbtr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.IntrmyAgt1 is not None:
-            showIndent(outfile, level)
-            outfile.write('IntrmyAgt1=model_.BranchAndFinancialInstitutionIdentification4_CH(\n')
-            self.IntrmyAgt1.exportLiteral(outfile, level, name_='IntrmyAgt1')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CdtrAgt is not None:
-            showIndent(outfile, level)
-            outfile.write('CdtrAgt=model_.BranchAndFinancialInstitutionIdentification4_CH(\n')
-            self.CdtrAgt.exportLiteral(outfile, level, name_='CdtrAgt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Cdtr is not None:
-            showIndent(outfile, level)
-            outfile.write('Cdtr=model_.PartyIdentification32_CH_Name(\n')
-            self.Cdtr.exportLiteral(outfile, level, name_='Cdtr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CdtrAcct is not None:
-            showIndent(outfile, level)
-            outfile.write('CdtrAcct=model_.CashAccount16_CH_Id(\n')
-            self.CdtrAcct.exportLiteral(outfile, level, name_='CdtrAcct')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.UltmtCdtr is not None:
-            showIndent(outfile, level)
-            outfile.write('UltmtCdtr=model_.PartyIdentification32_CH_Name(\n')
-            self.UltmtCdtr.exportLiteral(outfile, level, name_='UltmtCdtr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        showIndent(outfile, level)
-        outfile.write('InstrForCdtrAgt=[\n')
-        level += 1
-        for InstrForCdtrAgt_ in self.InstrForCdtrAgt:
-            showIndent(outfile, level)
-            outfile.write('model_.InstructionForCreditorAgent1(\n')
-            InstrForCdtrAgt_.exportLiteral(outfile, level, name_='InstructionForCreditorAgent1')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-        if self.InstrForDbtrAgt is not None:
-            showIndent(outfile, level)
-            outfile.write('InstrForDbtrAgt=model_.xs_BasicText_CH(\n')
-            self.InstrForDbtrAgt.exportLiteral(outfile, level, name_='InstrForDbtrAgt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Purp is not None:
-            showIndent(outfile, level)
-            outfile.write('Purp=model_.Purpose2_CH_Code(\n')
-            self.Purp.exportLiteral(outfile, level, name_='Purp')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        showIndent(outfile, level)
-        outfile.write('RgltryRptg=[\n')
-        level += 1
-        for RgltryRptg_ in self.RgltryRptg:
-            showIndent(outfile, level)
-            outfile.write('model_.RegulatoryReporting3(\n')
-            RgltryRptg_.exportLiteral(outfile, level, name_='RegulatoryReporting3')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-        if self.RmtInf is not None:
-            showIndent(outfile, level)
-            outfile.write('RmtInf=model_.RemittanceInformation5_CH(\n')
-            self.RmtInf.exportLiteral(outfile, level, name_='RmtInf')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -4340,10 +3019,8 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'PmtId':
             obj_ = PaymentIdentification1.factory()
@@ -4432,8 +3109,6 @@ class CreditTransferTransactionInformation10_CH(GeneratedsSuper):
             obj_.build(child_)
             self.RmtInf = obj_
             obj_.original_tagname_ = 'RmtInf'
-
-
 # end class CreditTransferTransactionInformation10_CH
 
 
@@ -4444,13 +3119,11 @@ class CreditorReferenceInformation2(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Tp=None, Ref=None):
         self.original_tagname_ = None
         self.Tp = Tp
         self.Ref = Ref
         self.validate_Max35Text(self.Ref)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -4461,49 +3134,31 @@ class CreditorReferenceInformation2(GeneratedsSuper):
             return CreditorReferenceInformation2.subclass(*args_, **kwargs_)
         else:
             return CreditorReferenceInformation2(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Tp(self):
-        return self.Tp
-
-    def set_Tp(self, Tp):
-        self.Tp = Tp
-
-    def get_Ref(self):
-        return self.Ref
-
-    def set_Ref(self, Ref):
-        self.Ref = Ref
-
+    def get_Tp(self): return self.Tp
+    def set_Tp(self, Tp): self.Tp = Tp
+    def get_Ref(self): return self.Ref
+    def set_Ref(self, Ref): self.Ref = Ref
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Tp is not None or
-                        self.Ref is not None
+            self.Tp is not None or
+            self.Ref is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='CreditorReferenceInformation2', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='CreditorReferenceInformation2', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -4511,23 +3166,19 @@ class CreditorReferenceInformation2(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='CreditorReferenceInformation2')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='CreditorReferenceInformation2',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='CreditorReferenceInformation2', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='CreditorReferenceInformation2'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='CreditorReferenceInformation2', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='CreditorReferenceInformation2', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -4536,13 +3187,11 @@ class CreditorReferenceInformation2(GeneratedsSuper):
             self.Tp.export(outfile, level, namespace_, name_='Tp', pretty_print=pretty_print)
         if self.Ref is not None:
             self.Ref.export(outfile, level, namespace_, name_='Ref', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='CreditorReferenceInformation2', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Tp is not None:
             Tp_ = self.Tp
             Tp_.to_etree(element, name_='Tp', mapping_=mapping_)
@@ -4552,31 +3201,6 @@ class CreditorReferenceInformation2(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='CreditorReferenceInformation2'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Tp is not None:
-            showIndent(outfile, level)
-            outfile.write('Tp=model_.CreditorReferenceType2(\n')
-            self.Tp.exportLiteral(outfile, level, name_='Tp')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Ref is not None:
-            showIndent(outfile, level)
-            outfile.write('Ref=model_.xs_BasicText_CH(\n')
-            self.Ref.exportLiteral(outfile, level, name_='Ref')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -4584,10 +3208,8 @@ class CreditorReferenceInformation2(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Tp':
             obj_ = CreditorReferenceType2.factory()
@@ -4600,8 +3222,6 @@ class CreditorReferenceInformation2(GeneratedsSuper):
             obj_.original_tagname_ = 'Ref'
             # validate type Max35Text
             self.validate_Max35Text(self.Ref)
-
-
 # end class CreditorReferenceInformation2
 
 
@@ -4612,14 +3232,12 @@ class CreditorReferenceType1Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, Prtry=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_DocumentType3Code(self.Cd)
         self.Prtry = Prtry
         self.validate_Max35Text(self.Prtry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -4630,21 +3248,11 @@ class CreditorReferenceType1Choice(GeneratedsSuper):
             return CreditorReferenceType1Choice.subclass(*args_, **kwargs_)
         else:
             return CreditorReferenceType1Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Prtry(self):
-        return self.Prtry
-
-    def set_Prtry(self, Prtry):
-        self.Prtry = Prtry
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Prtry(self): return self.Prtry
+    def set_Prtry(self, Prtry): self.Prtry = Prtry
     def validate_DocumentType3Code(self, value):
         # Validate type DocumentType3Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -4656,37 +3264,27 @@ class CreditorReferenceType1Choice(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on DocumentType3Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on DocumentType3Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.Prtry is not None
+            self.Cd is not None or
+            self.Prtry is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='CreditorReferenceType1Choice', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='CreditorReferenceType1Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -4694,73 +3292,42 @@ class CreditorReferenceType1Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='CreditorReferenceType1Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='CreditorReferenceType1Choice',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='CreditorReferenceType1Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='CreditorReferenceType1Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='CreditorReferenceType1Choice', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='CreditorReferenceType1Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.Prtry is not None:
             self.Prtry.export(outfile, level, namespace_, name_='Prtry', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='CreditorReferenceType1Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.Prtry is not None:
             Prtry_ = self.Prtry
             Prtry_.to_etree(element, name_='Prtry', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='CreditorReferenceType1Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.Prtry is not None:
-            showIndent(outfile, level)
-            outfile.write('Prtry=model_.xs_BasicText_CH(\n')
-            self.Prtry.exportLiteral(outfile, level, name_='Prtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -4768,10 +3335,8 @@ class CreditorReferenceType1Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -4785,8 +3350,6 @@ class CreditorReferenceType1Choice(GeneratedsSuper):
             obj_.original_tagname_ = 'Prtry'
             # validate type Max35Text
             self.validate_Max35Text(self.Prtry)
-
-
 # end class CreditorReferenceType1Choice
 
 
@@ -4797,13 +3360,11 @@ class CreditorReferenceType2(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, CdOrPrtry=None, Issr=None):
         self.original_tagname_ = None
         self.CdOrPrtry = CdOrPrtry
         self.Issr = Issr
         self.validate_Max35Text(self.Issr)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -4814,49 +3375,31 @@ class CreditorReferenceType2(GeneratedsSuper):
             return CreditorReferenceType2.subclass(*args_, **kwargs_)
         else:
             return CreditorReferenceType2(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_CdOrPrtry(self):
-        return self.CdOrPrtry
-
-    def set_CdOrPrtry(self, CdOrPrtry):
-        self.CdOrPrtry = CdOrPrtry
-
-    def get_Issr(self):
-        return self.Issr
-
-    def set_Issr(self, Issr):
-        self.Issr = Issr
-
+    def get_CdOrPrtry(self): return self.CdOrPrtry
+    def set_CdOrPrtry(self, CdOrPrtry): self.CdOrPrtry = CdOrPrtry
+    def get_Issr(self): return self.Issr
+    def set_Issr(self, Issr): self.Issr = Issr
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.CdOrPrtry is not None or
-                        self.Issr is not None
+            self.CdOrPrtry is not None or
+            self.Issr is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='CreditorReferenceType2', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='CreditorReferenceType2', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -4864,23 +3407,19 @@ class CreditorReferenceType2(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='CreditorReferenceType2')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='CreditorReferenceType2',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='CreditorReferenceType2', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='CreditorReferenceType2'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='CreditorReferenceType2', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='CreditorReferenceType2', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -4889,13 +3428,11 @@ class CreditorReferenceType2(GeneratedsSuper):
             self.CdOrPrtry.export(outfile, level, namespace_, name_='CdOrPrtry', pretty_print=pretty_print)
         if self.Issr is not None:
             self.Issr.export(outfile, level, namespace_, name_='Issr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='CreditorReferenceType2', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.CdOrPrtry is not None:
             CdOrPrtry_ = self.CdOrPrtry
             CdOrPrtry_.to_etree(element, name_='CdOrPrtry', mapping_=mapping_)
@@ -4905,31 +3442,6 @@ class CreditorReferenceType2(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='CreditorReferenceType2'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.CdOrPrtry is not None:
-            showIndent(outfile, level)
-            outfile.write('CdOrPrtry=model_.CreditorReferenceType1Choice(\n')
-            self.CdOrPrtry.exportLiteral(outfile, level, name_='CdOrPrtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Issr is not None:
-            showIndent(outfile, level)
-            outfile.write('Issr=model_.xs_BasicText_CH(\n')
-            self.Issr.exportLiteral(outfile, level, name_='Issr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -4937,10 +3449,8 @@ class CreditorReferenceType2(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'CdOrPrtry':
             obj_ = CreditorReferenceType1Choice.factory()
@@ -4953,8 +3463,6 @@ class CreditorReferenceType2(GeneratedsSuper):
             obj_.original_tagname_ = 'Issr'
             # validate type Max35Text
             self.validate_Max35Text(self.Issr)
-
-
 # end class CreditorReferenceType2
 
 
@@ -4965,7 +3473,6 @@ class CustomerCreditTransferInitiationV03_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, GrpHdr=None, PmtInf=None):
         self.original_tagname_ = None
         self.GrpHdr = GrpHdr
@@ -4973,7 +3480,6 @@ class CustomerCreditTransferInitiationV03_CH(GeneratedsSuper):
             self.PmtInf = []
         else:
             self.PmtInf = PmtInf
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -4984,41 +3490,23 @@ class CustomerCreditTransferInitiationV03_CH(GeneratedsSuper):
             return CustomerCreditTransferInitiationV03_CH.subclass(*args_, **kwargs_)
         else:
             return CustomerCreditTransferInitiationV03_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_GrpHdr(self):
-        return self.GrpHdr
-
-    def set_GrpHdr(self, GrpHdr):
-        self.GrpHdr = GrpHdr
-
-    def get_PmtInf(self):
-        return self.PmtInf
-
-    def set_PmtInf(self, PmtInf):
-        self.PmtInf = PmtInf
-
-    def add_PmtInf(self, value):
-        self.PmtInf.append(value)
-
-    def insert_PmtInf_at(self, index, value):
-        self.PmtInf.insert(index, value)
-
-    def replace_PmtInf_at(self, index, value):
-        self.PmtInf[index] = value
-
+    def get_GrpHdr(self): return self.GrpHdr
+    def set_GrpHdr(self, GrpHdr): self.GrpHdr = GrpHdr
+    def get_PmtInf(self): return self.PmtInf
+    def set_PmtInf(self, PmtInf): self.PmtInf = PmtInf
+    def add_PmtInf(self, value): self.PmtInf.append(value)
+    def insert_PmtInf_at(self, index, value): self.PmtInf.insert(index, value)
+    def replace_PmtInf_at(self, index, value): self.PmtInf[index] = value
     def hasContent_(self):
         if (
-                        self.GrpHdr is not None or
-                    self.PmtInf
+            self.GrpHdr is not None or
+            self.PmtInf
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='CustomerCreditTransferInitiationV03-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='CustomerCreditTransferInitiationV03-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -5026,25 +3514,19 @@ class CustomerCreditTransferInitiationV03_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='CustomerCreditTransferInitiationV03-CH')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='CustomerCreditTransferInitiationV03-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='CustomerCreditTransferInitiationV03-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='CustomerCreditTransferInitiationV03-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='CustomerCreditTransferInitiationV03-CH'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='CustomerCreditTransferInitiationV03-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='CustomerCreditTransferInitiationV03-CH',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='CustomerCreditTransferInitiationV03-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -5053,13 +3535,11 @@ class CustomerCreditTransferInitiationV03_CH(GeneratedsSuper):
             self.GrpHdr.export(outfile, level, namespace_, name_='GrpHdr', pretty_print=pretty_print)
         for PmtInf_ in self.PmtInf:
             PmtInf_.export(outfile, level, namespace_, name_='PmtInf', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='CustomerCreditTransferInitiationV03-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.GrpHdr is not None:
             GrpHdr_ = self.GrpHdr
             GrpHdr_.to_etree(element, name_='GrpHdr', mapping_=mapping_)
@@ -5068,37 +3548,6 @@ class CustomerCreditTransferInitiationV03_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='CustomerCreditTransferInitiationV03-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.GrpHdr is not None:
-            showIndent(outfile, level)
-            outfile.write('GrpHdr=model_.GroupHeader32_CH(\n')
-            self.GrpHdr.exportLiteral(outfile, level, name_='GrpHdr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        showIndent(outfile, level)
-        outfile.write('PmtInf=[\n')
-        level += 1
-        for PmtInf_ in self.PmtInf:
-            showIndent(outfile, level)
-            outfile.write('model_.PaymentInstructionInformation3_CH(\n')
-            PmtInf_.exportLiteral(outfile, level, name_='PaymentInstructionInformation3-CH')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -5106,10 +3555,8 @@ class CustomerCreditTransferInitiationV03_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'GrpHdr':
             obj_ = GroupHeader32_CH.factory()
@@ -5121,8 +3568,6 @@ class CustomerCreditTransferInitiationV03_CH(GeneratedsSuper):
             obj_.build(child_)
             self.PmtInf.append(obj_)
             obj_.original_tagname_ = 'PmtInf'
-
-
 # end class CustomerCreditTransferInitiationV03_CH
 
 
@@ -5135,7 +3580,6 @@ class DateAndPlaceOfBirth(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, BirthDt=None, PrvcOfBirth=None, CityOfBirth=None, CtryOfBirth=None):
         self.original_tagname_ = None
         if isinstance(BirthDt, BaseStrType_):
@@ -5149,7 +3593,6 @@ class DateAndPlaceOfBirth(GeneratedsSuper):
         self.validate_Max35Text(self.CityOfBirth)
         self.CtryOfBirth = CtryOfBirth
         self.validate_CountryCode(self.CtryOfBirth)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -5160,76 +3603,47 @@ class DateAndPlaceOfBirth(GeneratedsSuper):
             return DateAndPlaceOfBirth.subclass(*args_, **kwargs_)
         else:
             return DateAndPlaceOfBirth(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_BirthDt(self):
-        return self.BirthDt
-
-    def set_BirthDt(self, BirthDt):
-        self.BirthDt = BirthDt
-
-    def get_PrvcOfBirth(self):
-        return self.PrvcOfBirth
-
-    def set_PrvcOfBirth(self, PrvcOfBirth):
-        self.PrvcOfBirth = PrvcOfBirth
-
-    def get_CityOfBirth(self):
-        return self.CityOfBirth
-
-    def set_CityOfBirth(self, CityOfBirth):
-        self.CityOfBirth = CityOfBirth
-
-    def get_CtryOfBirth(self):
-        return self.CtryOfBirth
-
-    def set_CtryOfBirth(self, CtryOfBirth):
-        self.CtryOfBirth = CtryOfBirth
-
+    def get_BirthDt(self): return self.BirthDt
+    def set_BirthDt(self, BirthDt): self.BirthDt = BirthDt
+    def get_PrvcOfBirth(self): return self.PrvcOfBirth
+    def set_PrvcOfBirth(self, PrvcOfBirth): self.PrvcOfBirth = PrvcOfBirth
+    def get_CityOfBirth(self): return self.CityOfBirth
+    def set_CityOfBirth(self, CityOfBirth): self.CityOfBirth = CityOfBirth
+    def get_CtryOfBirth(self): return self.CtryOfBirth
+    def set_CtryOfBirth(self, CtryOfBirth): self.CtryOfBirth = CtryOfBirth
     def validate_ISODate(self, value):
         # Validate type ISODate, a restriction on xs:date.
         if value is not None and Validate_simpletypes_:
             pass
-
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_CountryCode(self, value):
         # Validate type CountryCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_CountryCode_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_CountryCode_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_CountryCode_patterns_, ))
     validate_CountryCode_patterns_ = [['^[A-Z]{2,2}$']]
-
     def hasContent_(self):
         if (
-                                self.BirthDt is not None or
-                                self.PrvcOfBirth is not None or
-                            self.CityOfBirth is not None or
-                        self.CtryOfBirth is not None
+            self.BirthDt is not None or
+            self.PrvcOfBirth is not None or
+            self.CityOfBirth is not None or
+            self.CtryOfBirth is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='DateAndPlaceOfBirth', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -5238,52 +3652,41 @@ class DateAndPlaceOfBirth(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='DateAndPlaceOfBirth')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='DateAndPlaceOfBirth',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='DateAndPlaceOfBirth', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='DateAndPlaceOfBirth'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='DateAndPlaceOfBirth', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='DateAndPlaceOfBirth', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.BirthDt is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sBirthDt>%s</%sBirthDt>%s' % (
-            namespace_, self.gds_format_date(self.BirthDt, input_name='BirthDt'), namespace_, eol_))
+            outfile.write('<%sBirthDt>%s</%sBirthDt>%s' % (namespace_, self.gds_format_date(self.BirthDt, input_name='BirthDt'), namespace_, eol_))
         if self.PrvcOfBirth is not None:
             self.PrvcOfBirth.export(outfile, level, namespace_, name_='PrvcOfBirth', pretty_print=pretty_print)
         if self.CityOfBirth is not None:
             self.CityOfBirth.export(outfile, level, namespace_, name_='CityOfBirth', pretty_print=pretty_print)
         if self.CtryOfBirth is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCtryOfBirth>%s</%sCtryOfBirth>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.CtryOfBirth), input_name='CtryOfBirth')),
-            namespace_, eol_))
-
+            outfile.write('<%sCtryOfBirth>%s</%sCtryOfBirth>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.CtryOfBirth), input_name='CtryOfBirth')), namespace_, eol_))
     def to_etree(self, parent_element=None, name_='DateAndPlaceOfBirth', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.BirthDt is not None:
             BirthDt_ = self.BirthDt
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BirthDt').text = self.gds_format_date(
-                BirthDt_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BirthDt').text = self.gds_format_date(BirthDt_)
         if self.PrvcOfBirth is not None:
             PrvcOfBirth_ = self.PrvcOfBirth
             PrvcOfBirth_.to_etree(element, name_='PrvcOfBirth', mapping_=mapping_)
@@ -5292,44 +3695,10 @@ class DateAndPlaceOfBirth(GeneratedsSuper):
             CityOfBirth_.to_etree(element, name_='CityOfBirth', mapping_=mapping_)
         if self.CtryOfBirth is not None:
             CtryOfBirth_ = self.CtryOfBirth
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CtryOfBirth').text = self.gds_format_string(
-                CtryOfBirth_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CtryOfBirth').text = self.gds_format_string(CtryOfBirth_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='DateAndPlaceOfBirth'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.BirthDt is not None:
-            showIndent(outfile, level)
-            outfile.write('BirthDt=model_.GeneratedsSuper.gds_parse_date("%s"),\n' % self.gds_format_date(self.BirthDt,
-                                                                                                          input_name='BirthDt'))
-        if self.PrvcOfBirth is not None:
-            showIndent(outfile, level)
-            outfile.write('PrvcOfBirth=model_.xs_BasicText_CH(\n')
-            self.PrvcOfBirth.exportLiteral(outfile, level, name_='PrvcOfBirth')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CityOfBirth is not None:
-            showIndent(outfile, level)
-            outfile.write('CityOfBirth=model_.xs_BasicText_CH(\n')
-            self.CityOfBirth.exportLiteral(outfile, level, name_='CityOfBirth')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CtryOfBirth is not None:
-            showIndent(outfile, level)
-            outfile.write('CtryOfBirth=%s,\n' % self.gds_encode(quote_python(self.CtryOfBirth)))
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -5337,10 +3706,8 @@ class DateAndPlaceOfBirth(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'BirthDt':
             sval_ = child_.text
@@ -5366,8 +3733,6 @@ class DateAndPlaceOfBirth(GeneratedsSuper):
             self.CtryOfBirth = CtryOfBirth_
             # validate type CountryCode
             self.validate_CountryCode(self.CtryOfBirth)
-
-
 # end class DateAndPlaceOfBirth
 
 
@@ -5377,11 +3742,9 @@ class Document(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, CstmrCdtTrfInitn=None):
         self.original_tagname_ = None
         self.CstmrCdtTrfInitn = CstmrCdtTrfInitn
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -5392,23 +3755,16 @@ class Document(GeneratedsSuper):
             return Document.subclass(*args_, **kwargs_)
         else:
             return Document(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_CstmrCdtTrfInitn(self):
-        return self.CstmrCdtTrfInitn
-
-    def set_CstmrCdtTrfInitn(self, CstmrCdtTrfInitn):
-        self.CstmrCdtTrfInitn = CstmrCdtTrfInitn
-
+    def get_CstmrCdtTrfInitn(self): return self.CstmrCdtTrfInitn
+    def set_CstmrCdtTrfInitn(self, CstmrCdtTrfInitn): self.CstmrCdtTrfInitn = CstmrCdtTrfInitn
     def hasContent_(self):
         if (
-                    self.CstmrCdtTrfInitn is not None
+            self.CstmrCdtTrfInitn is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='Document', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -5417,60 +3773,36 @@ class Document(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='Document')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='Document', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Document'):
         pass
-
     def exportChildren(self, outfile, level, namespace_='', name_='Document', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.CstmrCdtTrfInitn is not None:
-            self.CstmrCdtTrfInitn.export(outfile, level, namespace_, name_='CstmrCdtTrfInitn',
-                                         pretty_print=pretty_print)
-
+            self.CstmrCdtTrfInitn.export(outfile, level, namespace_, name_='CstmrCdtTrfInitn', pretty_print=pretty_print)
     def to_etree(self, parent_element=None, name_='Document', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.CstmrCdtTrfInitn is not None:
             CstmrCdtTrfInitn_ = self.CstmrCdtTrfInitn
             CstmrCdtTrfInitn_.to_etree(element, name_='CstmrCdtTrfInitn', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='Document'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.CstmrCdtTrfInitn is not None:
-            showIndent(outfile, level)
-            outfile.write('CstmrCdtTrfInitn=model_.CustomerCreditTransferInitiationV03_CH(\n')
-            self.CstmrCdtTrfInitn.exportLiteral(outfile, level, name_='CstmrCdtTrfInitn')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -5478,18 +3810,14 @@ class Document(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'CstmrCdtTrfInitn':
             obj_ = CustomerCreditTransferInitiationV03_CH.factory()
             obj_.build(child_)
             self.CstmrCdtTrfInitn = obj_
             obj_.original_tagname_ = 'CstmrCdtTrfInitn'
-
-
 # end class Document
 
 
@@ -5502,7 +3830,6 @@ class DocumentAdjustment1(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Amt=None, CdtDbtInd=None, Rsn=None, AddtlInf=None):
         self.original_tagname_ = None
         self.Amt = Amt
@@ -5512,7 +3839,6 @@ class DocumentAdjustment1(GeneratedsSuper):
         self.validate_Max4Text(self.Rsn)
         self.AddtlInf = AddtlInf
         self.validate_Max140Text(self.AddtlInf)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -5523,33 +3849,15 @@ class DocumentAdjustment1(GeneratedsSuper):
             return DocumentAdjustment1.subclass(*args_, **kwargs_)
         else:
             return DocumentAdjustment1(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Amt(self):
-        return self.Amt
-
-    def set_Amt(self, Amt):
-        self.Amt = Amt
-
-    def get_CdtDbtInd(self):
-        return self.CdtDbtInd
-
-    def set_CdtDbtInd(self, CdtDbtInd):
-        self.CdtDbtInd = CdtDbtInd
-
-    def get_Rsn(self):
-        return self.Rsn
-
-    def set_Rsn(self, Rsn):
-        self.Rsn = Rsn
-
-    def get_AddtlInf(self):
-        return self.AddtlInf
-
-    def set_AddtlInf(self, AddtlInf):
-        self.AddtlInf = AddtlInf
-
+    def get_Amt(self): return self.Amt
+    def set_Amt(self, Amt): self.Amt = Amt
+    def get_CdtDbtInd(self): return self.CdtDbtInd
+    def set_CdtDbtInd(self, CdtDbtInd): self.CdtDbtInd = CdtDbtInd
+    def get_Rsn(self): return self.Rsn
+    def set_Rsn(self, Rsn): self.Rsn = Rsn
+    def get_AddtlInf(self): return self.AddtlInf
+    def set_AddtlInf(self, AddtlInf): self.AddtlInf = AddtlInf
     def validate_CreditDebitCode(self, value):
         # Validate type CreditDebitCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -5561,54 +3869,39 @@ class DocumentAdjustment1(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on CreditDebitCode' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on CreditDebitCode' % {"value" : value.encode("utf-8")} )
     def validate_Max4Text(self, value):
         # Validate type Max4Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 4:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max4Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max4Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max4Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max4Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max4Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max4Text_patterns_,))
-
-    validate_Max4Text_patterns_ = [[
-                                       u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max4Text_patterns_, ))
+    validate_Max4Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_Max140Text(self, value):
         # Validate type Max140Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 140:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max140Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max140Text_patterns_,))
-
-    validate_Max140Text_patterns_ = [[
-                                         u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max140Text_patterns_, ))
+    validate_Max140Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                                self.Amt is not None or
-                                self.CdtDbtInd is not None or
-                            self.Rsn is not None or
-                        self.AddtlInf is not None
+            self.Amt is not None or
+            self.CdtDbtInd is not None or
+            self.Rsn is not None or
+            self.AddtlInf is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='DocumentAdjustment1', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -5617,23 +3910,19 @@ class DocumentAdjustment1(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='DocumentAdjustment1')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='DocumentAdjustment1',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='DocumentAdjustment1', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='DocumentAdjustment1'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='DocumentAdjustment1', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='DocumentAdjustment1', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -5642,28 +3931,22 @@ class DocumentAdjustment1(GeneratedsSuper):
             self.Amt.export(outfile, level, namespace_, name_='Amt', pretty_print=pretty_print)
         if self.CdtDbtInd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCdtDbtInd>%s</%sCdtDbtInd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.CdtDbtInd), input_name='CdtDbtInd')),
-            namespace_, eol_))
+            outfile.write('<%sCdtDbtInd>%s</%sCdtDbtInd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.CdtDbtInd), input_name='CdtDbtInd')), namespace_, eol_))
         if self.Rsn is not None:
             self.Rsn.export(outfile, level, namespace_, name_='Rsn', pretty_print=pretty_print)
         if self.AddtlInf is not None:
             self.AddtlInf.export(outfile, level, namespace_, name_='AddtlInf', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='DocumentAdjustment1', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Amt is not None:
             Amt_ = self.Amt
             Amt_.to_etree(element, name_='Amt', mapping_=mapping_)
         if self.CdtDbtInd is not None:
             CdtDbtInd_ = self.CdtDbtInd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CdtDbtInd').text = self.gds_format_string(
-                CdtDbtInd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CdtDbtInd').text = self.gds_format_string(CdtDbtInd_)
         if self.Rsn is not None:
             Rsn_ = self.Rsn
             Rsn_.to_etree(element, name_='Rsn', mapping_=mapping_)
@@ -5673,40 +3956,6 @@ class DocumentAdjustment1(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='DocumentAdjustment1'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Amt is not None:
-            showIndent(outfile, level)
-            outfile.write('Amt=model_.ActiveOrHistoricCurrencyAndAmount(\n')
-            self.Amt.exportLiteral(outfile, level, name_='Amt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CdtDbtInd is not None:
-            showIndent(outfile, level)
-            outfile.write('CdtDbtInd=%s,\n' % self.gds_encode(quote_python(self.CdtDbtInd)))
-        if self.Rsn is not None:
-            showIndent(outfile, level)
-            outfile.write('Rsn=model_.xs_BasicText_CH(\n')
-            self.Rsn.exportLiteral(outfile, level, name_='Rsn')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.AddtlInf is not None:
-            showIndent(outfile, level)
-            outfile.write('AddtlInf=model_.xs_BasicText_CH(\n')
-            self.AddtlInf.exportLiteral(outfile, level, name_='AddtlInf')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -5714,10 +3963,8 @@ class DocumentAdjustment1(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Amt':
             obj_ = ActiveOrHistoricCurrencyAndAmount.factory()
@@ -5742,8 +3989,6 @@ class DocumentAdjustment1(GeneratedsSuper):
             obj_.original_tagname_ = 'AddtlInf'
             # validate type Max140Text
             self.validate_Max140Text(self.AddtlInf)
-
-
 # end class DocumentAdjustment1
 
 
@@ -5754,13 +3999,11 @@ class EquivalentAmount2(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Amt=None, CcyOfTrf=None):
         self.original_tagname_ = None
         self.Amt = Amt
         self.CcyOfTrf = CcyOfTrf
         self.validate_ActiveOrHistoricCurrencyCode(self.CcyOfTrf)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -5771,40 +4014,26 @@ class EquivalentAmount2(GeneratedsSuper):
             return EquivalentAmount2.subclass(*args_, **kwargs_)
         else:
             return EquivalentAmount2(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Amt(self):
-        return self.Amt
-
-    def set_Amt(self, Amt):
-        self.Amt = Amt
-
-    def get_CcyOfTrf(self):
-        return self.CcyOfTrf
-
-    def set_CcyOfTrf(self, CcyOfTrf):
-        self.CcyOfTrf = CcyOfTrf
-
+    def get_Amt(self): return self.Amt
+    def set_Amt(self, Amt): self.Amt = Amt
+    def get_CcyOfTrf(self): return self.CcyOfTrf
+    def set_CcyOfTrf(self, CcyOfTrf): self.CcyOfTrf = CcyOfTrf
     def validate_ActiveOrHistoricCurrencyCode(self, value):
         # Validate type ActiveOrHistoricCurrencyCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_ActiveOrHistoricCurrencyCode_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_ActiveOrHistoricCurrencyCode_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_ActiveOrHistoricCurrencyCode_patterns_, ))
     validate_ActiveOrHistoricCurrencyCode_patterns_ = [['^[A-Z]{3,3}$']]
-
     def hasContent_(self):
         if (
-                        self.Amt is not None or
-                        self.CcyOfTrf is not None
+            self.Amt is not None or
+            self.CcyOfTrf is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='EquivalentAmount2', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -5813,22 +4042,19 @@ class EquivalentAmount2(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='EquivalentAmount2')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='EquivalentAmount2', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='EquivalentAmount2'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='EquivalentAmount2', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='EquivalentAmount2', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -5837,49 +4063,21 @@ class EquivalentAmount2(GeneratedsSuper):
             self.Amt.export(outfile, level, namespace_, name_='Amt', pretty_print=pretty_print)
         if self.CcyOfTrf is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCcyOfTrf>%s</%sCcyOfTrf>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.CcyOfTrf), input_name='CcyOfTrf')),
-            namespace_, eol_))
-
+            outfile.write('<%sCcyOfTrf>%s</%sCcyOfTrf>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.CcyOfTrf), input_name='CcyOfTrf')), namespace_, eol_))
     def to_etree(self, parent_element=None, name_='EquivalentAmount2', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Amt is not None:
             Amt_ = self.Amt
             Amt_.to_etree(element, name_='Amt', mapping_=mapping_)
         if self.CcyOfTrf is not None:
             CcyOfTrf_ = self.CcyOfTrf
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CcyOfTrf').text = self.gds_format_string(
-                CcyOfTrf_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CcyOfTrf').text = self.gds_format_string(CcyOfTrf_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='EquivalentAmount2'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Amt is not None:
-            showIndent(outfile, level)
-            outfile.write('Amt=model_.ActiveOrHistoricCurrencyAndAmount(\n')
-            self.Amt.exportLiteral(outfile, level, name_='Amt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CcyOfTrf is not None:
-            showIndent(outfile, level)
-            outfile.write('CcyOfTrf=%s,\n' % self.gds_encode(quote_python(self.CcyOfTrf)))
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -5887,10 +4085,8 @@ class EquivalentAmount2(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Amt':
             obj_ = ActiveOrHistoricCurrencyAndAmount.factory()
@@ -5903,8 +4099,6 @@ class EquivalentAmount2(GeneratedsSuper):
             self.CcyOfTrf = CcyOfTrf_
             # validate type ActiveOrHistoricCurrencyCode
             self.validate_ActiveOrHistoricCurrencyCode(self.CcyOfTrf)
-
-
 # end class EquivalentAmount2
 
 
@@ -5916,7 +4110,6 @@ class ExchangeRateInformation1(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, XchgRate=None, RateTp=None, CtrctId=None):
         self.original_tagname_ = None
         self.XchgRate = XchgRate
@@ -5925,7 +4118,6 @@ class ExchangeRateInformation1(GeneratedsSuper):
         self.validate_ExchangeRateType1Code(self.RateTp)
         self.CtrctId = CtrctId
         self.validate_Max35Text(self.CtrctId)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -5936,34 +4128,18 @@ class ExchangeRateInformation1(GeneratedsSuper):
             return ExchangeRateInformation1.subclass(*args_, **kwargs_)
         else:
             return ExchangeRateInformation1(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_XchgRate(self):
-        return self.XchgRate
-
-    def set_XchgRate(self, XchgRate):
-        self.XchgRate = XchgRate
-
-    def get_RateTp(self):
-        return self.RateTp
-
-    def set_RateTp(self, RateTp):
-        self.RateTp = RateTp
-
-    def get_CtrctId(self):
-        return self.CtrctId
-
-    def set_CtrctId(self, CtrctId):
-        self.CtrctId = CtrctId
-
+    def get_XchgRate(self): return self.XchgRate
+    def set_XchgRate(self, XchgRate): self.XchgRate = XchgRate
+    def get_RateTp(self): return self.RateTp
+    def set_RateTp(self, RateTp): self.RateTp = RateTp
+    def get_CtrctId(self): return self.CtrctId
+    def set_CtrctId(self, CtrctId): self.CtrctId = CtrctId
     def validate_BaseOneRate(self, value):
         # Validate type BaseOneRate, a restriction on xs:decimal.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) >= 11:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxInclusive restriction on BaseOneRate' % {"value": value})
-
+                warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on BaseOneRate' % {"value" : value} )
     def validate_ExchangeRateType1Code(self, value):
         # Validate type ExchangeRateType1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -5975,39 +4151,28 @@ class ExchangeRateInformation1(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd enumeration restriction on ExchangeRateType1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on ExchangeRateType1Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                            self.XchgRate is not None or
-                            self.RateTp is not None or
-                        self.CtrctId is not None
+            self.XchgRate is not None or
+            self.RateTp is not None or
+            self.CtrctId is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='ExchangeRateInformation1', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='ExchangeRateInformation1', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -6015,86 +4180,48 @@ class ExchangeRateInformation1(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='ExchangeRateInformation1')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='ExchangeRateInformation1',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='ExchangeRateInformation1', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ExchangeRateInformation1'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ExchangeRateInformation1', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='ExchangeRateInformation1', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.XchgRate is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sXchgRate>%s</%sXchgRate>%s' % (
-            namespace_, self.gds_format_float(self.XchgRate, input_name='XchgRate'), namespace_, eol_))
+            outfile.write('<%sXchgRate>%s</%sXchgRate>%s' % (namespace_, self.gds_format_float(self.XchgRate, input_name='XchgRate'), namespace_, eol_))
         if self.RateTp is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sRateTp>%s</%sRateTp>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.RateTp), input_name='RateTp')),
-            namespace_, eol_))
+            outfile.write('<%sRateTp>%s</%sRateTp>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.RateTp), input_name='RateTp')), namespace_, eol_))
         if self.CtrctId is not None:
             self.CtrctId.export(outfile, level, namespace_, name_='CtrctId', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='ExchangeRateInformation1', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.XchgRate is not None:
             XchgRate_ = self.XchgRate
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}XchgRate').text = self.gds_format_float(
-                XchgRate_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}XchgRate').text = self.gds_format_float(XchgRate_)
         if self.RateTp is not None:
             RateTp_ = self.RateTp
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}RateTp').text = self.gds_format_string(
-                RateTp_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}RateTp').text = self.gds_format_string(RateTp_)
         if self.CtrctId is not None:
             CtrctId_ = self.CtrctId
             CtrctId_.to_etree(element, name_='CtrctId', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ExchangeRateInformation1'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.XchgRate is not None:
-            showIndent(outfile, level)
-            outfile.write('XchgRate=%f,\n' % self.XchgRate)
-        if self.RateTp is not None:
-            showIndent(outfile, level)
-            outfile.write('RateTp=%s,\n' % self.gds_encode(quote_python(self.RateTp)))
-        if self.CtrctId is not None:
-            showIndent(outfile, level)
-            outfile.write('CtrctId=model_.xs_BasicText_CH(\n')
-            self.CtrctId.exportLiteral(outfile, level, name_='CtrctId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -6102,10 +4229,8 @@ class ExchangeRateInformation1(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'XchgRate':
             sval_ = child_.text
@@ -6129,8 +4254,6 @@ class ExchangeRateInformation1(GeneratedsSuper):
             obj_.original_tagname_ = 'CtrctId'
             # validate type Max35Text
             self.validate_Max35Text(self.CtrctId)
-
-
 # end class ExchangeRateInformation1
 
 
@@ -6141,14 +4264,12 @@ class FinancialIdentificationSchemeName1Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, Prtry=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_ExternalFinancialInstitutionIdentification1Code(self.Cd)
         self.Prtry = Prtry
         self.validate_Max35Text(self.Prtry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -6159,61 +4280,38 @@ class FinancialIdentificationSchemeName1Choice(GeneratedsSuper):
             return FinancialIdentificationSchemeName1Choice.subclass(*args_, **kwargs_)
         else:
             return FinancialIdentificationSchemeName1Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Prtry(self):
-        return self.Prtry
-
-    def set_Prtry(self, Prtry):
-        self.Prtry = Prtry
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Prtry(self): return self.Prtry
+    def set_Prtry(self, Prtry): self.Prtry = Prtry
     def validate_ExternalFinancialInstitutionIdentification1Code(self, value):
         # Validate type ExternalFinancialInstitutionIdentification1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if len(value) > 4:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on ExternalFinancialInstitutionIdentification1Code' % {
-                        "value": value.encode("utf-8")})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on ExternalFinancialInstitutionIdentification1Code' % {"value" : value.encode("utf-8")} )
             if len(value) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on ExternalFinancialInstitutionIdentification1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on ExternalFinancialInstitutionIdentification1Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.Prtry is not None
+            self.Cd is not None or
+            self.Prtry is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='FinancialIdentificationSchemeName1Choice', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='FinancialIdentificationSchemeName1Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -6221,75 +4319,42 @@ class FinancialIdentificationSchemeName1Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='FinancialIdentificationSchemeName1Choice')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='FinancialIdentificationSchemeName1Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='FinancialIdentificationSchemeName1Choice',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='FinancialIdentificationSchemeName1Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='FinancialIdentificationSchemeName1Choice'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='FinancialIdentificationSchemeName1Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='FinancialIdentificationSchemeName1Choice',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='FinancialIdentificationSchemeName1Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.Prtry is not None:
             self.Prtry.export(outfile, level, namespace_, name_='Prtry', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='FinancialIdentificationSchemeName1Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.Prtry is not None:
             Prtry_ = self.Prtry
             Prtry_.to_etree(element, name_='Prtry', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='FinancialIdentificationSchemeName1Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.Prtry is not None:
-            showIndent(outfile, level)
-            outfile.write('Prtry=model_.xs_BasicText_CH(\n')
-            self.Prtry.exportLiteral(outfile, level, name_='Prtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -6297,10 +4362,8 @@ class FinancialIdentificationSchemeName1Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -6314,8 +4377,6 @@ class FinancialIdentificationSchemeName1Choice(GeneratedsSuper):
             obj_.original_tagname_ = 'Prtry'
             # validate type Max35Text
             self.validate_Max35Text(self.Prtry)
-
-
 # end class FinancialIdentificationSchemeName1Choice
 
 
@@ -6329,7 +4390,6 @@ class FinancialInstitutionIdentification7(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, BIC=None, ClrSysMmbId=None, Nm=None, PstlAdr=None, Othr=None):
         self.original_tagname_ = None
         self.BIC = BIC
@@ -6339,7 +4399,6 @@ class FinancialInstitutionIdentification7(GeneratedsSuper):
         self.validate_Max140Text(self.Nm)
         self.PstlAdr = PstlAdr
         self.Othr = Othr
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -6350,80 +4409,47 @@ class FinancialInstitutionIdentification7(GeneratedsSuper):
             return FinancialInstitutionIdentification7.subclass(*args_, **kwargs_)
         else:
             return FinancialInstitutionIdentification7(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_BIC(self):
-        return self.BIC
-
-    def set_BIC(self, BIC):
-        self.BIC = BIC
-
-    def get_ClrSysMmbId(self):
-        return self.ClrSysMmbId
-
-    def set_ClrSysMmbId(self, ClrSysMmbId):
-        self.ClrSysMmbId = ClrSysMmbId
-
-    def get_Nm(self):
-        return self.Nm
-
-    def set_Nm(self, Nm):
-        self.Nm = Nm
-
-    def get_PstlAdr(self):
-        return self.PstlAdr
-
-    def set_PstlAdr(self, PstlAdr):
-        self.PstlAdr = PstlAdr
-
-    def get_Othr(self):
-        return self.Othr
-
-    def set_Othr(self, Othr):
-        self.Othr = Othr
-
+    def get_BIC(self): return self.BIC
+    def set_BIC(self, BIC): self.BIC = BIC
+    def get_ClrSysMmbId(self): return self.ClrSysMmbId
+    def set_ClrSysMmbId(self, ClrSysMmbId): self.ClrSysMmbId = ClrSysMmbId
+    def get_Nm(self): return self.Nm
+    def set_Nm(self, Nm): self.Nm = Nm
+    def get_PstlAdr(self): return self.PstlAdr
+    def set_PstlAdr(self, PstlAdr): self.PstlAdr = PstlAdr
+    def get_Othr(self): return self.Othr
+    def set_Othr(self, Othr): self.Othr = Othr
     def validate_BICIdentifier(self, value):
         # Validate type BICIdentifier, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_BICIdentifier_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_BICIdentifier_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_BICIdentifier_patterns_, ))
     validate_BICIdentifier_patterns_ = [['^[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}$']]
-
     def validate_Max140Text(self, value):
         # Validate type Max140Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 140:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max140Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max140Text_patterns_,))
-
-    validate_Max140Text_patterns_ = [[
-                                         u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max140Text_patterns_, ))
+    validate_Max140Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                                    self.BIC is not None or
-                                    self.ClrSysMmbId is not None or
-                                self.Nm is not None or
-                            self.PstlAdr is not None or
-                        self.Othr is not None
+            self.BIC is not None or
+            self.ClrSysMmbId is not None or
+            self.Nm is not None or
+            self.PstlAdr is not None or
+            self.Othr is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -6431,34 +4457,26 @@ class FinancialInstitutionIdentification7(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='FinancialInstitutionIdentification7')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='FinancialInstitutionIdentification7')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='FinancialInstitutionIdentification7',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='FinancialInstitutionIdentification7', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='FinancialInstitutionIdentification7'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='FinancialInstitutionIdentification7'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.BIC is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sBIC>%s</%sBIC>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.BIC), input_name='BIC')), namespace_,
-            eol_))
+            outfile.write('<%sBIC>%s</%sBIC>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.BIC), input_name='BIC')), namespace_, eol_))
         if self.ClrSysMmbId is not None:
             self.ClrSysMmbId.export(outfile, level, namespace_, name_='ClrSysMmbId', pretty_print=pretty_print)
         if self.Nm is not None:
@@ -6467,18 +4485,14 @@ class FinancialInstitutionIdentification7(GeneratedsSuper):
             self.PstlAdr.export(outfile, level, namespace_, name_='PstlAdr', pretty_print=pretty_print)
         if self.Othr is not None:
             self.Othr.export(outfile, level, namespace_, name_='Othr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='FinancialInstitutionIdentification7', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.BIC is not None:
             BIC_ = self.BIC
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BIC').text = self.gds_format_string(
-                BIC_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BIC').text = self.gds_format_string(BIC_)
         if self.ClrSysMmbId is not None:
             ClrSysMmbId_ = self.ClrSysMmbId
             ClrSysMmbId_.to_etree(element, name_='ClrSysMmbId', mapping_=mapping_)
@@ -6494,46 +4508,6 @@ class FinancialInstitutionIdentification7(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='FinancialInstitutionIdentification7'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.BIC is not None:
-            showIndent(outfile, level)
-            outfile.write('BIC=%s,\n' % self.gds_encode(quote_python(self.BIC)))
-        if self.ClrSysMmbId is not None:
-            showIndent(outfile, level)
-            outfile.write('ClrSysMmbId=model_.ClearingSystemMemberIdentification2(\n')
-            self.ClrSysMmbId.exportLiteral(outfile, level, name_='ClrSysMmbId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Nm is not None:
-            showIndent(outfile, level)
-            outfile.write('Nm=model_.xs_BasicText_CH(\n')
-            self.Nm.exportLiteral(outfile, level, name_='Nm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PstlAdr is not None:
-            showIndent(outfile, level)
-            outfile.write('PstlAdr=model_.PostalAddress6(\n')
-            self.PstlAdr.exportLiteral(outfile, level, name_='PstlAdr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Othr is not None:
-            showIndent(outfile, level)
-            outfile.write('Othr=model_.GenericFinancialIdentification1(\n')
-            self.Othr.exportLiteral(outfile, level, name_='Othr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -6541,10 +4515,8 @@ class FinancialInstitutionIdentification7(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'BIC':
             BIC_ = child_.text
@@ -6573,8 +4545,6 @@ class FinancialInstitutionIdentification7(GeneratedsSuper):
             obj_.build(child_)
             self.Othr = obj_
             obj_.original_tagname_ = 'Othr'
-
-
 # end class FinancialInstitutionIdentification7
 
 
@@ -6585,13 +4555,11 @@ class FinancialInstitutionIdentification7_CH_BicOrClrId(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, BIC=None, ClrSysMmbId=None):
         self.original_tagname_ = None
         self.BIC = BIC
         self.validate_BICIdentifier(self.BIC)
         self.ClrSysMmbId = ClrSysMmbId
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -6602,42 +4570,27 @@ class FinancialInstitutionIdentification7_CH_BicOrClrId(GeneratedsSuper):
             return FinancialInstitutionIdentification7_CH_BicOrClrId.subclass(*args_, **kwargs_)
         else:
             return FinancialInstitutionIdentification7_CH_BicOrClrId(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_BIC(self):
-        return self.BIC
-
-    def set_BIC(self, BIC):
-        self.BIC = BIC
-
-    def get_ClrSysMmbId(self):
-        return self.ClrSysMmbId
-
-    def set_ClrSysMmbId(self, ClrSysMmbId):
-        self.ClrSysMmbId = ClrSysMmbId
-
+    def get_BIC(self): return self.BIC
+    def set_BIC(self, BIC): self.BIC = BIC
+    def get_ClrSysMmbId(self): return self.ClrSysMmbId
+    def set_ClrSysMmbId(self, ClrSysMmbId): self.ClrSysMmbId = ClrSysMmbId
     def validate_BICIdentifier(self, value):
         # Validate type BICIdentifier, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_BICIdentifier_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_BICIdentifier_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_BICIdentifier_patterns_, ))
     validate_BICIdentifier_patterns_ = [['^[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}$']]
-
     def hasContent_(self):
         if (
-                        self.BIC is not None or
-                        self.ClrSysMmbId is not None
+            self.BIC is not None or
+            self.ClrSysMmbId is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7-CH_BicOrClrId',
-               namespacedef_='', pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7-CH_BicOrClrId', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -6645,76 +4598,42 @@ class FinancialInstitutionIdentification7_CH_BicOrClrId(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='FinancialInstitutionIdentification7-CH_BicOrClrId')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='FinancialInstitutionIdentification7-CH_BicOrClrId')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='',
-                                name_='FinancialInstitutionIdentification7-CH_BicOrClrId', pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='FinancialInstitutionIdentification7-CH_BicOrClrId', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='FinancialInstitutionIdentification7-CH_BicOrClrId'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='FinancialInstitutionIdentification7-CH_BicOrClrId'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7-CH_BicOrClrId',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7-CH_BicOrClrId', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.BIC is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sBIC>%s</%sBIC>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.BIC), input_name='BIC')), namespace_,
-            eol_))
+            outfile.write('<%sBIC>%s</%sBIC>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.BIC), input_name='BIC')), namespace_, eol_))
         if self.ClrSysMmbId is not None:
             self.ClrSysMmbId.export(outfile, level, namespace_, name_='ClrSysMmbId', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='FinancialInstitutionIdentification7-CH_BicOrClrId', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.BIC is not None:
             BIC_ = self.BIC
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BIC').text = self.gds_format_string(
-                BIC_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BIC').text = self.gds_format_string(BIC_)
         if self.ClrSysMmbId is not None:
             ClrSysMmbId_ = self.ClrSysMmbId
             ClrSysMmbId_.to_etree(element, name_='ClrSysMmbId', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='FinancialInstitutionIdentification7-CH_BicOrClrId'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.BIC is not None:
-            showIndent(outfile, level)
-            outfile.write('BIC=%s,\n' % self.gds_encode(quote_python(self.BIC)))
-        if self.ClrSysMmbId is not None:
-            showIndent(outfile, level)
-            outfile.write('ClrSysMmbId=model_.ClearingSystemMemberIdentification2(\n')
-            self.ClrSysMmbId.exportLiteral(outfile, level, name_='ClrSysMmbId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -6722,10 +4641,8 @@ class FinancialInstitutionIdentification7_CH_BicOrClrId(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'BIC':
             BIC_ = child_.text
@@ -6738,8 +4655,6 @@ class FinancialInstitutionIdentification7_CH_BicOrClrId(GeneratedsSuper):
             obj_.build(child_)
             self.ClrSysMmbId = obj_
             obj_.original_tagname_ = 'ClrSysMmbId'
-
-
 # end class FinancialInstitutionIdentification7_CH_BicOrClrId
 
 
@@ -6753,7 +4668,6 @@ class FinancialInstitutionIdentification7_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, BIC=None, ClrSysMmbId=None, Nm=None, PstlAdr=None, Othr=None):
         self.original_tagname_ = None
         self.BIC = BIC
@@ -6763,7 +4677,6 @@ class FinancialInstitutionIdentification7_CH(GeneratedsSuper):
         self.validate_Max70Text(self.Nm)
         self.PstlAdr = PstlAdr
         self.Othr = Othr
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -6774,80 +4687,47 @@ class FinancialInstitutionIdentification7_CH(GeneratedsSuper):
             return FinancialInstitutionIdentification7_CH.subclass(*args_, **kwargs_)
         else:
             return FinancialInstitutionIdentification7_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_BIC(self):
-        return self.BIC
-
-    def set_BIC(self, BIC):
-        self.BIC = BIC
-
-    def get_ClrSysMmbId(self):
-        return self.ClrSysMmbId
-
-    def set_ClrSysMmbId(self, ClrSysMmbId):
-        self.ClrSysMmbId = ClrSysMmbId
-
-    def get_Nm(self):
-        return self.Nm
-
-    def set_Nm(self, Nm):
-        self.Nm = Nm
-
-    def get_PstlAdr(self):
-        return self.PstlAdr
-
-    def set_PstlAdr(self, PstlAdr):
-        self.PstlAdr = PstlAdr
-
-    def get_Othr(self):
-        return self.Othr
-
-    def set_Othr(self, Othr):
-        self.Othr = Othr
-
+    def get_BIC(self): return self.BIC
+    def set_BIC(self, BIC): self.BIC = BIC
+    def get_ClrSysMmbId(self): return self.ClrSysMmbId
+    def set_ClrSysMmbId(self, ClrSysMmbId): self.ClrSysMmbId = ClrSysMmbId
+    def get_Nm(self): return self.Nm
+    def set_Nm(self, Nm): self.Nm = Nm
+    def get_PstlAdr(self): return self.PstlAdr
+    def set_PstlAdr(self, PstlAdr): self.PstlAdr = PstlAdr
+    def get_Othr(self): return self.Othr
+    def set_Othr(self, Othr): self.Othr = Othr
     def validate_BICIdentifier(self, value):
         # Validate type BICIdentifier, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_BICIdentifier_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_BICIdentifier_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_BICIdentifier_patterns_, ))
     validate_BICIdentifier_patterns_ = [['^[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}$']]
-
     def validate_Max70Text(self, value):
         # Validate type Max70Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 70:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max70Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max70Text_patterns_,))
-
-    validate_Max70Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max70Text_patterns_, ))
+    validate_Max70Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                                    self.BIC is not None or
-                                    self.ClrSysMmbId is not None or
-                                self.Nm is not None or
-                            self.PstlAdr is not None or
-                        self.Othr is not None
+            self.BIC is not None or
+            self.ClrSysMmbId is not None or
+            self.Nm is not None or
+            self.PstlAdr is not None or
+            self.Othr is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -6855,34 +4735,26 @@ class FinancialInstitutionIdentification7_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='FinancialInstitutionIdentification7-CH')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='FinancialInstitutionIdentification7-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='FinancialInstitutionIdentification7-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='FinancialInstitutionIdentification7-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='FinancialInstitutionIdentification7-CH'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='FinancialInstitutionIdentification7-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7-CH',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='FinancialInstitutionIdentification7-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.BIC is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sBIC>%s</%sBIC>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.BIC), input_name='BIC')), namespace_,
-            eol_))
+            outfile.write('<%sBIC>%s</%sBIC>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.BIC), input_name='BIC')), namespace_, eol_))
         if self.ClrSysMmbId is not None:
             self.ClrSysMmbId.export(outfile, level, namespace_, name_='ClrSysMmbId', pretty_print=pretty_print)
         if self.Nm is not None:
@@ -6891,18 +4763,14 @@ class FinancialInstitutionIdentification7_CH(GeneratedsSuper):
             self.PstlAdr.export(outfile, level, namespace_, name_='PstlAdr', pretty_print=pretty_print)
         if self.Othr is not None:
             self.Othr.export(outfile, level, namespace_, name_='Othr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='FinancialInstitutionIdentification7-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.BIC is not None:
             BIC_ = self.BIC
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BIC').text = self.gds_format_string(
-                BIC_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BIC').text = self.gds_format_string(BIC_)
         if self.ClrSysMmbId is not None:
             ClrSysMmbId_ = self.ClrSysMmbId
             ClrSysMmbId_.to_etree(element, name_='ClrSysMmbId', mapping_=mapping_)
@@ -6918,46 +4786,6 @@ class FinancialInstitutionIdentification7_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='FinancialInstitutionIdentification7-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.BIC is not None:
-            showIndent(outfile, level)
-            outfile.write('BIC=%s,\n' % self.gds_encode(quote_python(self.BIC)))
-        if self.ClrSysMmbId is not None:
-            showIndent(outfile, level)
-            outfile.write('ClrSysMmbId=model_.ClearingSystemMemberIdentification2(\n')
-            self.ClrSysMmbId.exportLiteral(outfile, level, name_='ClrSysMmbId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Nm is not None:
-            showIndent(outfile, level)
-            outfile.write('Nm=model_.xs_BasicText_CH(\n')
-            self.Nm.exportLiteral(outfile, level, name_='Nm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PstlAdr is not None:
-            showIndent(outfile, level)
-            outfile.write('PstlAdr=model_.PostalAddress6_CH(\n')
-            self.PstlAdr.exportLiteral(outfile, level, name_='PstlAdr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Othr is not None:
-            showIndent(outfile, level)
-            outfile.write('Othr=model_.GenericFinancialIdentification1_CH(\n')
-            self.Othr.exportLiteral(outfile, level, name_='Othr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -6965,10 +4793,8 @@ class FinancialInstitutionIdentification7_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'BIC':
             BIC_ = child_.text
@@ -6997,8 +4823,6 @@ class FinancialInstitutionIdentification7_CH(GeneratedsSuper):
             obj_.build(child_)
             self.Othr = obj_
             obj_.original_tagname_ = 'Othr'
-
-
 # end class FinancialInstitutionIdentification7_CH
 
 
@@ -7008,12 +4832,10 @@ class GenericAccountIdentification1_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Id=None):
         self.original_tagname_ = None
         self.Id = Id
         self.validate_Max34Text(self.Id)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -7024,42 +4846,28 @@ class GenericAccountIdentification1_CH(GeneratedsSuper):
             return GenericAccountIdentification1_CH.subclass(*args_, **kwargs_)
         else:
             return GenericAccountIdentification1_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
     def validate_Max34Text(self, value):
         # Validate type Max34Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 34:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max34Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max34Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max34Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max34Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max34Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max34Text_patterns_,))
-
-    validate_Max34Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max34Text_patterns_, ))
+    validate_Max34Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                    self.Id is not None
+            self.Id is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='GenericAccountIdentification1-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='GenericAccountIdentification1-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -7067,62 +4875,36 @@ class GenericAccountIdentification1_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='GenericAccountIdentification1-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='GenericAccountIdentification1-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='GenericAccountIdentification1-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='GenericAccountIdentification1-CH'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='GenericAccountIdentification1-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='GenericAccountIdentification1-CH',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='GenericAccountIdentification1-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Id is not None:
             self.Id.export(outfile, level, namespace_, name_='Id', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='GenericAccountIdentification1-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Id is not None:
             Id_ = self.Id
             Id_.to_etree(element, name_='Id', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='GenericAccountIdentification1-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.xs_BasicText_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -7130,10 +4912,8 @@ class GenericAccountIdentification1_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Id':
             obj_ = None
@@ -7141,8 +4921,6 @@ class GenericAccountIdentification1_CH(GeneratedsSuper):
             obj_.original_tagname_ = 'Id'
             # validate type Max34Text
             self.validate_Max34Text(self.Id)
-
-
 # end class GenericAccountIdentification1_CH
 
 
@@ -7154,7 +4932,6 @@ class GenericFinancialIdentification1(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Id=None, SchmeNm=None, Issr=None):
         self.original_tagname_ = None
         self.Id = Id
@@ -7162,7 +4939,6 @@ class GenericFinancialIdentification1(GeneratedsSuper):
         self.SchmeNm = SchmeNm
         self.Issr = Issr
         self.validate_Max35Text(self.Issr)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -7173,56 +4949,34 @@ class GenericFinancialIdentification1(GeneratedsSuper):
             return GenericFinancialIdentification1.subclass(*args_, **kwargs_)
         else:
             return GenericFinancialIdentification1(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
-    def get_SchmeNm(self):
-        return self.SchmeNm
-
-    def set_SchmeNm(self, SchmeNm):
-        self.SchmeNm = SchmeNm
-
-    def get_Issr(self):
-        return self.Issr
-
-    def set_Issr(self, Issr):
-        self.Issr = Issr
-
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
+    def get_SchmeNm(self): return self.SchmeNm
+    def set_SchmeNm(self, SchmeNm): self.SchmeNm = SchmeNm
+    def get_Issr(self): return self.Issr
+    def set_Issr(self, Issr): self.Issr = Issr
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                            self.Id is not None or
-                            self.SchmeNm is not None or
-                        self.Issr is not None
+            self.Id is not None or
+            self.SchmeNm is not None or
+            self.Issr is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='GenericFinancialIdentification1', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='GenericFinancialIdentification1', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -7230,24 +4984,19 @@ class GenericFinancialIdentification1(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='GenericFinancialIdentification1')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='GenericFinancialIdentification1',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='GenericFinancialIdentification1', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='GenericFinancialIdentification1'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='GenericFinancialIdentification1'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='GenericFinancialIdentification1',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='GenericFinancialIdentification1', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -7258,13 +5007,11 @@ class GenericFinancialIdentification1(GeneratedsSuper):
             self.SchmeNm.export(outfile, level, namespace_, name_='SchmeNm', pretty_print=pretty_print)
         if self.Issr is not None:
             self.Issr.export(outfile, level, namespace_, name_='Issr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='GenericFinancialIdentification1', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Id is not None:
             Id_ = self.Id
             Id_.to_etree(element, name_='Id', mapping_=mapping_)
@@ -7277,37 +5024,6 @@ class GenericFinancialIdentification1(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='GenericFinancialIdentification1'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.xs_BasicText_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.SchmeNm is not None:
-            showIndent(outfile, level)
-            outfile.write('SchmeNm=model_.FinancialIdentificationSchemeName1Choice(\n')
-            self.SchmeNm.exportLiteral(outfile, level, name_='SchmeNm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Issr is not None:
-            showIndent(outfile, level)
-            outfile.write('Issr=model_.xs_BasicText_CH(\n')
-            self.Issr.exportLiteral(outfile, level, name_='Issr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -7315,10 +5031,8 @@ class GenericFinancialIdentification1(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Id':
             obj_ = None
@@ -7337,8 +5051,6 @@ class GenericFinancialIdentification1(GeneratedsSuper):
             obj_.original_tagname_ = 'Issr'
             # validate type Max35Text
             self.validate_Max35Text(self.Issr)
-
-
 # end class GenericFinancialIdentification1
 
 
@@ -7348,12 +5060,10 @@ class GenericFinancialIdentification1_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Id=None):
         self.original_tagname_ = None
         self.Id = Id
         self.validate_Max35Text(self.Id)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -7364,42 +5074,28 @@ class GenericFinancialIdentification1_CH(GeneratedsSuper):
             return GenericFinancialIdentification1_CH.subclass(*args_, **kwargs_)
         else:
             return GenericFinancialIdentification1_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                    self.Id is not None
+            self.Id is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='GenericFinancialIdentification1-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='GenericFinancialIdentification1-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -7407,62 +5103,36 @@ class GenericFinancialIdentification1_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='GenericFinancialIdentification1-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='GenericFinancialIdentification1-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='GenericFinancialIdentification1-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='GenericFinancialIdentification1-CH'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='GenericFinancialIdentification1-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='GenericFinancialIdentification1-CH',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='GenericFinancialIdentification1-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Id is not None:
             self.Id.export(outfile, level, namespace_, name_='Id', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='GenericFinancialIdentification1-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Id is not None:
             Id_ = self.Id
             Id_.to_etree(element, name_='Id', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='GenericFinancialIdentification1-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.xs_BasicText_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -7470,10 +5140,8 @@ class GenericFinancialIdentification1_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Id':
             obj_ = None
@@ -7481,8 +5149,6 @@ class GenericFinancialIdentification1_CH(GeneratedsSuper):
             obj_.original_tagname_ = 'Id'
             # validate type Max35Text
             self.validate_Max35Text(self.Id)
-
-
 # end class GenericFinancialIdentification1_CH
 
 
@@ -7494,7 +5160,6 @@ class GenericOrganisationIdentification1(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Id=None, SchmeNm=None, Issr=None):
         self.original_tagname_ = None
         self.Id = Id
@@ -7502,7 +5167,6 @@ class GenericOrganisationIdentification1(GeneratedsSuper):
         self.SchmeNm = SchmeNm
         self.Issr = Issr
         self.validate_Max35Text(self.Issr)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -7513,56 +5177,34 @@ class GenericOrganisationIdentification1(GeneratedsSuper):
             return GenericOrganisationIdentification1.subclass(*args_, **kwargs_)
         else:
             return GenericOrganisationIdentification1(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
-    def get_SchmeNm(self):
-        return self.SchmeNm
-
-    def set_SchmeNm(self, SchmeNm):
-        self.SchmeNm = SchmeNm
-
-    def get_Issr(self):
-        return self.Issr
-
-    def set_Issr(self, Issr):
-        self.Issr = Issr
-
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
+    def get_SchmeNm(self): return self.SchmeNm
+    def set_SchmeNm(self, SchmeNm): self.SchmeNm = SchmeNm
+    def get_Issr(self): return self.Issr
+    def set_Issr(self, Issr): self.Issr = Issr
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                            self.Id is not None or
-                            self.SchmeNm is not None or
-                        self.Issr is not None
+            self.Id is not None or
+            self.SchmeNm is not None or
+            self.Issr is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='GenericOrganisationIdentification1', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='GenericOrganisationIdentification1', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -7570,24 +5212,19 @@ class GenericOrganisationIdentification1(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='GenericOrganisationIdentification1')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='GenericOrganisationIdentification1',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='GenericOrganisationIdentification1', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='GenericOrganisationIdentification1'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='GenericOrganisationIdentification1'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='GenericOrganisationIdentification1',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='GenericOrganisationIdentification1', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -7598,13 +5235,11 @@ class GenericOrganisationIdentification1(GeneratedsSuper):
             self.SchmeNm.export(outfile, level, namespace_, name_='SchmeNm', pretty_print=pretty_print)
         if self.Issr is not None:
             self.Issr.export(outfile, level, namespace_, name_='Issr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='GenericOrganisationIdentification1', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Id is not None:
             Id_ = self.Id
             Id_.to_etree(element, name_='Id', mapping_=mapping_)
@@ -7617,37 +5252,6 @@ class GenericOrganisationIdentification1(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='GenericOrganisationIdentification1'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.xs_BasicText_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.SchmeNm is not None:
-            showIndent(outfile, level)
-            outfile.write('SchmeNm=model_.OrganisationIdentificationSchemeName1Choice(\n')
-            self.SchmeNm.exportLiteral(outfile, level, name_='SchmeNm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Issr is not None:
-            showIndent(outfile, level)
-            outfile.write('Issr=model_.xs_BasicText_CH(\n')
-            self.Issr.exportLiteral(outfile, level, name_='Issr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -7655,10 +5259,8 @@ class GenericOrganisationIdentification1(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Id':
             obj_ = None
@@ -7677,8 +5279,6 @@ class GenericOrganisationIdentification1(GeneratedsSuper):
             obj_.original_tagname_ = 'Issr'
             # validate type Max35Text
             self.validate_Max35Text(self.Issr)
-
-
 # end class GenericOrganisationIdentification1
 
 
@@ -7690,7 +5290,6 @@ class GenericPersonIdentification1(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Id=None, SchmeNm=None, Issr=None):
         self.original_tagname_ = None
         self.Id = Id
@@ -7698,7 +5297,6 @@ class GenericPersonIdentification1(GeneratedsSuper):
         self.SchmeNm = SchmeNm
         self.Issr = Issr
         self.validate_Max35Text(self.Issr)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -7709,56 +5307,34 @@ class GenericPersonIdentification1(GeneratedsSuper):
             return GenericPersonIdentification1.subclass(*args_, **kwargs_)
         else:
             return GenericPersonIdentification1(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
-    def get_SchmeNm(self):
-        return self.SchmeNm
-
-    def set_SchmeNm(self, SchmeNm):
-        self.SchmeNm = SchmeNm
-
-    def get_Issr(self):
-        return self.Issr
-
-    def set_Issr(self, Issr):
-        self.Issr = Issr
-
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
+    def get_SchmeNm(self): return self.SchmeNm
+    def set_SchmeNm(self, SchmeNm): self.SchmeNm = SchmeNm
+    def get_Issr(self): return self.Issr
+    def set_Issr(self, Issr): self.Issr = Issr
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                            self.Id is not None or
-                            self.SchmeNm is not None or
-                        self.Issr is not None
+            self.Id is not None or
+            self.SchmeNm is not None or
+            self.Issr is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='GenericPersonIdentification1', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='GenericPersonIdentification1', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -7766,23 +5342,19 @@ class GenericPersonIdentification1(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='GenericPersonIdentification1')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='GenericPersonIdentification1',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='GenericPersonIdentification1', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='GenericPersonIdentification1'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='GenericPersonIdentification1', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='GenericPersonIdentification1', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -7793,13 +5365,11 @@ class GenericPersonIdentification1(GeneratedsSuper):
             self.SchmeNm.export(outfile, level, namespace_, name_='SchmeNm', pretty_print=pretty_print)
         if self.Issr is not None:
             self.Issr.export(outfile, level, namespace_, name_='Issr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='GenericPersonIdentification1', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Id is not None:
             Id_ = self.Id
             Id_.to_etree(element, name_='Id', mapping_=mapping_)
@@ -7812,37 +5382,6 @@ class GenericPersonIdentification1(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='GenericPersonIdentification1'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.xs_BasicText_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.SchmeNm is not None:
-            showIndent(outfile, level)
-            outfile.write('SchmeNm=model_.PersonIdentificationSchemeName1Choice(\n')
-            self.SchmeNm.exportLiteral(outfile, level, name_='SchmeNm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Issr is not None:
-            showIndent(outfile, level)
-            outfile.write('Issr=model_.xs_BasicText_CH(\n')
-            self.Issr.exportLiteral(outfile, level, name_='Issr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -7850,10 +5389,8 @@ class GenericPersonIdentification1(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Id':
             obj_ = None
@@ -7872,14 +5409,12 @@ class GenericPersonIdentification1(GeneratedsSuper):
             obj_.original_tagname_ = 'Issr'
             # validate type Max35Text
             self.validate_Max35Text(self.Issr)
-
-
 # end class GenericPersonIdentification1
 
 
 class GroupHeader32_CH(GeneratedsSuper):
     member_data_items_ = {
-        'MsgId': MemberSpec_('MsgId', ['Max15NumericText', 'xs:string'], 0),
+        'MsgId': MemberSpec_('MsgId', ['Max35TextSwift', 'BasicText-Swift'], 0),
         'CreDtTm': MemberSpec_('CreDtTm', ['ISODateTime', 'xs:dateTime'], 0),
         'NbOfTxs': MemberSpec_('NbOfTxs', ['Max15NumericText', 'xs:string'], 0),
         'CtrlSum': MemberSpec_('CtrlSum', ['DecimalNumber', 'xs:decimal'], 0),
@@ -7888,10 +5423,10 @@ class GroupHeader32_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, MsgId=None, CreDtTm=None, NbOfTxs=None, CtrlSum=None, InitgPty=None, FwdgAgt=None):
         self.original_tagname_ = None
         self.MsgId = MsgId
+        self.validate_Max35TextSwift(self.MsgId)
         if isinstance(CreDtTm, BaseStrType_):
             initvalue_ = datetime_.datetime.strptime(CreDtTm, '%Y-%m-%dT%H:%M:%S')
         else:
@@ -7903,7 +5438,6 @@ class GroupHeader32_CH(GeneratedsSuper):
         self.validate_DecimalNumber(self.CtrlSum)
         self.InitgPty = InitgPty
         self.FwdgAgt = FwdgAgt
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -7914,80 +5448,58 @@ class GroupHeader32_CH(GeneratedsSuper):
             return GroupHeader32_CH.subclass(*args_, **kwargs_)
         else:
             return GroupHeader32_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_MsgId(self):
-        return self.MsgId
-
-    def set_MsgId(self, MsgId):
-        self.MsgId = MsgId
-
-    def get_CreDtTm(self):
-        return self.CreDtTm
-
-    def set_CreDtTm(self, CreDtTm):
-        self.CreDtTm = CreDtTm
-
-    def get_NbOfTxs(self):
-        return self.NbOfTxs
-
-    def set_NbOfTxs(self, NbOfTxs):
-        self.NbOfTxs = NbOfTxs
-
-    def get_CtrlSum(self):
-        return self.CtrlSum
-
-    def set_CtrlSum(self, CtrlSum):
-        self.CtrlSum = CtrlSum
-
-    def get_InitgPty(self):
-        return self.InitgPty
-
-    def set_InitgPty(self, InitgPty):
-        self.InitgPty = InitgPty
-
-    def get_FwdgAgt(self):
-        return self.FwdgAgt
-
-    def set_FwdgAgt(self, FwdgAgt):
-        self.FwdgAgt = FwdgAgt
-
+    def get_MsgId(self): return self.MsgId
+    def set_MsgId(self, MsgId): self.MsgId = MsgId
+    def get_CreDtTm(self): return self.CreDtTm
+    def set_CreDtTm(self, CreDtTm): self.CreDtTm = CreDtTm
+    def get_NbOfTxs(self): return self.NbOfTxs
+    def set_NbOfTxs(self, NbOfTxs): self.NbOfTxs = NbOfTxs
+    def get_CtrlSum(self): return self.CtrlSum
+    def set_CtrlSum(self, CtrlSum): self.CtrlSum = CtrlSum
+    def get_InitgPty(self): return self.InitgPty
+    def set_InitgPty(self, InitgPty): self.InitgPty = InitgPty
+    def get_FwdgAgt(self): return self.FwdgAgt
+    def set_FwdgAgt(self, FwdgAgt): self.FwdgAgt = FwdgAgt
+    def validate_Max35TextSwift(self, value):
+        # Validate type Max35TextSwift, a restriction on BasicText-Swift.
+        if value is not None and Validate_simpletypes_:
+            if len(str(value)) > 35:
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35TextSwift' % {"value" : value} )
+            if len(str(value)) < 1:
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35TextSwift' % {"value" : value} )
+            if not self.gds_validate_simple_patterns(
+                    self.validate_Max35TextSwift_patterns_, value):
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35TextSwift_patterns_, ))
+    validate_Max35TextSwift_patterns_ = [["^([A-Za-z0-9]|[+|\\?|/|\\-|:|\\(|\\)|\\.|,|'|\\p{Zs}])*$"]]
     def validate_ISODateTime(self, value):
         # Validate type ISODateTime, a restriction on xs:dateTime.
         if value is not None and Validate_simpletypes_:
             pass
-
     def validate_Max15NumericText(self, value):
         # Validate type Max15NumericText, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_Max15NumericText_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max15NumericText_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max15NumericText_patterns_, ))
     validate_Max15NumericText_patterns_ = [['^[0-9]{1,15}$']]
-
     def validate_DecimalNumber(self, value):
         # Validate type DecimalNumber, a restriction on xs:decimal.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) >= 18:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxInclusive restriction on DecimalNumber' % {"value": value})
-
+                warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on DecimalNumber' % {"value" : value} )
     def hasContent_(self):
         if (
-                                        self.MsgId is not None or
-                                        self.CreDtTm is not None or
-                                    self.NbOfTxs is not None or
-                                self.CtrlSum is not None or
-                            self.InitgPty is not None or
-                        self.FwdgAgt is not None
+            self.MsgId is not None or
+            self.CreDtTm is not None or
+            self.NbOfTxs is not None or
+            self.CtrlSum is not None or
+            self.InitgPty is not None or
+            self.FwdgAgt is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='GroupHeader32-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -7996,75 +5508,55 @@ class GroupHeader32_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='GroupHeader32-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='GroupHeader32-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='GroupHeader32-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='GroupHeader32-CH', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='GroupHeader32-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.MsgId is not None:
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sMsgId>%s</%sMsgId>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.MsgId), input_name='MsgId')), namespace_,
-            eol_))
+            self.MsgId.export(outfile, level, namespace_, name_='MsgId', pretty_print=pretty_print)
         if self.CreDtTm is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCreDtTm>%s</%sCreDtTm>%s' % (
-            namespace_, self.gds_format_datetime(self.CreDtTm, input_name='CreDtTm'), namespace_, eol_))
+            outfile.write('<%sCreDtTm>%s</%sCreDtTm>%s' % (namespace_, self.gds_format_datetime(self.CreDtTm, input_name='CreDtTm'), namespace_, eol_))
         if self.NbOfTxs is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sNbOfTxs>%s</%sNbOfTxs>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.NbOfTxs), input_name='NbOfTxs')),
-            namespace_, eol_))
+            outfile.write('<%sNbOfTxs>%s</%sNbOfTxs>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.NbOfTxs), input_name='NbOfTxs')), namespace_, eol_))
         if self.CtrlSum is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCtrlSum>%s</%sCtrlSum>%s' % (
-            namespace_, self.gds_format_float(self.CtrlSum, input_name='CtrlSum'), namespace_, eol_))
+            outfile.write('<%sCtrlSum>%s</%sCtrlSum>%s' % (namespace_, self.gds_format_float(self.CtrlSum, input_name='CtrlSum'), namespace_, eol_))
         if self.InitgPty is not None:
             self.InitgPty.export(outfile, level, namespace_, name_='InitgPty', pretty_print=pretty_print)
         if self.FwdgAgt is not None:
             self.FwdgAgt.export(outfile, level, namespace_, name_='FwdgAgt', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='GroupHeader32-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.MsgId is not None:
             MsgId_ = self.MsgId
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}MsgId').text = self.gds_format_string(
-                MsgId_)
+            MsgId_.to_etree(element, name_='MsgId', mapping_=mapping_)
         if self.CreDtTm is not None:
             CreDtTm_ = self.CreDtTm
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CreDtTm').text = self.gds_format_datetime(
-                CreDtTm_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CreDtTm').text = self.gds_format_datetime(CreDtTm_)
         if self.NbOfTxs is not None:
             NbOfTxs_ = self.NbOfTxs
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}NbOfTxs').text = self.gds_format_string(
-                NbOfTxs_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}NbOfTxs').text = self.gds_format_string(NbOfTxs_)
         if self.CtrlSum is not None:
             CtrlSum_ = self.CtrlSum
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CtrlSum').text = self.gds_format_float(
-                CtrlSum_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CtrlSum').text = self.gds_format_float(CtrlSum_)
         if self.InitgPty is not None:
             InitgPty_ = self.InitgPty
             InitgPty_.to_etree(element, name_='InitgPty', mapping_=mapping_)
@@ -8074,45 +5566,6 @@ class GroupHeader32_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='GroupHeader32-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.MsgId is not None:
-            showIndent(outfile, level)
-            outfile.write('MsgId=%s,\n' % self.gds_encode(quote_python(self.MsgId)))
-        if self.CreDtTm is not None:
-            showIndent(outfile, level)
-            outfile.write(
-                'CreDtTm=model_.GeneratedsSuper.gds_parse_datetime("%s"),\n' % self.gds_format_datetime(self.CreDtTm,
-                                                                                                        input_name='CreDtTm'))
-        if self.NbOfTxs is not None:
-            showIndent(outfile, level)
-            outfile.write('NbOfTxs=%s,\n' % self.gds_encode(quote_python(self.NbOfTxs)))
-        if self.CtrlSum is not None:
-            showIndent(outfile, level)
-            outfile.write('CtrlSum=%f,\n' % self.CtrlSum)
-        if self.InitgPty is not None:
-            showIndent(outfile, level)
-            outfile.write('InitgPty=model_.PartyIdentification32_CH_NameAndId(\n')
-            self.InitgPty.exportLiteral(outfile, level, name_='InitgPty')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.FwdgAgt is not None:
-            showIndent(outfile, level)
-            outfile.write('FwdgAgt=model_.BranchAndFinancialInstitutionIdentification4(\n')
-            self.FwdgAgt.exportLiteral(outfile, level, name_='FwdgAgt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -8120,15 +5573,15 @@ class GroupHeader32_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'MsgId':
-            MsgId_ = child_.text
-            MsgId_ = self.gds_validate_string(MsgId_, node, 'MsgId')
-            self.MsgId = MsgId_
+            obj_ = None
+            self.MsgId = obj_
+            obj_.original_tagname_ = 'MsgId'
+            # validate type Max35TextSwift
+            self.validate_Max35TextSwift(self.MsgId)
         elif nodeName_ == 'CreDtTm':
             sval_ = child_.text
             dval_ = self.gds_parse_datetime(sval_)
@@ -8161,8 +5614,6 @@ class GroupHeader32_CH(GeneratedsSuper):
             obj_.build(child_)
             self.FwdgAgt = obj_
             obj_.original_tagname_ = 'FwdgAgt'
-
-
 # end class GroupHeader32_CH
 
 
@@ -8173,14 +5624,12 @@ class InstructionForCreditorAgent1(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, InstrInf=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_Instruction3Code(self.Cd)
         self.InstrInf = InstrInf
         self.validate_Max140Text(self.InstrInf)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -8191,21 +5640,11 @@ class InstructionForCreditorAgent1(GeneratedsSuper):
             return InstructionForCreditorAgent1.subclass(*args_, **kwargs_)
         else:
             return InstructionForCreditorAgent1(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_InstrInf(self):
-        return self.InstrInf
-
-    def set_InstrInf(self, InstrInf):
-        self.InstrInf = InstrInf
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_InstrInf(self): return self.InstrInf
+    def set_InstrInf(self, InstrInf): self.InstrInf = InstrInf
     def validate_Instruction3Code(self, value):
         # Validate type Instruction3Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -8217,37 +5656,27 @@ class InstructionForCreditorAgent1(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on Instruction3Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on Instruction3Code' % {"value" : value.encode("utf-8")} )
     def validate_Max140Text(self, value):
         # Validate type Max140Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 140:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max140Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max140Text_patterns_,))
-
-    validate_Max140Text_patterns_ = [[
-                                         u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max140Text_patterns_, ))
+    validate_Max140Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.InstrInf is not None
+            self.Cd is not None or
+            self.InstrInf is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='InstructionForCreditorAgent1', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='InstructionForCreditorAgent1', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -8255,73 +5684,42 @@ class InstructionForCreditorAgent1(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='InstructionForCreditorAgent1')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='InstructionForCreditorAgent1',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='InstructionForCreditorAgent1', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='InstructionForCreditorAgent1'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='InstructionForCreditorAgent1', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='InstructionForCreditorAgent1', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.InstrInf is not None:
             self.InstrInf.export(outfile, level, namespace_, name_='InstrInf', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='InstructionForCreditorAgent1', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.InstrInf is not None:
             InstrInf_ = self.InstrInf
             InstrInf_.to_etree(element, name_='InstrInf', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='InstructionForCreditorAgent1'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.InstrInf is not None:
-            showIndent(outfile, level)
-            outfile.write('InstrInf=model_.xs_BasicText_CH(\n')
-            self.InstrInf.exportLiteral(outfile, level, name_='InstrInf')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -8329,10 +5727,8 @@ class InstructionForCreditorAgent1(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -8346,8 +5742,6 @@ class InstructionForCreditorAgent1(GeneratedsSuper):
             obj_.original_tagname_ = 'InstrInf'
             # validate type Max140Text
             self.validate_Max140Text(self.InstrInf)
-
-
 # end class InstructionForCreditorAgent1
 
 
@@ -8358,14 +5752,12 @@ class LocalInstrument2Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, Prtry=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_ExternalLocalInstrument1Code(self.Cd)
         self.Prtry = Prtry
         self.validate_Max35Text(self.Prtry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -8376,61 +5768,38 @@ class LocalInstrument2Choice(GeneratedsSuper):
             return LocalInstrument2Choice.subclass(*args_, **kwargs_)
         else:
             return LocalInstrument2Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Prtry(self):
-        return self.Prtry
-
-    def set_Prtry(self, Prtry):
-        self.Prtry = Prtry
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Prtry(self): return self.Prtry
+    def set_Prtry(self, Prtry): self.Prtry = Prtry
     def validate_ExternalLocalInstrument1Code(self, value):
         # Validate type ExternalLocalInstrument1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if len(value) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on ExternalLocalInstrument1Code' % {
-                        "value": value.encode("utf-8")})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on ExternalLocalInstrument1Code' % {"value" : value.encode("utf-8")} )
             if len(value) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on ExternalLocalInstrument1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on ExternalLocalInstrument1Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.Prtry is not None
+            self.Cd is not None or
+            self.Prtry is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='LocalInstrument2Choice', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='LocalInstrument2Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -8438,73 +5807,42 @@ class LocalInstrument2Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='LocalInstrument2Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='LocalInstrument2Choice',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='LocalInstrument2Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='LocalInstrument2Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='LocalInstrument2Choice', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='LocalInstrument2Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.Prtry is not None:
             self.Prtry.export(outfile, level, namespace_, name_='Prtry', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='LocalInstrument2Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.Prtry is not None:
             Prtry_ = self.Prtry
             Prtry_.to_etree(element, name_='Prtry', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='LocalInstrument2Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.Prtry is not None:
-            showIndent(outfile, level)
-            outfile.write('Prtry=model_.xs_BasicText_CH(\n')
-            self.Prtry.exportLiteral(outfile, level, name_='Prtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -8512,10 +5850,8 @@ class LocalInstrument2Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -8529,8 +5865,6 @@ class LocalInstrument2Choice(GeneratedsSuper):
             obj_.original_tagname_ = 'Prtry'
             # validate type Max35Text
             self.validate_Max35Text(self.Prtry)
-
-
 # end class LocalInstrument2Choice
 
 
@@ -8541,7 +5875,6 @@ class OrganisationIdentification4(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, BICOrBEI=None, Othr=None):
         self.original_tagname_ = None
         self.BICOrBEI = BICOrBEI
@@ -8550,7 +5883,6 @@ class OrganisationIdentification4(GeneratedsSuper):
             self.Othr = []
         else:
             self.Othr = Othr
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -8561,51 +5893,30 @@ class OrganisationIdentification4(GeneratedsSuper):
             return OrganisationIdentification4.subclass(*args_, **kwargs_)
         else:
             return OrganisationIdentification4(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_BICOrBEI(self):
-        return self.BICOrBEI
-
-    def set_BICOrBEI(self, BICOrBEI):
-        self.BICOrBEI = BICOrBEI
-
-    def get_Othr(self):
-        return self.Othr
-
-    def set_Othr(self, Othr):
-        self.Othr = Othr
-
-    def add_Othr(self, value):
-        self.Othr.append(value)
-
-    def insert_Othr_at(self, index, value):
-        self.Othr.insert(index, value)
-
-    def replace_Othr_at(self, index, value):
-        self.Othr[index] = value
-
+    def get_BICOrBEI(self): return self.BICOrBEI
+    def set_BICOrBEI(self, BICOrBEI): self.BICOrBEI = BICOrBEI
+    def get_Othr(self): return self.Othr
+    def set_Othr(self, Othr): self.Othr = Othr
+    def add_Othr(self, value): self.Othr.append(value)
+    def insert_Othr_at(self, index, value): self.Othr.insert(index, value)
+    def replace_Othr_at(self, index, value): self.Othr[index] = value
     def validate_AnyBICIdentifier(self, value):
         # Validate type AnyBICIdentifier, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_AnyBICIdentifier_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_AnyBICIdentifier_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_AnyBICIdentifier_patterns_, ))
     validate_AnyBICIdentifier_patterns_ = [['^[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}$']]
-
     def hasContent_(self):
         if (
-                        self.BICOrBEI is not None or
-                    self.Othr
+            self.BICOrBEI is not None or
+            self.Othr
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='OrganisationIdentification4', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='OrganisationIdentification4', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -8613,79 +5924,41 @@ class OrganisationIdentification4(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='OrganisationIdentification4')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='OrganisationIdentification4',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='OrganisationIdentification4', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='OrganisationIdentification4'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='OrganisationIdentification4', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='OrganisationIdentification4', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.BICOrBEI is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sBICOrBEI>%s</%sBICOrBEI>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.BICOrBEI), input_name='BICOrBEI')),
-            namespace_, eol_))
+            outfile.write('<%sBICOrBEI>%s</%sBICOrBEI>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.BICOrBEI), input_name='BICOrBEI')), namespace_, eol_))
         for Othr_ in self.Othr:
             Othr_.export(outfile, level, namespace_, name_='Othr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='OrganisationIdentification4', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.BICOrBEI is not None:
             BICOrBEI_ = self.BICOrBEI
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BICOrBEI').text = self.gds_format_string(
-                BICOrBEI_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BICOrBEI').text = self.gds_format_string(BICOrBEI_)
         for Othr_ in self.Othr:
             Othr_.to_etree(element, name_='Othr', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='OrganisationIdentification4'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.BICOrBEI is not None:
-            showIndent(outfile, level)
-            outfile.write('BICOrBEI=%s,\n' % self.gds_encode(quote_python(self.BICOrBEI)))
-        showIndent(outfile, level)
-        outfile.write('Othr=[\n')
-        level += 1
-        for Othr_ in self.Othr:
-            showIndent(outfile, level)
-            outfile.write('model_.GenericOrganisationIdentification1(\n')
-            Othr_.exportLiteral(outfile, level, name_='GenericOrganisationIdentification1')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -8693,10 +5966,8 @@ class OrganisationIdentification4(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'BICOrBEI':
             BICOrBEI_ = child_.text
@@ -8709,8 +5980,6 @@ class OrganisationIdentification4(GeneratedsSuper):
             obj_.build(child_)
             self.Othr.append(obj_)
             obj_.original_tagname_ = 'Othr'
-
-
 # end class OrganisationIdentification4
 
 
@@ -8721,13 +5990,11 @@ class OrganisationIdentification4_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, BICOrBEI=None, Othr=None):
         self.original_tagname_ = None
         self.BICOrBEI = BICOrBEI
         self.validate_AnyBICIdentifier(self.BICOrBEI)
         self.Othr = Othr
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -8738,42 +6005,27 @@ class OrganisationIdentification4_CH(GeneratedsSuper):
             return OrganisationIdentification4_CH.subclass(*args_, **kwargs_)
         else:
             return OrganisationIdentification4_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_BICOrBEI(self):
-        return self.BICOrBEI
-
-    def set_BICOrBEI(self, BICOrBEI):
-        self.BICOrBEI = BICOrBEI
-
-    def get_Othr(self):
-        return self.Othr
-
-    def set_Othr(self, Othr):
-        self.Othr = Othr
-
+    def get_BICOrBEI(self): return self.BICOrBEI
+    def set_BICOrBEI(self, BICOrBEI): self.BICOrBEI = BICOrBEI
+    def get_Othr(self): return self.Othr
+    def set_Othr(self, Othr): self.Othr = Othr
     def validate_AnyBICIdentifier(self, value):
         # Validate type AnyBICIdentifier, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_AnyBICIdentifier_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_AnyBICIdentifier_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_AnyBICIdentifier_patterns_, ))
     validate_AnyBICIdentifier_patterns_ = [['^[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}$']]
-
     def hasContent_(self):
         if (
-                        self.BICOrBEI is not None or
-                        self.Othr is not None
+            self.BICOrBEI is not None or
+            self.Othr is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='OrganisationIdentification4-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='OrganisationIdentification4-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -8781,75 +6033,42 @@ class OrganisationIdentification4_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='OrganisationIdentification4-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='OrganisationIdentification4-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='OrganisationIdentification4-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='OrganisationIdentification4-CH'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='OrganisationIdentification4-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='OrganisationIdentification4-CH', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='OrganisationIdentification4-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.BICOrBEI is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sBICOrBEI>%s</%sBICOrBEI>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.BICOrBEI), input_name='BICOrBEI')),
-            namespace_, eol_))
+            outfile.write('<%sBICOrBEI>%s</%sBICOrBEI>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.BICOrBEI), input_name='BICOrBEI')), namespace_, eol_))
         if self.Othr is not None:
             self.Othr.export(outfile, level, namespace_, name_='Othr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='OrganisationIdentification4-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.BICOrBEI is not None:
             BICOrBEI_ = self.BICOrBEI
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BICOrBEI').text = self.gds_format_string(
-                BICOrBEI_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BICOrBEI').text = self.gds_format_string(BICOrBEI_)
         if self.Othr is not None:
             Othr_ = self.Othr
             Othr_.to_etree(element, name_='Othr', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='OrganisationIdentification4-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.BICOrBEI is not None:
-            showIndent(outfile, level)
-            outfile.write('BICOrBEI=%s,\n' % self.gds_encode(quote_python(self.BICOrBEI)))
-        if self.Othr is not None:
-            showIndent(outfile, level)
-            outfile.write('Othr=model_.GenericOrganisationIdentification1(\n')
-            self.Othr.exportLiteral(outfile, level, name_='Othr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -8857,10 +6076,8 @@ class OrganisationIdentification4_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'BICOrBEI':
             BICOrBEI_ = child_.text
@@ -8873,8 +6090,6 @@ class OrganisationIdentification4_CH(GeneratedsSuper):
             obj_.build(child_)
             self.Othr = obj_
             obj_.original_tagname_ = 'Othr'
-
-
 # end class OrganisationIdentification4_CH
 
 
@@ -8885,14 +6100,12 @@ class OrganisationIdentificationSchemeName1Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, Prtry=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_ExternalOrganisationIdentification1Code(self.Cd)
         self.Prtry = Prtry
         self.validate_Max35Text(self.Prtry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -8903,61 +6116,38 @@ class OrganisationIdentificationSchemeName1Choice(GeneratedsSuper):
             return OrganisationIdentificationSchemeName1Choice.subclass(*args_, **kwargs_)
         else:
             return OrganisationIdentificationSchemeName1Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Prtry(self):
-        return self.Prtry
-
-    def set_Prtry(self, Prtry):
-        self.Prtry = Prtry
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Prtry(self): return self.Prtry
+    def set_Prtry(self, Prtry): self.Prtry = Prtry
     def validate_ExternalOrganisationIdentification1Code(self, value):
         # Validate type ExternalOrganisationIdentification1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if len(value) > 4:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on ExternalOrganisationIdentification1Code' % {
-                        "value": value.encode("utf-8")})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on ExternalOrganisationIdentification1Code' % {"value" : value.encode("utf-8")} )
             if len(value) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on ExternalOrganisationIdentification1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on ExternalOrganisationIdentification1Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.Prtry is not None
+            self.Cd is not None or
+            self.Prtry is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='OrganisationIdentificationSchemeName1Choice',
-               namespacedef_='', pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='OrganisationIdentificationSchemeName1Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -8965,75 +6155,42 @@ class OrganisationIdentificationSchemeName1Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='OrganisationIdentificationSchemeName1Choice')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='OrganisationIdentificationSchemeName1Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='OrganisationIdentificationSchemeName1Choice',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='OrganisationIdentificationSchemeName1Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='OrganisationIdentificationSchemeName1Choice'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='OrganisationIdentificationSchemeName1Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='OrganisationIdentificationSchemeName1Choice',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='OrganisationIdentificationSchemeName1Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.Prtry is not None:
             self.Prtry.export(outfile, level, namespace_, name_='Prtry', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='OrganisationIdentificationSchemeName1Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.Prtry is not None:
             Prtry_ = self.Prtry
             Prtry_.to_etree(element, name_='Prtry', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='OrganisationIdentificationSchemeName1Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.Prtry is not None:
-            showIndent(outfile, level)
-            outfile.write('Prtry=model_.xs_BasicText_CH(\n')
-            self.Prtry.exportLiteral(outfile, level, name_='Prtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -9041,10 +6198,8 @@ class OrganisationIdentificationSchemeName1Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -9058,8 +6213,6 @@ class OrganisationIdentificationSchemeName1Choice(GeneratedsSuper):
             obj_.original_tagname_ = 'Prtry'
             # validate type Max35Text
             self.validate_Max35Text(self.Prtry)
-
-
 # end class OrganisationIdentificationSchemeName1Choice
 
 
@@ -9070,12 +6223,10 @@ class Party6Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, OrgId=None, PrvtId=None):
         self.original_tagname_ = None
         self.OrgId = OrgId
         self.PrvtId = PrvtId
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -9086,30 +6237,19 @@ class Party6Choice(GeneratedsSuper):
             return Party6Choice.subclass(*args_, **kwargs_)
         else:
             return Party6Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_OrgId(self):
-        return self.OrgId
-
-    def set_OrgId(self, OrgId):
-        self.OrgId = OrgId
-
-    def get_PrvtId(self):
-        return self.PrvtId
-
-    def set_PrvtId(self, PrvtId):
-        self.PrvtId = PrvtId
-
+    def get_OrgId(self): return self.OrgId
+    def set_OrgId(self, OrgId): self.OrgId = OrgId
+    def get_PrvtId(self): return self.PrvtId
+    def set_PrvtId(self, PrvtId): self.PrvtId = PrvtId
     def hasContent_(self):
         if (
-                        self.OrgId is not None or
-                        self.PrvtId is not None
+            self.OrgId is not None or
+            self.PrvtId is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='Party6Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -9118,22 +6258,19 @@ class Party6Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='Party6Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='Party6Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Party6Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='Party6Choice', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='Party6Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -9142,13 +6279,11 @@ class Party6Choice(GeneratedsSuper):
             self.OrgId.export(outfile, level, namespace_, name_='OrgId', pretty_print=pretty_print)
         if self.PrvtId is not None:
             self.PrvtId.export(outfile, level, namespace_, name_='PrvtId', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='Party6Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.OrgId is not None:
             OrgId_ = self.OrgId
             OrgId_.to_etree(element, name_='OrgId', mapping_=mapping_)
@@ -9158,31 +6293,6 @@ class Party6Choice(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='Party6Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.OrgId is not None:
-            showIndent(outfile, level)
-            outfile.write('OrgId=model_.OrganisationIdentification4(\n')
-            self.OrgId.exportLiteral(outfile, level, name_='OrgId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PrvtId is not None:
-            showIndent(outfile, level)
-            outfile.write('PrvtId=model_.PersonIdentification5(\n')
-            self.PrvtId.exportLiteral(outfile, level, name_='PrvtId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -9190,10 +6300,8 @@ class Party6Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'OrgId':
             obj_ = OrganisationIdentification4.factory()
@@ -9205,8 +6313,6 @@ class Party6Choice(GeneratedsSuper):
             obj_.build(child_)
             self.PrvtId = obj_
             obj_.original_tagname_ = 'PrvtId'
-
-
 # end class Party6Choice
 
 
@@ -9217,12 +6323,10 @@ class Party6Choice_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, OrgId=None, PrvtId=None):
         self.original_tagname_ = None
         self.OrgId = OrgId
         self.PrvtId = PrvtId
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -9233,30 +6337,19 @@ class Party6Choice_CH(GeneratedsSuper):
             return Party6Choice_CH.subclass(*args_, **kwargs_)
         else:
             return Party6Choice_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_OrgId(self):
-        return self.OrgId
-
-    def set_OrgId(self, OrgId):
-        self.OrgId = OrgId
-
-    def get_PrvtId(self):
-        return self.PrvtId
-
-    def set_PrvtId(self, PrvtId):
-        self.PrvtId = PrvtId
-
+    def get_OrgId(self): return self.OrgId
+    def set_OrgId(self, OrgId): self.OrgId = OrgId
+    def get_PrvtId(self): return self.PrvtId
+    def set_PrvtId(self, PrvtId): self.PrvtId = PrvtId
     def hasContent_(self):
         if (
-                        self.OrgId is not None or
-                        self.PrvtId is not None
+            self.OrgId is not None or
+            self.PrvtId is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='Party6Choice-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -9265,22 +6358,19 @@ class Party6Choice_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='Party6Choice-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='Party6Choice-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Party6Choice-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='Party6Choice-CH', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='Party6Choice-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -9289,13 +6379,11 @@ class Party6Choice_CH(GeneratedsSuper):
             self.OrgId.export(outfile, level, namespace_, name_='OrgId', pretty_print=pretty_print)
         if self.PrvtId is not None:
             self.PrvtId.export(outfile, level, namespace_, name_='PrvtId', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='Party6Choice-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.OrgId is not None:
             OrgId_ = self.OrgId
             OrgId_.to_etree(element, name_='OrgId', mapping_=mapping_)
@@ -9305,31 +6393,6 @@ class Party6Choice_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='Party6Choice-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.OrgId is not None:
-            showIndent(outfile, level)
-            outfile.write('OrgId=model_.OrganisationIdentification4_CH(\n')
-            self.OrgId.exportLiteral(outfile, level, name_='OrgId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PrvtId is not None:
-            showIndent(outfile, level)
-            outfile.write('PrvtId=model_.PersonIdentification5_CH(\n')
-            self.PrvtId.exportLiteral(outfile, level, name_='PrvtId')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -9337,10 +6400,8 @@ class Party6Choice_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'OrgId':
             obj_ = OrganisationIdentification4_CH.factory()
@@ -9352,8 +6413,6 @@ class Party6Choice_CH(GeneratedsSuper):
             obj_.build(child_)
             self.PrvtId = obj_
             obj_.original_tagname_ = 'PrvtId'
-
-
 # end class Party6Choice_CH
 
 
@@ -9367,7 +6426,6 @@ class PartyIdentification32(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Nm=None, PstlAdr=None, Id=None, CtryOfRes=None, CtctDtls=None):
         self.original_tagname_ = None
         self.Nm = Nm
@@ -9377,7 +6435,6 @@ class PartyIdentification32(GeneratedsSuper):
         self.CtryOfRes = CtryOfRes
         self.validate_CountryCode(self.CtryOfRes)
         self.CtctDtls = CtctDtls
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -9388,78 +6445,46 @@ class PartyIdentification32(GeneratedsSuper):
             return PartyIdentification32.subclass(*args_, **kwargs_)
         else:
             return PartyIdentification32(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Nm(self):
-        return self.Nm
-
-    def set_Nm(self, Nm):
-        self.Nm = Nm
-
-    def get_PstlAdr(self):
-        return self.PstlAdr
-
-    def set_PstlAdr(self, PstlAdr):
-        self.PstlAdr = PstlAdr
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
-    def get_CtryOfRes(self):
-        return self.CtryOfRes
-
-    def set_CtryOfRes(self, CtryOfRes):
-        self.CtryOfRes = CtryOfRes
-
-    def get_CtctDtls(self):
-        return self.CtctDtls
-
-    def set_CtctDtls(self, CtctDtls):
-        self.CtctDtls = CtctDtls
-
+    def get_Nm(self): return self.Nm
+    def set_Nm(self, Nm): self.Nm = Nm
+    def get_PstlAdr(self): return self.PstlAdr
+    def set_PstlAdr(self, PstlAdr): self.PstlAdr = PstlAdr
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
+    def get_CtryOfRes(self): return self.CtryOfRes
+    def set_CtryOfRes(self, CtryOfRes): self.CtryOfRes = CtryOfRes
+    def get_CtctDtls(self): return self.CtctDtls
+    def set_CtctDtls(self, CtctDtls): self.CtctDtls = CtctDtls
     def validate_Max140Text(self, value):
         # Validate type Max140Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 140:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max140Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max140Text_patterns_,))
-
-    validate_Max140Text_patterns_ = [[
-                                         u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max140Text_patterns_, ))
+    validate_Max140Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_CountryCode(self, value):
         # Validate type CountryCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_CountryCode_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_CountryCode_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_CountryCode_patterns_, ))
     validate_CountryCode_patterns_ = [['^[A-Z]{2,2}$']]
-
     def hasContent_(self):
         if (
-                                    self.Nm is not None or
-                                    self.PstlAdr is not None or
-                                self.Id is not None or
-                            self.CtryOfRes is not None or
-                        self.CtctDtls is not None
+            self.Nm is not None or
+            self.PstlAdr is not None or
+            self.Id is not None or
+            self.CtryOfRes is not None or
+            self.CtctDtls is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='PartyIdentification32', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -9468,23 +6493,19 @@ class PartyIdentification32(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PartyIdentification32')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='PartyIdentification32',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='PartyIdentification32', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PartyIdentification32'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PartyIdentification32', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PartyIdentification32', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -9497,18 +6518,14 @@ class PartyIdentification32(GeneratedsSuper):
             self.Id.export(outfile, level, namespace_, name_='Id', pretty_print=pretty_print)
         if self.CtryOfRes is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCtryOfRes>%s</%sCtryOfRes>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.CtryOfRes), input_name='CtryOfRes')),
-            namespace_, eol_))
+            outfile.write('<%sCtryOfRes>%s</%sCtryOfRes>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.CtryOfRes), input_name='CtryOfRes')), namespace_, eol_))
         if self.CtctDtls is not None:
             self.CtctDtls.export(outfile, level, namespace_, name_='CtctDtls', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PartyIdentification32', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Nm is not None:
             Nm_ = self.Nm
             Nm_.to_etree(element, name_='Nm', mapping_=mapping_)
@@ -9520,55 +6537,13 @@ class PartyIdentification32(GeneratedsSuper):
             Id_.to_etree(element, name_='Id', mapping_=mapping_)
         if self.CtryOfRes is not None:
             CtryOfRes_ = self.CtryOfRes
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CtryOfRes').text = self.gds_format_string(
-                CtryOfRes_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CtryOfRes').text = self.gds_format_string(CtryOfRes_)
         if self.CtctDtls is not None:
             CtctDtls_ = self.CtctDtls
             CtctDtls_.to_etree(element, name_='CtctDtls', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PartyIdentification32'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Nm is not None:
-            showIndent(outfile, level)
-            outfile.write('Nm=model_.xs_BasicText_CH(\n')
-            self.Nm.exportLiteral(outfile, level, name_='Nm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PstlAdr is not None:
-            showIndent(outfile, level)
-            outfile.write('PstlAdr=model_.PostalAddress6(\n')
-            self.PstlAdr.exportLiteral(outfile, level, name_='PstlAdr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.Party6Choice(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CtryOfRes is not None:
-            showIndent(outfile, level)
-            outfile.write('CtryOfRes=%s,\n' % self.gds_encode(quote_python(self.CtryOfRes)))
-        if self.CtctDtls is not None:
-            showIndent(outfile, level)
-            outfile.write('CtctDtls=model_.ContactDetails2(\n')
-            self.CtctDtls.exportLiteral(outfile, level, name_='CtctDtls')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -9576,10 +6551,8 @@ class PartyIdentification32(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Nm':
             obj_ = None
@@ -9608,8 +6581,6 @@ class PartyIdentification32(GeneratedsSuper):
             obj_.build(child_)
             self.CtctDtls = obj_
             obj_.original_tagname_ = 'CtctDtls'
-
-
 # end class PartyIdentification32
 
 
@@ -9621,14 +6592,12 @@ class PartyIdentification32_CH_NameAndId(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Nm=None, Id=None, CtctDtls=None):
         self.original_tagname_ = None
         self.Nm = Nm
         self.validate_Max70Text(self.Nm)
         self.Id = Id
         self.CtctDtls = CtctDtls
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -9639,56 +6608,34 @@ class PartyIdentification32_CH_NameAndId(GeneratedsSuper):
             return PartyIdentification32_CH_NameAndId.subclass(*args_, **kwargs_)
         else:
             return PartyIdentification32_CH_NameAndId(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Nm(self):
-        return self.Nm
-
-    def set_Nm(self, Nm):
-        self.Nm = Nm
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
-    def get_CtctDtls(self):
-        return self.CtctDtls
-
-    def set_CtctDtls(self, CtctDtls):
-        self.CtctDtls = CtctDtls
-
+    def get_Nm(self): return self.Nm
+    def set_Nm(self, Nm): self.Nm = Nm
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
+    def get_CtctDtls(self): return self.CtctDtls
+    def set_CtctDtls(self, CtctDtls): self.CtctDtls = CtctDtls
     def validate_Max70Text(self, value):
         # Validate type Max70Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 70:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max70Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max70Text_patterns_,))
-
-    validate_Max70Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max70Text_patterns_, ))
+    validate_Max70Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                            self.Nm is not None or
-                            self.Id is not None or
-                        self.CtctDtls is not None
+            self.Nm is not None or
+            self.Id is not None or
+            self.CtctDtls is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='PartyIdentification32-CH_NameAndId', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='PartyIdentification32-CH_NameAndId', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -9696,24 +6643,19 @@ class PartyIdentification32_CH_NameAndId(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PartyIdentification32-CH_NameAndId')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='PartyIdentification32-CH_NameAndId',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='PartyIdentification32-CH_NameAndId', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='PartyIdentification32-CH_NameAndId'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PartyIdentification32-CH_NameAndId'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PartyIdentification32-CH_NameAndId',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PartyIdentification32-CH_NameAndId', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -9724,13 +6666,11 @@ class PartyIdentification32_CH_NameAndId(GeneratedsSuper):
             self.Id.export(outfile, level, namespace_, name_='Id', pretty_print=pretty_print)
         if self.CtctDtls is not None:
             self.CtctDtls.export(outfile, level, namespace_, name_='CtctDtls', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PartyIdentification32-CH_NameAndId', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Nm is not None:
             Nm_ = self.Nm
             Nm_.to_etree(element, name_='Nm', mapping_=mapping_)
@@ -9743,37 +6683,6 @@ class PartyIdentification32_CH_NameAndId(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PartyIdentification32-CH_NameAndId'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Nm is not None:
-            showIndent(outfile, level)
-            outfile.write('Nm=model_.xs_BasicText_CH(\n')
-            self.Nm.exportLiteral(outfile, level, name_='Nm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.Party6Choice_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CtctDtls is not None:
-            showIndent(outfile, level)
-            outfile.write('CtctDtls=model_.ContactDetails2_CH(\n')
-            self.CtctDtls.exportLiteral(outfile, level, name_='CtctDtls')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -9781,10 +6690,8 @@ class PartyIdentification32_CH_NameAndId(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Nm':
             obj_ = None
@@ -9802,8 +6709,6 @@ class PartyIdentification32_CH_NameAndId(GeneratedsSuper):
             obj_.build(child_)
             self.CtctDtls = obj_
             obj_.original_tagname_ = 'CtctDtls'
-
-
 # end class PartyIdentification32_CH_NameAndId
 
 
@@ -9815,14 +6720,12 @@ class PartyIdentification32_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Nm=None, PstlAdr=None, Id=None):
         self.original_tagname_ = None
         self.Nm = Nm
         self.validate_Max70Text(self.Nm)
         self.PstlAdr = PstlAdr
         self.Id = Id
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -9833,56 +6736,34 @@ class PartyIdentification32_CH(GeneratedsSuper):
             return PartyIdentification32_CH.subclass(*args_, **kwargs_)
         else:
             return PartyIdentification32_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Nm(self):
-        return self.Nm
-
-    def set_Nm(self, Nm):
-        self.Nm = Nm
-
-    def get_PstlAdr(self):
-        return self.PstlAdr
-
-    def set_PstlAdr(self, PstlAdr):
-        self.PstlAdr = PstlAdr
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
+    def get_Nm(self): return self.Nm
+    def set_Nm(self, Nm): self.Nm = Nm
+    def get_PstlAdr(self): return self.PstlAdr
+    def set_PstlAdr(self, PstlAdr): self.PstlAdr = PstlAdr
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
     def validate_Max70Text(self, value):
         # Validate type Max70Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 70:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max70Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max70Text_patterns_,))
-
-    validate_Max70Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max70Text_patterns_, ))
+    validate_Max70Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                            self.Nm is not None or
-                            self.PstlAdr is not None or
-                        self.Id is not None
+            self.Nm is not None or
+            self.PstlAdr is not None or
+            self.Id is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='PartyIdentification32-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='PartyIdentification32-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -9890,23 +6771,19 @@ class PartyIdentification32_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PartyIdentification32-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='PartyIdentification32-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='PartyIdentification32-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PartyIdentification32-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PartyIdentification32-CH', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PartyIdentification32-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -9917,13 +6794,11 @@ class PartyIdentification32_CH(GeneratedsSuper):
             self.PstlAdr.export(outfile, level, namespace_, name_='PstlAdr', pretty_print=pretty_print)
         if self.Id is not None:
             self.Id.export(outfile, level, namespace_, name_='Id', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PartyIdentification32-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Nm is not None:
             Nm_ = self.Nm
             Nm_.to_etree(element, name_='Nm', mapping_=mapping_)
@@ -9936,37 +6811,6 @@ class PartyIdentification32_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PartyIdentification32-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Nm is not None:
-            showIndent(outfile, level)
-            outfile.write('Nm=model_.xs_BasicText_CH(\n')
-            self.Nm.exportLiteral(outfile, level, name_='Nm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PstlAdr is not None:
-            showIndent(outfile, level)
-            outfile.write('PstlAdr=model_.PostalAddress6_CH(\n')
-            self.PstlAdr.exportLiteral(outfile, level, name_='PstlAdr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.Party6Choice_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -9974,10 +6818,8 @@ class PartyIdentification32_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Nm':
             obj_ = None
@@ -9995,8 +6837,6 @@ class PartyIdentification32_CH(GeneratedsSuper):
             obj_.build(child_)
             self.Id = obj_
             obj_.original_tagname_ = 'Id'
-
-
 # end class PartyIdentification32_CH
 
 
@@ -10008,14 +6848,12 @@ class PartyIdentification32_CH_Name(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Nm=None, PstlAdr=None, Id=None):
         self.original_tagname_ = None
         self.Nm = Nm
         self.validate_Max70Text(self.Nm)
         self.PstlAdr = PstlAdr
         self.Id = Id
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -10026,56 +6864,34 @@ class PartyIdentification32_CH_Name(GeneratedsSuper):
             return PartyIdentification32_CH_Name.subclass(*args_, **kwargs_)
         else:
             return PartyIdentification32_CH_Name(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Nm(self):
-        return self.Nm
-
-    def set_Nm(self, Nm):
-        self.Nm = Nm
-
-    def get_PstlAdr(self):
-        return self.PstlAdr
-
-    def set_PstlAdr(self, PstlAdr):
-        self.PstlAdr = PstlAdr
-
-    def get_Id(self):
-        return self.Id
-
-    def set_Id(self, Id):
-        self.Id = Id
-
+    def get_Nm(self): return self.Nm
+    def set_Nm(self, Nm): self.Nm = Nm
+    def get_PstlAdr(self): return self.PstlAdr
+    def set_PstlAdr(self, PstlAdr): self.PstlAdr = PstlAdr
+    def get_Id(self): return self.Id
+    def set_Id(self, Id): self.Id = Id
     def validate_Max70Text(self, value):
         # Validate type Max70Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 70:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max70Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max70Text_patterns_,))
-
-    validate_Max70Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max70Text_patterns_, ))
+    validate_Max70Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                            self.Nm is not None or
-                            self.PstlAdr is not None or
-                        self.Id is not None
+            self.Nm is not None or
+            self.PstlAdr is not None or
+            self.Id is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='PartyIdentification32-CH_Name', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='PartyIdentification32-CH_Name', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -10083,23 +6899,19 @@ class PartyIdentification32_CH_Name(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PartyIdentification32-CH_Name')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='PartyIdentification32-CH_Name',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='PartyIdentification32-CH_Name', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PartyIdentification32-CH_Name'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PartyIdentification32-CH_Name', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PartyIdentification32-CH_Name', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -10110,13 +6922,11 @@ class PartyIdentification32_CH_Name(GeneratedsSuper):
             self.PstlAdr.export(outfile, level, namespace_, name_='PstlAdr', pretty_print=pretty_print)
         if self.Id is not None:
             self.Id.export(outfile, level, namespace_, name_='Id', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PartyIdentification32-CH_Name', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Nm is not None:
             Nm_ = self.Nm
             Nm_.to_etree(element, name_='Nm', mapping_=mapping_)
@@ -10129,37 +6939,6 @@ class PartyIdentification32_CH_Name(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PartyIdentification32-CH_Name'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Nm is not None:
-            showIndent(outfile, level)
-            outfile.write('Nm=model_.xs_BasicText_CH(\n')
-            self.Nm.exportLiteral(outfile, level, name_='Nm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PstlAdr is not None:
-            showIndent(outfile, level)
-            outfile.write('PstlAdr=model_.PostalAddress6_CH(\n')
-            self.PstlAdr.exportLiteral(outfile, level, name_='PstlAdr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Id is not None:
-            showIndent(outfile, level)
-            outfile.write('Id=model_.Party6Choice_CH(\n')
-            self.Id.exportLiteral(outfile, level, name_='Id')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -10167,10 +6946,8 @@ class PartyIdentification32_CH_Name(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Nm':
             obj_ = None
@@ -10188,24 +6965,22 @@ class PartyIdentification32_CH_Name(GeneratedsSuper):
             obj_.build(child_)
             self.Id = obj_
             obj_.original_tagname_ = 'Id'
-
-
 # end class PartyIdentification32_CH_Name
 
 
 class PaymentIdentification1(GeneratedsSuper):
     member_data_items_ = {
-        'InstrId': MemberSpec_('InstrId', 'xs:string', 0),
-        'EndToEndId': MemberSpec_('EndToEndId', 'xs:string', 0),
+        'InstrId': MemberSpec_('InstrId', ['Max35TextSwift', 'BasicText-Swift'], 0),
+        'EndToEndId': MemberSpec_('EndToEndId', ['Max35TextSwift', 'BasicText-Swift'], 0),
     }
     subclass = None
     superclass = None
-
     def __init__(self, InstrId=None, EndToEndId=None):
         self.original_tagname_ = None
         self.InstrId = InstrId
+        self.validate_Max35TextSwift(self.InstrId)
         self.EndToEndId = EndToEndId
-
+        self.validate_Max35TextSwift(self.EndToEndId)
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -10216,32 +6991,31 @@ class PaymentIdentification1(GeneratedsSuper):
             return PaymentIdentification1.subclass(*args_, **kwargs_)
         else:
             return PaymentIdentification1(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_InstrId(self):
-        return self.InstrId
-
-    def set_InstrId(self, InstrId):
-        self.InstrId = InstrId
-
-    def get_EndToEndId(self):
-        return self.EndToEndId
-
-    def set_EndToEndId(self, EndToEndId):
-        self.EndToEndId = EndToEndId
-
+    def get_InstrId(self): return self.InstrId
+    def set_InstrId(self, InstrId): self.InstrId = InstrId
+    def get_EndToEndId(self): return self.EndToEndId
+    def set_EndToEndId(self, EndToEndId): self.EndToEndId = EndToEndId
+    def validate_Max35TextSwift(self, value):
+        # Validate type Max35TextSwift, a restriction on BasicText-Swift.
+        if value is not None and Validate_simpletypes_:
+            if len(str(value)) > 35:
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35TextSwift' % {"value" : value} )
+            if len(str(value)) < 1:
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35TextSwift' % {"value" : value} )
+            if not self.gds_validate_simple_patterns(
+                    self.validate_Max35TextSwift_patterns_, value):
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35TextSwift_patterns_, ))
+    validate_Max35TextSwift_patterns_ = [["^([A-Za-z0-9]|[+|\\?|/|\\-|:|\\(|\\)|\\.|,|'|\\p{Zs}])*$"]]
     def hasContent_(self):
         if (
-                        self.InstrId is not None or
-                        self.EndToEndId is not None
+            self.InstrId is not None or
+            self.EndToEndId is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='PaymentIdentification1', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='PaymentIdentification1', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -10249,76 +7023,41 @@ class PaymentIdentification1(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PaymentIdentification1')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='PaymentIdentification1',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='PaymentIdentification1', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PaymentIdentification1'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PaymentIdentification1', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PaymentIdentification1', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.InstrId is not None:
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sInstrId>%s</%sInstrId>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.InstrId), input_name='InstrId')),
-            namespace_, eol_))
+            self.InstrId.export(outfile, level, namespace_, name_='InstrId', pretty_print=pretty_print)
         if self.EndToEndId is not None:
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sEndToEndId>%s</%sEndToEndId>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.EndToEndId), input_name='EndToEndId')),
-            namespace_, eol_))
-
+            self.EndToEndId.export(outfile, level, namespace_, name_='EndToEndId', pretty_print=pretty_print)
     def to_etree(self, parent_element=None, name_='PaymentIdentification1', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.InstrId is not None:
             InstrId_ = self.InstrId
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}InstrId').text = self.gds_format_string(
-                InstrId_)
+            InstrId_.to_etree(element, name_='InstrId', mapping_=mapping_)
         if self.EndToEndId is not None:
             EndToEndId_ = self.EndToEndId
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}EndToEndId').text = self.gds_format_string(
-                EndToEndId_)
+            EndToEndId_.to_etree(element, name_='EndToEndId', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PaymentIdentification1'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.InstrId is not None:
-            showIndent(outfile, level)
-            outfile.write('InstrId=%s,\n' % self.gds_encode(quote_python(self.InstrId)))
-        if self.EndToEndId is not None:
-            showIndent(outfile, level)
-            outfile.write('EndToEndId=%s,\n' % self.gds_encode(quote_python(self.EndToEndId)))
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -10326,27 +7065,27 @@ class PaymentIdentification1(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'InstrId':
-            InstrId_ = child_.text
-            InstrId_ = self.gds_validate_string(InstrId_, node, 'InstrId')
-            self.InstrId = InstrId_
+            obj_ = None
+            self.InstrId = obj_
+            obj_.original_tagname_ = 'InstrId'
+            # validate type Max35TextSwift
+            self.validate_Max35TextSwift(self.InstrId)
         elif nodeName_ == 'EndToEndId':
-            EndToEndId_ = child_.text
-            EndToEndId_ = self.gds_validate_string(EndToEndId_, node, 'EndToEndId')
-            self.EndToEndId = EndToEndId_
-
-
+            obj_ = None
+            self.EndToEndId = obj_
+            obj_.original_tagname_ = 'EndToEndId'
+            # validate type Max35TextSwift
+            self.validate_Max35TextSwift(self.EndToEndId)
 # end class PaymentIdentification1
 
 
 class PaymentInstructionInformation3_CH(GeneratedsSuper):
     member_data_items_ = {
-        'PmtInfId': MemberSpec_('PmtInfId', 'xs:string', 0),
+        'PmtInfId': MemberSpec_('PmtInfId', ['Max35TextSwift', 'BasicText-Swift'], 0),
         'PmtMtd': MemberSpec_('PmtMtd', ['PaymentMethod3Code', 'xs:string'], 0),
         'BtchBookg': MemberSpec_('BtchBookg', ['BatchBookingIndicator', 'xs:boolean'], 0),
         'NbOfTxs': MemberSpec_('NbOfTxs', ['Max15NumericText', 'xs:string'], 0),
@@ -10363,12 +7102,10 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
-    def __init__(self, PmtInfId=None, PmtMtd=None, BtchBookg=None, NbOfTxs=None, CtrlSum=None, PmtTpInf=None,
-                 ReqdExctnDt=None, Dbtr=None, DbtrAcct=None, DbtrAgt=None, UltmtDbtr=None, ChrgBr=None, ChrgsAcct=None,
-                 CdtTrfTxInf=None):
+    def __init__(self, PmtInfId=None, PmtMtd=None, BtchBookg=None, NbOfTxs=None, CtrlSum=None, PmtTpInf=None, ReqdExctnDt=None, Dbtr=None, DbtrAcct=None, DbtrAgt=None, UltmtDbtr=None, ChrgBr=None, ChrgsAcct=None, CdtTrfTxInf=None):
         self.original_tagname_ = None
         self.PmtInfId = PmtInfId
+        self.validate_Max35TextSwift(self.PmtInfId)
         self.PmtMtd = PmtMtd
         self.validate_PaymentMethod3Code(self.PmtMtd)
         self.BtchBookg = BtchBookg
@@ -10394,7 +7131,6 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
             self.CdtTrfTxInf = []
         else:
             self.CdtTrfTxInf = CdtTrfTxInf
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -10405,102 +7141,49 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
             return PaymentInstructionInformation3_CH.subclass(*args_, **kwargs_)
         else:
             return PaymentInstructionInformation3_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_PmtInfId(self):
-        return self.PmtInfId
-
-    def set_PmtInfId(self, PmtInfId):
-        self.PmtInfId = PmtInfId
-
-    def get_PmtMtd(self):
-        return self.PmtMtd
-
-    def set_PmtMtd(self, PmtMtd):
-        self.PmtMtd = PmtMtd
-
-    def get_BtchBookg(self):
-        return self.BtchBookg
-
-    def set_BtchBookg(self, BtchBookg):
-        self.BtchBookg = BtchBookg
-
-    def get_NbOfTxs(self):
-        return self.NbOfTxs
-
-    def set_NbOfTxs(self, NbOfTxs):
-        self.NbOfTxs = NbOfTxs
-
-    def get_CtrlSum(self):
-        return self.CtrlSum
-
-    def set_CtrlSum(self, CtrlSum):
-        self.CtrlSum = CtrlSum
-
-    def get_PmtTpInf(self):
-        return self.PmtTpInf
-
-    def set_PmtTpInf(self, PmtTpInf):
-        self.PmtTpInf = PmtTpInf
-
-    def get_ReqdExctnDt(self):
-        return self.ReqdExctnDt
-
-    def set_ReqdExctnDt(self, ReqdExctnDt):
-        self.ReqdExctnDt = ReqdExctnDt
-
-    def get_Dbtr(self):
-        return self.Dbtr
-
-    def set_Dbtr(self, Dbtr):
-        self.Dbtr = Dbtr
-
-    def get_DbtrAcct(self):
-        return self.DbtrAcct
-
-    def set_DbtrAcct(self, DbtrAcct):
-        self.DbtrAcct = DbtrAcct
-
-    def get_DbtrAgt(self):
-        return self.DbtrAgt
-
-    def set_DbtrAgt(self, DbtrAgt):
-        self.DbtrAgt = DbtrAgt
-
-    def get_UltmtDbtr(self):
-        return self.UltmtDbtr
-
-    def set_UltmtDbtr(self, UltmtDbtr):
-        self.UltmtDbtr = UltmtDbtr
-
-    def get_ChrgBr(self):
-        return self.ChrgBr
-
-    def set_ChrgBr(self, ChrgBr):
-        self.ChrgBr = ChrgBr
-
-    def get_ChrgsAcct(self):
-        return self.ChrgsAcct
-
-    def set_ChrgsAcct(self, ChrgsAcct):
-        self.ChrgsAcct = ChrgsAcct
-
-    def get_CdtTrfTxInf(self):
-        return self.CdtTrfTxInf
-
-    def set_CdtTrfTxInf(self, CdtTrfTxInf):
-        self.CdtTrfTxInf = CdtTrfTxInf
-
-    def add_CdtTrfTxInf(self, value):
-        self.CdtTrfTxInf.append(value)
-
-    def insert_CdtTrfTxInf_at(self, index, value):
-        self.CdtTrfTxInf.insert(index, value)
-
-    def replace_CdtTrfTxInf_at(self, index, value):
-        self.CdtTrfTxInf[index] = value
-
+    def get_PmtInfId(self): return self.PmtInfId
+    def set_PmtInfId(self, PmtInfId): self.PmtInfId = PmtInfId
+    def get_PmtMtd(self): return self.PmtMtd
+    def set_PmtMtd(self, PmtMtd): self.PmtMtd = PmtMtd
+    def get_BtchBookg(self): return self.BtchBookg
+    def set_BtchBookg(self, BtchBookg): self.BtchBookg = BtchBookg
+    def get_NbOfTxs(self): return self.NbOfTxs
+    def set_NbOfTxs(self, NbOfTxs): self.NbOfTxs = NbOfTxs
+    def get_CtrlSum(self): return self.CtrlSum
+    def set_CtrlSum(self, CtrlSum): self.CtrlSum = CtrlSum
+    def get_PmtTpInf(self): return self.PmtTpInf
+    def set_PmtTpInf(self, PmtTpInf): self.PmtTpInf = PmtTpInf
+    def get_ReqdExctnDt(self): return self.ReqdExctnDt
+    def set_ReqdExctnDt(self, ReqdExctnDt): self.ReqdExctnDt = ReqdExctnDt
+    def get_Dbtr(self): return self.Dbtr
+    def set_Dbtr(self, Dbtr): self.Dbtr = Dbtr
+    def get_DbtrAcct(self): return self.DbtrAcct
+    def set_DbtrAcct(self, DbtrAcct): self.DbtrAcct = DbtrAcct
+    def get_DbtrAgt(self): return self.DbtrAgt
+    def set_DbtrAgt(self, DbtrAgt): self.DbtrAgt = DbtrAgt
+    def get_UltmtDbtr(self): return self.UltmtDbtr
+    def set_UltmtDbtr(self, UltmtDbtr): self.UltmtDbtr = UltmtDbtr
+    def get_ChrgBr(self): return self.ChrgBr
+    def set_ChrgBr(self, ChrgBr): self.ChrgBr = ChrgBr
+    def get_ChrgsAcct(self): return self.ChrgsAcct
+    def set_ChrgsAcct(self, ChrgsAcct): self.ChrgsAcct = ChrgsAcct
+    def get_CdtTrfTxInf(self): return self.CdtTrfTxInf
+    def set_CdtTrfTxInf(self, CdtTrfTxInf): self.CdtTrfTxInf = CdtTrfTxInf
+    def add_CdtTrfTxInf(self, value): self.CdtTrfTxInf.append(value)
+    def insert_CdtTrfTxInf_at(self, index, value): self.CdtTrfTxInf.insert(index, value)
+    def replace_CdtTrfTxInf_at(self, index, value): self.CdtTrfTxInf[index] = value
+    def validate_Max35TextSwift(self, value):
+        # Validate type Max35TextSwift, a restriction on BasicText-Swift.
+        if value is not None and Validate_simpletypes_:
+            if len(str(value)) > 35:
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35TextSwift' % {"value" : value} )
+            if len(str(value)) < 1:
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35TextSwift' % {"value" : value} )
+            if not self.gds_validate_simple_patterns(
+                    self.validate_Max35TextSwift_patterns_, value):
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35TextSwift_patterns_, ))
+    validate_Max35TextSwift_patterns_ = [["^([A-Za-z0-9]|[+|\\?|/|\\-|:|\\(|\\)|\\.|,|'|\\p{Zs}])*$"]]
     def validate_PaymentMethod3Code(self, value):
         # Validate type PaymentMethod3Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -10512,36 +7195,27 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on PaymentMethod3Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on PaymentMethod3Code' % {"value" : value.encode("utf-8")} )
     def validate_BatchBookingIndicator(self, value):
         # Validate type BatchBookingIndicator, a restriction on xs:boolean.
         if value is not None and Validate_simpletypes_:
             pass
-
     def validate_Max15NumericText(self, value):
         # Validate type Max15NumericText, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_Max15NumericText_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max15NumericText_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max15NumericText_patterns_, ))
     validate_Max15NumericText_patterns_ = [['^[0-9]{1,15}$']]
-
     def validate_DecimalNumber(self, value):
         # Validate type DecimalNumber, a restriction on xs:decimal.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) >= 18:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxInclusive restriction on DecimalNumber' % {"value": value})
-
+                warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on DecimalNumber' % {"value" : value} )
     def validate_ISODate(self, value):
         # Validate type ISODate, a restriction on xs:date.
         if value is not None and Validate_simpletypes_:
             pass
-
     def validate_ChargeBearerType1Code(self, value):
         # Validate type ChargeBearerType1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -10553,33 +7227,28 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd enumeration restriction on ChargeBearerType1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on ChargeBearerType1Code' % {"value" : value.encode("utf-8")} )
     def hasContent_(self):
         if (
-                                                                        self.PmtInfId is not None or
-                                                                        self.PmtMtd is not None or
-                                                                    self.BtchBookg is not None or
-                                                                self.NbOfTxs is not None or
-                                                            self.CtrlSum is not None or
-                                                        self.PmtTpInf is not None or
-                                                    self.ReqdExctnDt is not None or
-                                                self.Dbtr is not None or
-                                            self.DbtrAcct is not None or
-                                        self.DbtrAgt is not None or
-                                    self.UltmtDbtr is not None or
-                                self.ChrgBr is not None or
-                            self.ChrgsAcct is not None or
-                    self.CdtTrfTxInf
+            self.PmtInfId is not None or
+            self.PmtMtd is not None or
+            self.BtchBookg is not None or
+            self.NbOfTxs is not None or
+            self.CtrlSum is not None or
+            self.PmtTpInf is not None or
+            self.ReqdExctnDt is not None or
+            self.Dbtr is not None or
+            self.DbtrAcct is not None or
+            self.DbtrAgt is not None or
+            self.UltmtDbtr is not None or
+            self.ChrgBr is not None or
+            self.ChrgsAcct is not None or
+            self.CdtTrfTxInf
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='PaymentInstructionInformation3-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='PaymentInstructionInformation3-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -10587,57 +7256,42 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PaymentInstructionInformation3-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='PaymentInstructionInformation3-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='PaymentInstructionInformation3-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='PaymentInstructionInformation3-CH'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PaymentInstructionInformation3-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PaymentInstructionInformation3-CH',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PaymentInstructionInformation3-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.PmtInfId is not None:
-            showIndent(outfile, level, pretty_print)
-            outfile.write('<%sPmtInfId>%s</%sPmtInfId>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.PmtInfId), input_name='PmtInfId')),
-            namespace_, eol_))
+            self.PmtInfId.export(outfile, level, namespace_, name_='PmtInfId', pretty_print=pretty_print)
         if self.PmtMtd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sPmtMtd>%s</%sPmtMtd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.PmtMtd), input_name='PmtMtd')),
-            namespace_, eol_))
+            outfile.write('<%sPmtMtd>%s</%sPmtMtd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.PmtMtd), input_name='PmtMtd')), namespace_, eol_))
         if self.BtchBookg is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sBtchBookg>%s</%sBtchBookg>%s' % (
-            namespace_, self.gds_format_boolean(self.BtchBookg, input_name='BtchBookg'), namespace_, eol_))
+            outfile.write('<%sBtchBookg>%s</%sBtchBookg>%s' % (namespace_, self.gds_format_boolean(self.BtchBookg, input_name='BtchBookg'), namespace_, eol_))
         if self.NbOfTxs is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sNbOfTxs>%s</%sNbOfTxs>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.NbOfTxs), input_name='NbOfTxs')),
-            namespace_, eol_))
+            outfile.write('<%sNbOfTxs>%s</%sNbOfTxs>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.NbOfTxs), input_name='NbOfTxs')), namespace_, eol_))
         if self.CtrlSum is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCtrlSum>%s</%sCtrlSum>%s' % (
-            namespace_, self.gds_format_float(self.CtrlSum, input_name='CtrlSum'), namespace_, eol_))
+            outfile.write('<%sCtrlSum>%s</%sCtrlSum>%s' % (namespace_, self.gds_format_float(self.CtrlSum, input_name='CtrlSum'), namespace_, eol_))
         if self.PmtTpInf is not None:
             self.PmtTpInf.export(outfile, level, namespace_, name_='PmtTpInf', pretty_print=pretty_print)
         if self.ReqdExctnDt is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sReqdExctnDt>%s</%sReqdExctnDt>%s' % (
-            namespace_, self.gds_format_date(self.ReqdExctnDt, input_name='ReqdExctnDt'), namespace_, eol_))
+            outfile.write('<%sReqdExctnDt>%s</%sReqdExctnDt>%s' % (namespace_, self.gds_format_date(self.ReqdExctnDt, input_name='ReqdExctnDt'), namespace_, eol_))
         if self.Dbtr is not None:
             self.Dbtr.export(outfile, level, namespace_, name_='Dbtr', pretty_print=pretty_print)
         if self.DbtrAcct is not None:
@@ -10648,53 +7302,37 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
             self.UltmtDbtr.export(outfile, level, namespace_, name_='UltmtDbtr', pretty_print=pretty_print)
         if self.ChrgBr is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sChrgBr>%s</%sChrgBr>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.ChrgBr), input_name='ChrgBr')),
-            namespace_, eol_))
+            outfile.write('<%sChrgBr>%s</%sChrgBr>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.ChrgBr), input_name='ChrgBr')), namespace_, eol_))
         if self.ChrgsAcct is not None:
             self.ChrgsAcct.export(outfile, level, namespace_, name_='ChrgsAcct', pretty_print=pretty_print)
         for CdtTrfTxInf_ in self.CdtTrfTxInf:
             CdtTrfTxInf_.export(outfile, level, namespace_, name_='CdtTrfTxInf', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PaymentInstructionInformation3-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.PmtInfId is not None:
             PmtInfId_ = self.PmtInfId
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}PmtInfId').text = self.gds_format_string(
-                PmtInfId_)
+            PmtInfId_.to_etree(element, name_='PmtInfId', mapping_=mapping_)
         if self.PmtMtd is not None:
             PmtMtd_ = self.PmtMtd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}PmtMtd').text = self.gds_format_string(
-                PmtMtd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}PmtMtd').text = self.gds_format_string(PmtMtd_)
         if self.BtchBookg is not None:
             BtchBookg_ = self.BtchBookg
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BtchBookg').text = self.gds_format_boolean(
-                BtchBookg_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}BtchBookg').text = self.gds_format_boolean(BtchBookg_)
         if self.NbOfTxs is not None:
             NbOfTxs_ = self.NbOfTxs
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}NbOfTxs').text = self.gds_format_string(
-                NbOfTxs_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}NbOfTxs').text = self.gds_format_string(NbOfTxs_)
         if self.CtrlSum is not None:
             CtrlSum_ = self.CtrlSum
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CtrlSum').text = self.gds_format_float(
-                CtrlSum_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}CtrlSum').text = self.gds_format_float(CtrlSum_)
         if self.PmtTpInf is not None:
             PmtTpInf_ = self.PmtTpInf
             PmtTpInf_.to_etree(element, name_='PmtTpInf', mapping_=mapping_)
         if self.ReqdExctnDt is not None:
             ReqdExctnDt_ = self.ReqdExctnDt
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}ReqdExctnDt').text = self.gds_format_date(
-                ReqdExctnDt_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}ReqdExctnDt').text = self.gds_format_date(ReqdExctnDt_)
         if self.Dbtr is not None:
             Dbtr_ = self.Dbtr
             Dbtr_.to_etree(element, name_='Dbtr', mapping_=mapping_)
@@ -10709,9 +7347,7 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
             UltmtDbtr_.to_etree(element, name_='UltmtDbtr', mapping_=mapping_)
         if self.ChrgBr is not None:
             ChrgBr_ = self.ChrgBr
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}ChrgBr').text = self.gds_format_string(
-                ChrgBr_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}ChrgBr').text = self.gds_format_string(ChrgBr_)
         if self.ChrgsAcct is not None:
             ChrgsAcct_ = self.ChrgsAcct
             ChrgsAcct_.to_etree(element, name_='ChrgsAcct', mapping_=mapping_)
@@ -10720,90 +7356,6 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PaymentInstructionInformation3-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.PmtInfId is not None:
-            showIndent(outfile, level)
-            outfile.write('PmtInfId=%s,\n' % self.gds_encode(quote_python(self.PmtInfId)))
-        if self.PmtMtd is not None:
-            showIndent(outfile, level)
-            outfile.write('PmtMtd=%s,\n' % self.gds_encode(quote_python(self.PmtMtd)))
-        if self.BtchBookg is not None:
-            showIndent(outfile, level)
-            outfile.write('BtchBookg=%s,\n' % self.BtchBookg)
-        if self.NbOfTxs is not None:
-            showIndent(outfile, level)
-            outfile.write('NbOfTxs=%s,\n' % self.gds_encode(quote_python(self.NbOfTxs)))
-        if self.CtrlSum is not None:
-            showIndent(outfile, level)
-            outfile.write('CtrlSum=%f,\n' % self.CtrlSum)
-        if self.PmtTpInf is not None:
-            showIndent(outfile, level)
-            outfile.write('PmtTpInf=model_.PaymentTypeInformation19_CH(\n')
-            self.PmtTpInf.exportLiteral(outfile, level, name_='PmtTpInf')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.ReqdExctnDt is not None:
-            showIndent(outfile, level)
-            outfile.write(
-                'ReqdExctnDt=model_.GeneratedsSuper.gds_parse_date("%s"),\n' % self.gds_format_date(self.ReqdExctnDt,
-                                                                                                    input_name='ReqdExctnDt'))
-        if self.Dbtr is not None:
-            showIndent(outfile, level)
-            outfile.write('Dbtr=model_.PartyIdentification32_CH(\n')
-            self.Dbtr.exportLiteral(outfile, level, name_='Dbtr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.DbtrAcct is not None:
-            showIndent(outfile, level)
-            outfile.write('DbtrAcct=model_.CashAccount16_CH_IdTpCcy(\n')
-            self.DbtrAcct.exportLiteral(outfile, level, name_='DbtrAcct')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.DbtrAgt is not None:
-            showIndent(outfile, level)
-            outfile.write('DbtrAgt=model_.BranchAndFinancialInstitutionIdentification4_CH_BicOrClrId(\n')
-            self.DbtrAgt.exportLiteral(outfile, level, name_='DbtrAgt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.UltmtDbtr is not None:
-            showIndent(outfile, level)
-            outfile.write('UltmtDbtr=model_.PartyIdentification32_CH(\n')
-            self.UltmtDbtr.exportLiteral(outfile, level, name_='UltmtDbtr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.ChrgBr is not None:
-            showIndent(outfile, level)
-            outfile.write('ChrgBr=%s,\n' % self.gds_encode(quote_python(self.ChrgBr)))
-        if self.ChrgsAcct is not None:
-            showIndent(outfile, level)
-            outfile.write('ChrgsAcct=model_.CashAccount16_CH_IdAndCurrency(\n')
-            self.ChrgsAcct.exportLiteral(outfile, level, name_='ChrgsAcct')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        showIndent(outfile, level)
-        outfile.write('CdtTrfTxInf=[\n')
-        level += 1
-        for CdtTrfTxInf_ in self.CdtTrfTxInf:
-            showIndent(outfile, level)
-            outfile.write('model_.CreditTransferTransactionInformation10_CH(\n')
-            CdtTrfTxInf_.exportLiteral(outfile, level, name_='CreditTransferTransactionInformation10-CH')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -10811,15 +7363,15 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'PmtInfId':
-            PmtInfId_ = child_.text
-            PmtInfId_ = self.gds_validate_string(PmtInfId_, node, 'PmtInfId')
-            self.PmtInfId = PmtInfId_
+            obj_ = None
+            self.PmtInfId = obj_
+            obj_.original_tagname_ = 'PmtInfId'
+            # validate type Max35TextSwift
+            self.validate_Max35TextSwift(self.PmtInfId)
         elif nodeName_ == 'PmtMtd':
             PmtMtd_ = child_.text
             PmtMtd_ = self.gds_validate_string(PmtMtd_, node, 'PmtMtd')
@@ -10901,8 +7453,6 @@ class PaymentInstructionInformation3_CH(GeneratedsSuper):
             obj_.build(child_)
             self.CdtTrfTxInf.append(obj_)
             obj_.original_tagname_ = 'CdtTrfTxInf'
-
-
 # end class PaymentInstructionInformation3_CH
 
 
@@ -10915,7 +7465,6 @@ class PaymentTypeInformation19_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, InstrPrty=None, SvcLvl=None, LclInstrm=None, CtgyPurp=None):
         self.original_tagname_ = None
         self.InstrPrty = InstrPrty
@@ -10923,7 +7472,6 @@ class PaymentTypeInformation19_CH(GeneratedsSuper):
         self.SvcLvl = SvcLvl
         self.LclInstrm = LclInstrm
         self.CtgyPurp = CtgyPurp
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -10934,33 +7482,15 @@ class PaymentTypeInformation19_CH(GeneratedsSuper):
             return PaymentTypeInformation19_CH.subclass(*args_, **kwargs_)
         else:
             return PaymentTypeInformation19_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_InstrPrty(self):
-        return self.InstrPrty
-
-    def set_InstrPrty(self, InstrPrty):
-        self.InstrPrty = InstrPrty
-
-    def get_SvcLvl(self):
-        return self.SvcLvl
-
-    def set_SvcLvl(self, SvcLvl):
-        self.SvcLvl = SvcLvl
-
-    def get_LclInstrm(self):
-        return self.LclInstrm
-
-    def set_LclInstrm(self, LclInstrm):
-        self.LclInstrm = LclInstrm
-
-    def get_CtgyPurp(self):
-        return self.CtgyPurp
-
-    def set_CtgyPurp(self, CtgyPurp):
-        self.CtgyPurp = CtgyPurp
-
+    def get_InstrPrty(self): return self.InstrPrty
+    def set_InstrPrty(self, InstrPrty): self.InstrPrty = InstrPrty
+    def get_SvcLvl(self): return self.SvcLvl
+    def set_SvcLvl(self, SvcLvl): self.SvcLvl = SvcLvl
+    def get_LclInstrm(self): return self.LclInstrm
+    def set_LclInstrm(self, LclInstrm): self.LclInstrm = LclInstrm
+    def get_CtgyPurp(self): return self.CtgyPurp
+    def set_CtgyPurp(self, CtgyPurp): self.CtgyPurp = CtgyPurp
     def validate_Priority2Code(self, value):
         # Validate type Priority2Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -10972,22 +7502,18 @@ class PaymentTypeInformation19_CH(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on Priority2Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on Priority2Code' % {"value" : value.encode("utf-8")} )
     def hasContent_(self):
         if (
-                                self.InstrPrty is not None or
-                                self.SvcLvl is not None or
-                            self.LclInstrm is not None or
-                        self.CtgyPurp is not None
+            self.InstrPrty is not None or
+            self.SvcLvl is not None or
+            self.LclInstrm is not None or
+            self.CtgyPurp is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='PaymentTypeInformation19-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='PaymentTypeInformation19-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -10995,50 +7521,40 @@ class PaymentTypeInformation19_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PaymentTypeInformation19-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='PaymentTypeInformation19-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='PaymentTypeInformation19-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PaymentTypeInformation19-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PaymentTypeInformation19-CH', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PaymentTypeInformation19-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.InstrPrty is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sInstrPrty>%s</%sInstrPrty>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.InstrPrty), input_name='InstrPrty')),
-            namespace_, eol_))
+            outfile.write('<%sInstrPrty>%s</%sInstrPrty>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.InstrPrty), input_name='InstrPrty')), namespace_, eol_))
         if self.SvcLvl is not None:
             self.SvcLvl.export(outfile, level, namespace_, name_='SvcLvl', pretty_print=pretty_print)
         if self.LclInstrm is not None:
             self.LclInstrm.export(outfile, level, namespace_, name_='LclInstrm', pretty_print=pretty_print)
         if self.CtgyPurp is not None:
             self.CtgyPurp.export(outfile, level, namespace_, name_='CtgyPurp', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PaymentTypeInformation19-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.InstrPrty is not None:
             InstrPrty_ = self.InstrPrty
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}InstrPrty').text = self.gds_format_string(
-                InstrPrty_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}InstrPrty').text = self.gds_format_string(InstrPrty_)
         if self.SvcLvl is not None:
             SvcLvl_ = self.SvcLvl
             SvcLvl_.to_etree(element, name_='SvcLvl', mapping_=mapping_)
@@ -11051,40 +7567,6 @@ class PaymentTypeInformation19_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PaymentTypeInformation19-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.InstrPrty is not None:
-            showIndent(outfile, level)
-            outfile.write('InstrPrty=%s,\n' % self.gds_encode(quote_python(self.InstrPrty)))
-        if self.SvcLvl is not None:
-            showIndent(outfile, level)
-            outfile.write('SvcLvl=model_.ServiceLevel8Choice(\n')
-            self.SvcLvl.exportLiteral(outfile, level, name_='SvcLvl')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.LclInstrm is not None:
-            showIndent(outfile, level)
-            outfile.write('LclInstrm=model_.LocalInstrument2Choice(\n')
-            self.LclInstrm.exportLiteral(outfile, level, name_='LclInstrm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CtgyPurp is not None:
-            showIndent(outfile, level)
-            outfile.write('CtgyPurp=model_.CategoryPurpose1_CH_Code(\n')
-            self.CtgyPurp.exportLiteral(outfile, level, name_='CtgyPurp')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -11092,10 +7574,8 @@ class PaymentTypeInformation19_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'InstrPrty':
             InstrPrty_ = child_.text
@@ -11118,8 +7598,6 @@ class PaymentTypeInformation19_CH(GeneratedsSuper):
             obj_.build(child_)
             self.CtgyPurp = obj_
             obj_.original_tagname_ = 'CtgyPurp'
-
-
 # end class PaymentTypeInformation19_CH
 
 
@@ -11130,7 +7608,6 @@ class PersonIdentification5(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, DtAndPlcOfBirth=None, Othr=None):
         self.original_tagname_ = None
         self.DtAndPlcOfBirth = DtAndPlcOfBirth
@@ -11138,7 +7615,6 @@ class PersonIdentification5(GeneratedsSuper):
             self.Othr = []
         else:
             self.Othr = Othr
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -11149,39 +7625,22 @@ class PersonIdentification5(GeneratedsSuper):
             return PersonIdentification5.subclass(*args_, **kwargs_)
         else:
             return PersonIdentification5(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_DtAndPlcOfBirth(self):
-        return self.DtAndPlcOfBirth
-
-    def set_DtAndPlcOfBirth(self, DtAndPlcOfBirth):
-        self.DtAndPlcOfBirth = DtAndPlcOfBirth
-
-    def get_Othr(self):
-        return self.Othr
-
-    def set_Othr(self, Othr):
-        self.Othr = Othr
-
-    def add_Othr(self, value):
-        self.Othr.append(value)
-
-    def insert_Othr_at(self, index, value):
-        self.Othr.insert(index, value)
-
-    def replace_Othr_at(self, index, value):
-        self.Othr[index] = value
-
+    def get_DtAndPlcOfBirth(self): return self.DtAndPlcOfBirth
+    def set_DtAndPlcOfBirth(self, DtAndPlcOfBirth): self.DtAndPlcOfBirth = DtAndPlcOfBirth
+    def get_Othr(self): return self.Othr
+    def set_Othr(self, Othr): self.Othr = Othr
+    def add_Othr(self, value): self.Othr.append(value)
+    def insert_Othr_at(self, index, value): self.Othr.insert(index, value)
+    def replace_Othr_at(self, index, value): self.Othr[index] = value
     def hasContent_(self):
         if (
-                        self.DtAndPlcOfBirth is not None or
-                    self.Othr
+            self.DtAndPlcOfBirth is not None or
+            self.Othr
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='PersonIdentification5', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -11190,23 +7649,19 @@ class PersonIdentification5(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PersonIdentification5')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='PersonIdentification5',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='PersonIdentification5', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PersonIdentification5'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PersonIdentification5', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PersonIdentification5', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -11215,13 +7670,11 @@ class PersonIdentification5(GeneratedsSuper):
             self.DtAndPlcOfBirth.export(outfile, level, namespace_, name_='DtAndPlcOfBirth', pretty_print=pretty_print)
         for Othr_ in self.Othr:
             Othr_.export(outfile, level, namespace_, name_='Othr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PersonIdentification5', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.DtAndPlcOfBirth is not None:
             DtAndPlcOfBirth_ = self.DtAndPlcOfBirth
             DtAndPlcOfBirth_.to_etree(element, name_='DtAndPlcOfBirth', mapping_=mapping_)
@@ -11230,37 +7683,6 @@ class PersonIdentification5(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PersonIdentification5'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.DtAndPlcOfBirth is not None:
-            showIndent(outfile, level)
-            outfile.write('DtAndPlcOfBirth=model_.DateAndPlaceOfBirth(\n')
-            self.DtAndPlcOfBirth.exportLiteral(outfile, level, name_='DtAndPlcOfBirth')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        showIndent(outfile, level)
-        outfile.write('Othr=[\n')
-        level += 1
-        for Othr_ in self.Othr:
-            showIndent(outfile, level)
-            outfile.write('model_.GenericPersonIdentification1(\n')
-            Othr_.exportLiteral(outfile, level, name_='GenericPersonIdentification1')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -11268,10 +7690,8 @@ class PersonIdentification5(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'DtAndPlcOfBirth':
             obj_ = DateAndPlaceOfBirth.factory()
@@ -11283,8 +7703,6 @@ class PersonIdentification5(GeneratedsSuper):
             obj_.build(child_)
             self.Othr.append(obj_)
             obj_.original_tagname_ = 'Othr'
-
-
 # end class PersonIdentification5
 
 
@@ -11295,12 +7713,10 @@ class PersonIdentification5_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, DtAndPlcOfBirth=None, Othr=None):
         self.original_tagname_ = None
         self.DtAndPlcOfBirth = DtAndPlcOfBirth
         self.Othr = Othr
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -11311,32 +7727,20 @@ class PersonIdentification5_CH(GeneratedsSuper):
             return PersonIdentification5_CH.subclass(*args_, **kwargs_)
         else:
             return PersonIdentification5_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_DtAndPlcOfBirth(self):
-        return self.DtAndPlcOfBirth
-
-    def set_DtAndPlcOfBirth(self, DtAndPlcOfBirth):
-        self.DtAndPlcOfBirth = DtAndPlcOfBirth
-
-    def get_Othr(self):
-        return self.Othr
-
-    def set_Othr(self, Othr):
-        self.Othr = Othr
-
+    def get_DtAndPlcOfBirth(self): return self.DtAndPlcOfBirth
+    def set_DtAndPlcOfBirth(self, DtAndPlcOfBirth): self.DtAndPlcOfBirth = DtAndPlcOfBirth
+    def get_Othr(self): return self.Othr
+    def set_Othr(self, Othr): self.Othr = Othr
     def hasContent_(self):
         if (
-                        self.DtAndPlcOfBirth is not None or
-                        self.Othr is not None
+            self.DtAndPlcOfBirth is not None or
+            self.Othr is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='PersonIdentification5-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='PersonIdentification5-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -11344,23 +7748,19 @@ class PersonIdentification5_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PersonIdentification5-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='PersonIdentification5-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='PersonIdentification5-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PersonIdentification5-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PersonIdentification5-CH', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PersonIdentification5-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -11369,13 +7769,11 @@ class PersonIdentification5_CH(GeneratedsSuper):
             self.DtAndPlcOfBirth.export(outfile, level, namespace_, name_='DtAndPlcOfBirth', pretty_print=pretty_print)
         if self.Othr is not None:
             self.Othr.export(outfile, level, namespace_, name_='Othr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PersonIdentification5-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.DtAndPlcOfBirth is not None:
             DtAndPlcOfBirth_ = self.DtAndPlcOfBirth
             DtAndPlcOfBirth_.to_etree(element, name_='DtAndPlcOfBirth', mapping_=mapping_)
@@ -11385,31 +7783,6 @@ class PersonIdentification5_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PersonIdentification5-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.DtAndPlcOfBirth is not None:
-            showIndent(outfile, level)
-            outfile.write('DtAndPlcOfBirth=model_.DateAndPlaceOfBirth(\n')
-            self.DtAndPlcOfBirth.exportLiteral(outfile, level, name_='DtAndPlcOfBirth')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Othr is not None:
-            showIndent(outfile, level)
-            outfile.write('Othr=model_.GenericPersonIdentification1(\n')
-            self.Othr.exportLiteral(outfile, level, name_='Othr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -11417,10 +7790,8 @@ class PersonIdentification5_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'DtAndPlcOfBirth':
             obj_ = DateAndPlaceOfBirth.factory()
@@ -11432,8 +7803,6 @@ class PersonIdentification5_CH(GeneratedsSuper):
             obj_.build(child_)
             self.Othr = obj_
             obj_.original_tagname_ = 'Othr'
-
-
 # end class PersonIdentification5_CH
 
 
@@ -11444,14 +7813,12 @@ class PersonIdentificationSchemeName1Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, Prtry=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_ExternalPersonIdentification1Code(self.Cd)
         self.Prtry = Prtry
         self.validate_Max35Text(self.Prtry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -11462,61 +7829,38 @@ class PersonIdentificationSchemeName1Choice(GeneratedsSuper):
             return PersonIdentificationSchemeName1Choice.subclass(*args_, **kwargs_)
         else:
             return PersonIdentificationSchemeName1Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Prtry(self):
-        return self.Prtry
-
-    def set_Prtry(self, Prtry):
-        self.Prtry = Prtry
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Prtry(self): return self.Prtry
+    def set_Prtry(self, Prtry): self.Prtry = Prtry
     def validate_ExternalPersonIdentification1Code(self, value):
         # Validate type ExternalPersonIdentification1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if len(value) > 4:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on ExternalPersonIdentification1Code' % {
-                        "value": value.encode("utf-8")})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on ExternalPersonIdentification1Code' % {"value" : value.encode("utf-8")} )
             if len(value) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on ExternalPersonIdentification1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on ExternalPersonIdentification1Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.Prtry is not None
+            self.Cd is not None or
+            self.Prtry is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='PersonIdentificationSchemeName1Choice', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='PersonIdentificationSchemeName1Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -11524,75 +7868,42 @@ class PersonIdentificationSchemeName1Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
-        self.exportAttributes(outfile, level, already_processed, namespace_,
-                              name_='PersonIdentificationSchemeName1Choice')
+        self.exportAttributes(outfile, level, already_processed, namespace_, name_='PersonIdentificationSchemeName1Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='PersonIdentificationSchemeName1Choice',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='PersonIdentificationSchemeName1Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='PersonIdentificationSchemeName1Choice'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PersonIdentificationSchemeName1Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PersonIdentificationSchemeName1Choice',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PersonIdentificationSchemeName1Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.Prtry is not None:
             self.Prtry.export(outfile, level, namespace_, name_='Prtry', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PersonIdentificationSchemeName1Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.Prtry is not None:
             Prtry_ = self.Prtry
             Prtry_.to_etree(element, name_='Prtry', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PersonIdentificationSchemeName1Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.Prtry is not None:
-            showIndent(outfile, level)
-            outfile.write('Prtry=model_.xs_BasicText_CH(\n')
-            self.Prtry.exportLiteral(outfile, level, name_='Prtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -11600,10 +7911,8 @@ class PersonIdentificationSchemeName1Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -11617,8 +7926,6 @@ class PersonIdentificationSchemeName1Choice(GeneratedsSuper):
             obj_.original_tagname_ = 'Prtry'
             # validate type Max35Text
             self.validate_Max35Text(self.Prtry)
-
-
 # end class PersonIdentificationSchemeName1Choice
 
 
@@ -11637,9 +7944,7 @@ class PostalAddress6(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
-    def __init__(self, AdrTp=None, Dept=None, SubDept=None, StrtNm=None, BldgNb=None, PstCd=None, TwnNm=None,
-                 CtrySubDvsn=None, Ctry=None, AdrLine=None):
+    def __init__(self, AdrTp=None, Dept=None, SubDept=None, StrtNm=None, BldgNb=None, PstCd=None, TwnNm=None, CtrySubDvsn=None, Ctry=None, AdrLine=None):
         self.original_tagname_ = None
         self.AdrTp = AdrTp
         self.validate_AddressType2Code(self.AdrTp)
@@ -11663,7 +7968,6 @@ class PostalAddress6(GeneratedsSuper):
             self.AdrLine = []
         else:
             self.AdrLine = AdrLine
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -11674,78 +7978,30 @@ class PostalAddress6(GeneratedsSuper):
             return PostalAddress6.subclass(*args_, **kwargs_)
         else:
             return PostalAddress6(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_AdrTp(self):
-        return self.AdrTp
-
-    def set_AdrTp(self, AdrTp):
-        self.AdrTp = AdrTp
-
-    def get_Dept(self):
-        return self.Dept
-
-    def set_Dept(self, Dept):
-        self.Dept = Dept
-
-    def get_SubDept(self):
-        return self.SubDept
-
-    def set_SubDept(self, SubDept):
-        self.SubDept = SubDept
-
-    def get_StrtNm(self):
-        return self.StrtNm
-
-    def set_StrtNm(self, StrtNm):
-        self.StrtNm = StrtNm
-
-    def get_BldgNb(self):
-        return self.BldgNb
-
-    def set_BldgNb(self, BldgNb):
-        self.BldgNb = BldgNb
-
-    def get_PstCd(self):
-        return self.PstCd
-
-    def set_PstCd(self, PstCd):
-        self.PstCd = PstCd
-
-    def get_TwnNm(self):
-        return self.TwnNm
-
-    def set_TwnNm(self, TwnNm):
-        self.TwnNm = TwnNm
-
-    def get_CtrySubDvsn(self):
-        return self.CtrySubDvsn
-
-    def set_CtrySubDvsn(self, CtrySubDvsn):
-        self.CtrySubDvsn = CtrySubDvsn
-
-    def get_Ctry(self):
-        return self.Ctry
-
-    def set_Ctry(self, Ctry):
-        self.Ctry = Ctry
-
-    def get_AdrLine(self):
-        return self.AdrLine
-
-    def set_AdrLine(self, AdrLine):
-        self.AdrLine = AdrLine
-
-    def add_AdrLine(self, value):
-        self.AdrLine.append(value)
-
-    def insert_AdrLine_at(self, index, value):
-        self.AdrLine.insert(index, value)
-
-    def replace_AdrLine_at(self, index, value):
-        self.AdrLine[index] = value
-
+    def get_AdrTp(self): return self.AdrTp
+    def set_AdrTp(self, AdrTp): self.AdrTp = AdrTp
+    def get_Dept(self): return self.Dept
+    def set_Dept(self, Dept): self.Dept = Dept
+    def get_SubDept(self): return self.SubDept
+    def set_SubDept(self, SubDept): self.SubDept = SubDept
+    def get_StrtNm(self): return self.StrtNm
+    def set_StrtNm(self, StrtNm): self.StrtNm = StrtNm
+    def get_BldgNb(self): return self.BldgNb
+    def set_BldgNb(self, BldgNb): self.BldgNb = BldgNb
+    def get_PstCd(self): return self.PstCd
+    def set_PstCd(self, PstCd): self.PstCd = PstCd
+    def get_TwnNm(self): return self.TwnNm
+    def set_TwnNm(self, TwnNm): self.TwnNm = TwnNm
+    def get_CtrySubDvsn(self): return self.CtrySubDvsn
+    def set_CtrySubDvsn(self, CtrySubDvsn): self.CtrySubDvsn = CtrySubDvsn
+    def get_Ctry(self): return self.Ctry
+    def set_Ctry(self, Ctry): self.Ctry = Ctry
+    def get_AdrLine(self): return self.AdrLine
+    def set_AdrLine(self, AdrLine): self.AdrLine = AdrLine
+    def add_AdrLine(self, value): self.AdrLine.append(value)
+    def insert_AdrLine_at(self, index, value): self.AdrLine.insert(index, value)
+    def replace_AdrLine_at(self, index, value): self.AdrLine[index] = value
     def validate_AddressType2Code(self, value):
         # Validate type AddressType2Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -11757,87 +8013,63 @@ class PostalAddress6(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on AddressType2Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on AddressType2Code' % {"value" : value.encode("utf-8")} )
     def validate_Max70Text(self, value):
         # Validate type Max70Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 70:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max70Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max70Text_patterns_,))
-
-    validate_Max70Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max70Text_patterns_, ))
+    validate_Max70Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_Max16Text(self, value):
         # Validate type Max16Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 16:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max16Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max16Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max16Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max16Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max16Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max16Text_patterns_,))
-
-    validate_Max16Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max16Text_patterns_, ))
+    validate_Max16Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_CountryCode(self, value):
         # Validate type CountryCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_CountryCode_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_CountryCode_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_CountryCode_patterns_, ))
     validate_CountryCode_patterns_ = [['^[A-Z]{2,2}$']]
-
     def hasContent_(self):
         if (
-                                                        self.AdrTp is not None or
-                                                        self.Dept is not None or
-                                                    self.SubDept is not None or
-                                                self.StrtNm is not None or
-                                            self.BldgNb is not None or
-                                        self.PstCd is not None or
-                                    self.TwnNm is not None or
-                                self.CtrySubDvsn is not None or
-                            self.Ctry is not None or
-                    self.AdrLine
+            self.AdrTp is not None or
+            self.Dept is not None or
+            self.SubDept is not None or
+            self.StrtNm is not None or
+            self.BldgNb is not None or
+            self.PstCd is not None or
+            self.TwnNm is not None or
+            self.CtrySubDvsn is not None or
+            self.Ctry is not None or
+            self.AdrLine
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='PostalAddress6', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -11846,31 +8078,26 @@ class PostalAddress6(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PostalAddress6')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='PostalAddress6', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PostalAddress6'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PostalAddress6', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PostalAddress6', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.AdrTp is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sAdrTp>%s</%sAdrTp>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.AdrTp), input_name='AdrTp')), namespace_,
-            eol_))
+            outfile.write('<%sAdrTp>%s</%sAdrTp>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.AdrTp), input_name='AdrTp')), namespace_, eol_))
         if self.Dept is not None:
             self.Dept.export(outfile, level, namespace_, name_='Dept', pretty_print=pretty_print)
         if self.SubDept is not None:
@@ -11887,23 +8114,17 @@ class PostalAddress6(GeneratedsSuper):
             self.CtrySubDvsn.export(outfile, level, namespace_, name_='CtrySubDvsn', pretty_print=pretty_print)
         if self.Ctry is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCtry>%s</%sCtry>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ctry), input_name='Ctry')), namespace_,
-            eol_))
+            outfile.write('<%sCtry>%s</%sCtry>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ctry), input_name='Ctry')), namespace_, eol_))
         for AdrLine_ in self.AdrLine:
             AdrLine_.export(outfile, level, namespace_, name_='AdrLine', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PostalAddress6', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.AdrTp is not None:
             AdrTp_ = self.AdrTp
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}AdrTp').text = self.gds_format_string(
-                AdrTp_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}AdrTp').text = self.gds_format_string(AdrTp_)
         if self.Dept is not None:
             Dept_ = self.Dept
             Dept_.to_etree(element, name_='Dept', mapping_=mapping_)
@@ -11927,87 +8148,12 @@ class PostalAddress6(GeneratedsSuper):
             CtrySubDvsn_.to_etree(element, name_='CtrySubDvsn', mapping_=mapping_)
         if self.Ctry is not None:
             Ctry_ = self.Ctry
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ctry').text = self.gds_format_string(
-                Ctry_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ctry').text = self.gds_format_string(Ctry_)
         for AdrLine_ in self.AdrLine:
             AdrLine_.to_etree(element, name_='AdrLine', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PostalAddress6'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.AdrTp is not None:
-            showIndent(outfile, level)
-            outfile.write('AdrTp=%s,\n' % self.gds_encode(quote_python(self.AdrTp)))
-        if self.Dept is not None:
-            showIndent(outfile, level)
-            outfile.write('Dept=model_.xs_BasicText_CH(\n')
-            self.Dept.exportLiteral(outfile, level, name_='Dept')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.SubDept is not None:
-            showIndent(outfile, level)
-            outfile.write('SubDept=model_.xs_BasicText_CH(\n')
-            self.SubDept.exportLiteral(outfile, level, name_='SubDept')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.StrtNm is not None:
-            showIndent(outfile, level)
-            outfile.write('StrtNm=model_.xs_BasicText_CH(\n')
-            self.StrtNm.exportLiteral(outfile, level, name_='StrtNm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.BldgNb is not None:
-            showIndent(outfile, level)
-            outfile.write('BldgNb=model_.xs_BasicText_CH(\n')
-            self.BldgNb.exportLiteral(outfile, level, name_='BldgNb')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PstCd is not None:
-            showIndent(outfile, level)
-            outfile.write('PstCd=model_.xs_BasicText_CH(\n')
-            self.PstCd.exportLiteral(outfile, level, name_='PstCd')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.TwnNm is not None:
-            showIndent(outfile, level)
-            outfile.write('TwnNm=model_.xs_BasicText_CH(\n')
-            self.TwnNm.exportLiteral(outfile, level, name_='TwnNm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CtrySubDvsn is not None:
-            showIndent(outfile, level)
-            outfile.write('CtrySubDvsn=model_.xs_BasicText_CH(\n')
-            self.CtrySubDvsn.exportLiteral(outfile, level, name_='CtrySubDvsn')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Ctry is not None:
-            showIndent(outfile, level)
-            outfile.write('Ctry=%s,\n' % self.gds_encode(quote_python(self.Ctry)))
-        showIndent(outfile, level)
-        outfile.write('AdrLine=[\n')
-        level += 1
-        for AdrLine_ in self.AdrLine:
-            showIndent(outfile, level)
-            outfile.write('model_.xs_BasicText_CH(\n')
-            AdrLine_.exportLiteral(outfile, level, name_='xs:BasicText-CH')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -12015,10 +8161,8 @@ class PostalAddress6(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'AdrTp':
             AdrTp_ = child_.text
@@ -12080,8 +8224,6 @@ class PostalAddress6(GeneratedsSuper):
             obj_.original_tagname_ = 'AdrLine'
             # validate type Max70Text
             self.validate_Max70Text(self.AdrLine[-1])
-
-
 # end class PostalAddress6
 
 
@@ -12100,9 +8242,7 @@ class PostalAddress6_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
-    def __init__(self, AdrTp=None, Dept=None, SubDept=None, StrtNm=None, BldgNb=None, PstCd=None, TwnNm=None,
-                 CtrySubDvsn=None, Ctry=None, AdrLine=None):
+    def __init__(self, AdrTp=None, Dept=None, SubDept=None, StrtNm=None, BldgNb=None, PstCd=None, TwnNm=None, CtrySubDvsn=None, Ctry=None, AdrLine=None):
         self.original_tagname_ = None
         self.AdrTp = AdrTp
         self.validate_AddressType2Code(self.AdrTp)
@@ -12126,7 +8266,6 @@ class PostalAddress6_CH(GeneratedsSuper):
             self.AdrLine = []
         else:
             self.AdrLine = AdrLine
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -12137,78 +8276,30 @@ class PostalAddress6_CH(GeneratedsSuper):
             return PostalAddress6_CH.subclass(*args_, **kwargs_)
         else:
             return PostalAddress6_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_AdrTp(self):
-        return self.AdrTp
-
-    def set_AdrTp(self, AdrTp):
-        self.AdrTp = AdrTp
-
-    def get_Dept(self):
-        return self.Dept
-
-    def set_Dept(self, Dept):
-        self.Dept = Dept
-
-    def get_SubDept(self):
-        return self.SubDept
-
-    def set_SubDept(self, SubDept):
-        self.SubDept = SubDept
-
-    def get_StrtNm(self):
-        return self.StrtNm
-
-    def set_StrtNm(self, StrtNm):
-        self.StrtNm = StrtNm
-
-    def get_BldgNb(self):
-        return self.BldgNb
-
-    def set_BldgNb(self, BldgNb):
-        self.BldgNb = BldgNb
-
-    def get_PstCd(self):
-        return self.PstCd
-
-    def set_PstCd(self, PstCd):
-        self.PstCd = PstCd
-
-    def get_TwnNm(self):
-        return self.TwnNm
-
-    def set_TwnNm(self, TwnNm):
-        self.TwnNm = TwnNm
-
-    def get_CtrySubDvsn(self):
-        return self.CtrySubDvsn
-
-    def set_CtrySubDvsn(self, CtrySubDvsn):
-        self.CtrySubDvsn = CtrySubDvsn
-
-    def get_Ctry(self):
-        return self.Ctry
-
-    def set_Ctry(self, Ctry):
-        self.Ctry = Ctry
-
-    def get_AdrLine(self):
-        return self.AdrLine
-
-    def set_AdrLine(self, AdrLine):
-        self.AdrLine = AdrLine
-
-    def add_AdrLine(self, value):
-        self.AdrLine.append(value)
-
-    def insert_AdrLine_at(self, index, value):
-        self.AdrLine.insert(index, value)
-
-    def replace_AdrLine_at(self, index, value):
-        self.AdrLine[index] = value
-
+    def get_AdrTp(self): return self.AdrTp
+    def set_AdrTp(self, AdrTp): self.AdrTp = AdrTp
+    def get_Dept(self): return self.Dept
+    def set_Dept(self, Dept): self.Dept = Dept
+    def get_SubDept(self): return self.SubDept
+    def set_SubDept(self, SubDept): self.SubDept = SubDept
+    def get_StrtNm(self): return self.StrtNm
+    def set_StrtNm(self, StrtNm): self.StrtNm = StrtNm
+    def get_BldgNb(self): return self.BldgNb
+    def set_BldgNb(self, BldgNb): self.BldgNb = BldgNb
+    def get_PstCd(self): return self.PstCd
+    def set_PstCd(self, PstCd): self.PstCd = PstCd
+    def get_TwnNm(self): return self.TwnNm
+    def set_TwnNm(self, TwnNm): self.TwnNm = TwnNm
+    def get_CtrySubDvsn(self): return self.CtrySubDvsn
+    def set_CtrySubDvsn(self, CtrySubDvsn): self.CtrySubDvsn = CtrySubDvsn
+    def get_Ctry(self): return self.Ctry
+    def set_Ctry(self, Ctry): self.Ctry = Ctry
+    def get_AdrLine(self): return self.AdrLine
+    def set_AdrLine(self, AdrLine): self.AdrLine = AdrLine
+    def add_AdrLine(self, value): self.AdrLine.append(value)
+    def insert_AdrLine_at(self, index, value): self.AdrLine.insert(index, value)
+    def replace_AdrLine_at(self, index, value): self.AdrLine[index] = value
     def validate_AddressType2Code(self, value):
         # Validate type AddressType2Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -12220,87 +8311,63 @@ class PostalAddress6_CH(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on AddressType2Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on AddressType2Code' % {"value" : value.encode("utf-8")} )
     def validate_Max70Text(self, value):
         # Validate type Max70Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 70:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max70Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max70Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max70Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max70Text_patterns_,))
-
-    validate_Max70Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max70Text_patterns_, ))
+    validate_Max70Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_Max16Text(self, value):
         # Validate type Max16Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 16:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max16Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max16Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max16Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max16Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max16Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max16Text_patterns_,))
-
-    validate_Max16Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max16Text_patterns_, ))
+    validate_Max16Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_CountryCode(self, value):
         # Validate type CountryCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_CountryCode_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_CountryCode_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_CountryCode_patterns_, ))
     validate_CountryCode_patterns_ = [['^[A-Z]{2,2}$']]
-
     def hasContent_(self):
         if (
-                                                        self.AdrTp is not None or
-                                                        self.Dept is not None or
-                                                    self.SubDept is not None or
-                                                self.StrtNm is not None or
-                                            self.BldgNb is not None or
-                                        self.PstCd is not None or
-                                    self.TwnNm is not None or
-                                self.CtrySubDvsn is not None or
-                            self.Ctry is not None or
-                    self.AdrLine
+            self.AdrTp is not None or
+            self.Dept is not None or
+            self.SubDept is not None or
+            self.StrtNm is not None or
+            self.BldgNb is not None or
+            self.PstCd is not None or
+            self.TwnNm is not None or
+            self.CtrySubDvsn is not None or
+            self.Ctry is not None or
+            self.AdrLine
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='PostalAddress6-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -12309,31 +8376,26 @@ class PostalAddress6_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PostalAddress6-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='PostalAddress6-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='PostalAddress6-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='PostalAddress6-CH', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='PostalAddress6-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.AdrTp is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sAdrTp>%s</%sAdrTp>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.AdrTp), input_name='AdrTp')), namespace_,
-            eol_))
+            outfile.write('<%sAdrTp>%s</%sAdrTp>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.AdrTp), input_name='AdrTp')), namespace_, eol_))
         if self.Dept is not None:
             self.Dept.export(outfile, level, namespace_, name_='Dept', pretty_print=pretty_print)
         if self.SubDept is not None:
@@ -12350,23 +8412,17 @@ class PostalAddress6_CH(GeneratedsSuper):
             self.CtrySubDvsn.export(outfile, level, namespace_, name_='CtrySubDvsn', pretty_print=pretty_print)
         if self.Ctry is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCtry>%s</%sCtry>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ctry), input_name='Ctry')), namespace_,
-            eol_))
+            outfile.write('<%sCtry>%s</%sCtry>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ctry), input_name='Ctry')), namespace_, eol_))
         for AdrLine_ in self.AdrLine:
             AdrLine_.export(outfile, level, namespace_, name_='AdrLine', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='PostalAddress6-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.AdrTp is not None:
             AdrTp_ = self.AdrTp
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}AdrTp').text = self.gds_format_string(
-                AdrTp_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}AdrTp').text = self.gds_format_string(AdrTp_)
         if self.Dept is not None:
             Dept_ = self.Dept
             Dept_.to_etree(element, name_='Dept', mapping_=mapping_)
@@ -12390,87 +8446,12 @@ class PostalAddress6_CH(GeneratedsSuper):
             CtrySubDvsn_.to_etree(element, name_='CtrySubDvsn', mapping_=mapping_)
         if self.Ctry is not None:
             Ctry_ = self.Ctry
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ctry').text = self.gds_format_string(
-                Ctry_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ctry').text = self.gds_format_string(Ctry_)
         for AdrLine_ in self.AdrLine:
             AdrLine_.to_etree(element, name_='AdrLine', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='PostalAddress6-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.AdrTp is not None:
-            showIndent(outfile, level)
-            outfile.write('AdrTp=%s,\n' % self.gds_encode(quote_python(self.AdrTp)))
-        if self.Dept is not None:
-            showIndent(outfile, level)
-            outfile.write('Dept=model_.xs_BasicText_CH(\n')
-            self.Dept.exportLiteral(outfile, level, name_='Dept')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.SubDept is not None:
-            showIndent(outfile, level)
-            outfile.write('SubDept=model_.xs_BasicText_CH(\n')
-            self.SubDept.exportLiteral(outfile, level, name_='SubDept')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.StrtNm is not None:
-            showIndent(outfile, level)
-            outfile.write('StrtNm=model_.xs_BasicText_CH(\n')
-            self.StrtNm.exportLiteral(outfile, level, name_='StrtNm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.BldgNb is not None:
-            showIndent(outfile, level)
-            outfile.write('BldgNb=model_.xs_BasicText_CH(\n')
-            self.BldgNb.exportLiteral(outfile, level, name_='BldgNb')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.PstCd is not None:
-            showIndent(outfile, level)
-            outfile.write('PstCd=model_.xs_BasicText_CH(\n')
-            self.PstCd.exportLiteral(outfile, level, name_='PstCd')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.TwnNm is not None:
-            showIndent(outfile, level)
-            outfile.write('TwnNm=model_.xs_BasicText_CH(\n')
-            self.TwnNm.exportLiteral(outfile, level, name_='TwnNm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CtrySubDvsn is not None:
-            showIndent(outfile, level)
-            outfile.write('CtrySubDvsn=model_.xs_BasicText_CH(\n')
-            self.CtrySubDvsn.exportLiteral(outfile, level, name_='CtrySubDvsn')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Ctry is not None:
-            showIndent(outfile, level)
-            outfile.write('Ctry=%s,\n' % self.gds_encode(quote_python(self.Ctry)))
-        showIndent(outfile, level)
-        outfile.write('AdrLine=[\n')
-        level += 1
-        for AdrLine_ in self.AdrLine:
-            showIndent(outfile, level)
-            outfile.write('model_.xs_BasicText_CH(\n')
-            AdrLine_.exportLiteral(outfile, level, name_='xs:BasicText-CH')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -12478,10 +8459,8 @@ class PostalAddress6_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'AdrTp':
             AdrTp_ = child_.text
@@ -12543,8 +8522,6 @@ class PostalAddress6_CH(GeneratedsSuper):
             obj_.original_tagname_ = 'AdrLine'
             # validate type Max70Text
             self.validate_Max70Text(self.AdrLine[-1])
-
-
 # end class PostalAddress6_CH
 
 
@@ -12554,12 +8531,10 @@ class Purpose2_CH_Code(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_ExternalPurpose1Code(self.Cd)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -12570,33 +8545,23 @@ class Purpose2_CH_Code(GeneratedsSuper):
             return Purpose2_CH_Code.subclass(*args_, **kwargs_)
         else:
             return Purpose2_CH_Code(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
     def validate_ExternalPurpose1Code(self, value):
         # Validate type ExternalPurpose1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if len(value) > 4:
-                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on ExternalPurpose1Code' % {
-                    "value": value.encode("utf-8")})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on ExternalPurpose1Code' % {"value" : value.encode("utf-8")} )
             if len(value) < 1:
-                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on ExternalPurpose1Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on ExternalPurpose1Code' % {"value" : value.encode("utf-8")} )
     def hasContent_(self):
         if (
-                    self.Cd is not None
+            self.Cd is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='Purpose2-CH_Code', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -12605,61 +8570,37 @@ class Purpose2_CH_Code(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='Purpose2-CH_Code')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='Purpose2-CH_Code', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Purpose2-CH_Code'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='Purpose2-CH_Code', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='Purpose2-CH_Code', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
-
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
     def to_etree(self, parent_element=None, name_='Purpose2-CH_Code', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='Purpose2-CH_Code'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -12667,10 +8608,8 @@ class Purpose2_CH_Code(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -12678,8 +8617,6 @@ class Purpose2_CH_Code(GeneratedsSuper):
             self.Cd = Cd_
             # validate type ExternalPurpose1Code
             self.validate_ExternalPurpose1Code(self.Cd)
-
-
 # end class Purpose2_CH_Code
 
 
@@ -12691,7 +8628,6 @@ class ReferredDocumentInformation3(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Tp=None, Nb=None, RltdDt=None):
         self.original_tagname_ = None
         self.Tp = Tp
@@ -12702,7 +8638,6 @@ class ReferredDocumentInformation3(GeneratedsSuper):
         else:
             initvalue_ = RltdDt
         self.RltdDt = initvalue_
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -12713,61 +8648,38 @@ class ReferredDocumentInformation3(GeneratedsSuper):
             return ReferredDocumentInformation3.subclass(*args_, **kwargs_)
         else:
             return ReferredDocumentInformation3(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Tp(self):
-        return self.Tp
-
-    def set_Tp(self, Tp):
-        self.Tp = Tp
-
-    def get_Nb(self):
-        return self.Nb
-
-    def set_Nb(self, Nb):
-        self.Nb = Nb
-
-    def get_RltdDt(self):
-        return self.RltdDt
-
-    def set_RltdDt(self, RltdDt):
-        self.RltdDt = RltdDt
-
+    def get_Tp(self): return self.Tp
+    def set_Tp(self, Tp): self.Tp = Tp
+    def get_Nb(self): return self.Nb
+    def set_Nb(self, Nb): self.Nb = Nb
+    def get_RltdDt(self): return self.RltdDt
+    def set_RltdDt(self, RltdDt): self.RltdDt = RltdDt
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_ISODate(self, value):
         # Validate type ISODate, a restriction on xs:date.
         if value is not None and Validate_simpletypes_:
             pass
-
     def hasContent_(self):
         if (
-                            self.Tp is not None or
-                            self.Nb is not None or
-                        self.RltdDt is not None
+            self.Tp is not None or
+            self.Nb is not None or
+            self.RltdDt is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='ReferredDocumentInformation3', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='ReferredDocumentInformation3', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -12775,23 +8687,19 @@ class ReferredDocumentInformation3(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='ReferredDocumentInformation3')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='ReferredDocumentInformation3',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='ReferredDocumentInformation3', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ReferredDocumentInformation3'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ReferredDocumentInformation3', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='ReferredDocumentInformation3', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -12802,15 +8710,12 @@ class ReferredDocumentInformation3(GeneratedsSuper):
             self.Nb.export(outfile, level, namespace_, name_='Nb', pretty_print=pretty_print)
         if self.RltdDt is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sRltdDt>%s</%sRltdDt>%s' % (
-            namespace_, self.gds_format_date(self.RltdDt, input_name='RltdDt'), namespace_, eol_))
-
+            outfile.write('<%sRltdDt>%s</%sRltdDt>%s' % (namespace_, self.gds_format_date(self.RltdDt, input_name='RltdDt'), namespace_, eol_))
     def to_etree(self, parent_element=None, name_='ReferredDocumentInformation3', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Tp is not None:
             Tp_ = self.Tp
             Tp_.to_etree(element, name_='Tp', mapping_=mapping_)
@@ -12819,41 +8724,10 @@ class ReferredDocumentInformation3(GeneratedsSuper):
             Nb_.to_etree(element, name_='Nb', mapping_=mapping_)
         if self.RltdDt is not None:
             RltdDt_ = self.RltdDt
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}RltdDt').text = self.gds_format_date(
-                RltdDt_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}RltdDt').text = self.gds_format_date(RltdDt_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ReferredDocumentInformation3'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Tp is not None:
-            showIndent(outfile, level)
-            outfile.write('Tp=model_.ReferredDocumentType2(\n')
-            self.Tp.exportLiteral(outfile, level, name_='Tp')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Nb is not None:
-            showIndent(outfile, level)
-            outfile.write('Nb=model_.xs_BasicText_CH(\n')
-            self.Nb.exportLiteral(outfile, level, name_='Nb')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.RltdDt is not None:
-            showIndent(outfile, level)
-            outfile.write('RltdDt=model_.GeneratedsSuper.gds_parse_date("%s"),\n' % self.gds_format_date(self.RltdDt,
-                                                                                                         input_name='RltdDt'))
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -12861,10 +8735,8 @@ class ReferredDocumentInformation3(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Tp':
             obj_ = ReferredDocumentType2.factory()
@@ -12883,8 +8755,6 @@ class ReferredDocumentInformation3(GeneratedsSuper):
             self.RltdDt = dval_
             # validate type ISODate
             self.validate_ISODate(self.RltdDt)
-
-
 # end class ReferredDocumentInformation3
 
 
@@ -12895,14 +8765,12 @@ class ReferredDocumentType1Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, Prtry=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_DocumentType5Code(self.Cd)
         self.Prtry = Prtry
         self.validate_Max35Text(self.Prtry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -12913,64 +8781,43 @@ class ReferredDocumentType1Choice(GeneratedsSuper):
             return ReferredDocumentType1Choice.subclass(*args_, **kwargs_)
         else:
             return ReferredDocumentType1Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Prtry(self):
-        return self.Prtry
-
-    def set_Prtry(self, Prtry):
-        self.Prtry = Prtry
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Prtry(self): return self.Prtry
+    def set_Prtry(self, Prtry): self.Prtry = Prtry
     def validate_DocumentType5Code(self, value):
         # Validate type DocumentType5Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             value = str(value)
-            enumerations = ['MSIN', 'CNFA', 'DNFA', 'CINV', 'CREN', 'DEBN', 'HIRI', 'SBIN', 'CMCN', 'SOAC', 'DISP',
-                            'BOLD', 'VCHR', 'AROI', 'TSUT']
+            enumerations = ['MSIN', 'CNFA', 'DNFA', 'CINV', 'CREN', 'DEBN', 'HIRI', 'SBIN', 'CMCN', 'SOAC', 'DISP', 'BOLD', 'VCHR', 'AROI', 'TSUT']
             enumeration_respectee = False
             for enum in enumerations:
                 if value == enum:
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on DocumentType5Code' % {
-                    "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on DocumentType5Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.Prtry is not None
+            self.Cd is not None or
+            self.Prtry is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='ReferredDocumentType1Choice', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='ReferredDocumentType1Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -12978,73 +8825,42 @@ class ReferredDocumentType1Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='ReferredDocumentType1Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='ReferredDocumentType1Choice',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='ReferredDocumentType1Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ReferredDocumentType1Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ReferredDocumentType1Choice', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='ReferredDocumentType1Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.Prtry is not None:
             self.Prtry.export(outfile, level, namespace_, name_='Prtry', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='ReferredDocumentType1Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.Prtry is not None:
             Prtry_ = self.Prtry
             Prtry_.to_etree(element, name_='Prtry', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ReferredDocumentType1Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.Prtry is not None:
-            showIndent(outfile, level)
-            outfile.write('Prtry=model_.xs_BasicText_CH(\n')
-            self.Prtry.exportLiteral(outfile, level, name_='Prtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -13052,10 +8868,8 @@ class ReferredDocumentType1Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -13069,8 +8883,6 @@ class ReferredDocumentType1Choice(GeneratedsSuper):
             obj_.original_tagname_ = 'Prtry'
             # validate type Max35Text
             self.validate_Max35Text(self.Prtry)
-
-
 # end class ReferredDocumentType1Choice
 
 
@@ -13081,13 +8893,11 @@ class ReferredDocumentType2(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, CdOrPrtry=None, Issr=None):
         self.original_tagname_ = None
         self.CdOrPrtry = CdOrPrtry
         self.Issr = Issr
         self.validate_Max35Text(self.Issr)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -13098,47 +8908,30 @@ class ReferredDocumentType2(GeneratedsSuper):
             return ReferredDocumentType2.subclass(*args_, **kwargs_)
         else:
             return ReferredDocumentType2(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_CdOrPrtry(self):
-        return self.CdOrPrtry
-
-    def set_CdOrPrtry(self, CdOrPrtry):
-        self.CdOrPrtry = CdOrPrtry
-
-    def get_Issr(self):
-        return self.Issr
-
-    def set_Issr(self, Issr):
-        self.Issr = Issr
-
+    def get_CdOrPrtry(self): return self.CdOrPrtry
+    def set_CdOrPrtry(self, CdOrPrtry): self.CdOrPrtry = CdOrPrtry
+    def get_Issr(self): return self.Issr
+    def set_Issr(self, Issr): self.Issr = Issr
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.CdOrPrtry is not None or
-                        self.Issr is not None
+            self.CdOrPrtry is not None or
+            self.Issr is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='ReferredDocumentType2', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -13147,23 +8940,19 @@ class ReferredDocumentType2(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='ReferredDocumentType2')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='ReferredDocumentType2',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='ReferredDocumentType2', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ReferredDocumentType2'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ReferredDocumentType2', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='ReferredDocumentType2', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -13172,13 +8961,11 @@ class ReferredDocumentType2(GeneratedsSuper):
             self.CdOrPrtry.export(outfile, level, namespace_, name_='CdOrPrtry', pretty_print=pretty_print)
         if self.Issr is not None:
             self.Issr.export(outfile, level, namespace_, name_='Issr', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='ReferredDocumentType2', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.CdOrPrtry is not None:
             CdOrPrtry_ = self.CdOrPrtry
             CdOrPrtry_.to_etree(element, name_='CdOrPrtry', mapping_=mapping_)
@@ -13188,31 +8975,6 @@ class ReferredDocumentType2(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ReferredDocumentType2'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.CdOrPrtry is not None:
-            showIndent(outfile, level)
-            outfile.write('CdOrPrtry=model_.ReferredDocumentType1Choice(\n')
-            self.CdOrPrtry.exportLiteral(outfile, level, name_='CdOrPrtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Issr is not None:
-            showIndent(outfile, level)
-            outfile.write('Issr=model_.xs_BasicText_CH(\n')
-            self.Issr.exportLiteral(outfile, level, name_='Issr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -13220,10 +8982,8 @@ class ReferredDocumentType2(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'CdOrPrtry':
             obj_ = ReferredDocumentType1Choice.factory()
@@ -13236,8 +8996,6 @@ class ReferredDocumentType2(GeneratedsSuper):
             obj_.original_tagname_ = 'Issr'
             # validate type Max35Text
             self.validate_Max35Text(self.Issr)
-
-
 # end class ReferredDocumentType2
 
 
@@ -13248,14 +9006,12 @@ class RegulatoryAuthority2(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Nm=None, Ctry=None):
         self.original_tagname_ = None
         self.Nm = Nm
         self.validate_Max140Text(self.Nm)
         self.Ctry = Ctry
         self.validate_CountryCode(self.Ctry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -13266,57 +9022,37 @@ class RegulatoryAuthority2(GeneratedsSuper):
             return RegulatoryAuthority2.subclass(*args_, **kwargs_)
         else:
             return RegulatoryAuthority2(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Nm(self):
-        return self.Nm
-
-    def set_Nm(self, Nm):
-        self.Nm = Nm
-
-    def get_Ctry(self):
-        return self.Ctry
-
-    def set_Ctry(self, Ctry):
-        self.Ctry = Ctry
-
+    def get_Nm(self): return self.Nm
+    def set_Nm(self, Nm): self.Nm = Nm
+    def get_Ctry(self): return self.Ctry
+    def set_Ctry(self, Ctry): self.Ctry = Ctry
     def validate_Max140Text(self, value):
         # Validate type Max140Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 140:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max140Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max140Text_patterns_,))
-
-    validate_Max140Text_patterns_ = [[
-                                         u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max140Text_patterns_, ))
+    validate_Max140Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_CountryCode(self, value):
         # Validate type CountryCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_CountryCode_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_CountryCode_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_CountryCode_patterns_, ))
     validate_CountryCode_patterns_ = [['^[A-Z]{2,2}$']]
-
     def hasContent_(self):
         if (
-                        self.Nm is not None or
-                        self.Ctry is not None
+            self.Nm is not None or
+            self.Ctry is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='RegulatoryAuthority2', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -13325,23 +9061,19 @@ class RegulatoryAuthority2(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='RegulatoryAuthority2')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='RegulatoryAuthority2',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='RegulatoryAuthority2', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='RegulatoryAuthority2'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='RegulatoryAuthority2', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='RegulatoryAuthority2', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -13350,49 +9082,21 @@ class RegulatoryAuthority2(GeneratedsSuper):
             self.Nm.export(outfile, level, namespace_, name_='Nm', pretty_print=pretty_print)
         if self.Ctry is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCtry>%s</%sCtry>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ctry), input_name='Ctry')), namespace_,
-            eol_))
-
+            outfile.write('<%sCtry>%s</%sCtry>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ctry), input_name='Ctry')), namespace_, eol_))
     def to_etree(self, parent_element=None, name_='RegulatoryAuthority2', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Nm is not None:
             Nm_ = self.Nm
             Nm_.to_etree(element, name_='Nm', mapping_=mapping_)
         if self.Ctry is not None:
             Ctry_ = self.Ctry
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ctry').text = self.gds_format_string(
-                Ctry_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ctry').text = self.gds_format_string(Ctry_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='RegulatoryAuthority2'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Nm is not None:
-            showIndent(outfile, level)
-            outfile.write('Nm=model_.xs_BasicText_CH(\n')
-            self.Nm.exportLiteral(outfile, level, name_='Nm')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Ctry is not None:
-            showIndent(outfile, level)
-            outfile.write('Ctry=%s,\n' % self.gds_encode(quote_python(self.Ctry)))
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -13400,10 +9104,8 @@ class RegulatoryAuthority2(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Nm':
             obj_ = None
@@ -13417,8 +9119,6 @@ class RegulatoryAuthority2(GeneratedsSuper):
             self.Ctry = Ctry_
             # validate type CountryCode
             self.validate_CountryCode(self.Ctry)
-
-
 # end class RegulatoryAuthority2
 
 
@@ -13430,7 +9130,6 @@ class RegulatoryReporting3(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, DbtCdtRptgInd=None, Authrty=None, Dtls=None):
         self.original_tagname_ = None
         self.DbtCdtRptgInd = DbtCdtRptgInd
@@ -13440,7 +9139,6 @@ class RegulatoryReporting3(GeneratedsSuper):
             self.Dtls = []
         else:
             self.Dtls = Dtls
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -13451,36 +9149,16 @@ class RegulatoryReporting3(GeneratedsSuper):
             return RegulatoryReporting3.subclass(*args_, **kwargs_)
         else:
             return RegulatoryReporting3(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_DbtCdtRptgInd(self):
-        return self.DbtCdtRptgInd
-
-    def set_DbtCdtRptgInd(self, DbtCdtRptgInd):
-        self.DbtCdtRptgInd = DbtCdtRptgInd
-
-    def get_Authrty(self):
-        return self.Authrty
-
-    def set_Authrty(self, Authrty):
-        self.Authrty = Authrty
-
-    def get_Dtls(self):
-        return self.Dtls
-
-    def set_Dtls(self, Dtls):
-        self.Dtls = Dtls
-
-    def add_Dtls(self, value):
-        self.Dtls.append(value)
-
-    def insert_Dtls_at(self, index, value):
-        self.Dtls.insert(index, value)
-
-    def replace_Dtls_at(self, index, value):
-        self.Dtls[index] = value
-
+    def get_DbtCdtRptgInd(self): return self.DbtCdtRptgInd
+    def set_DbtCdtRptgInd(self, DbtCdtRptgInd): self.DbtCdtRptgInd = DbtCdtRptgInd
+    def get_Authrty(self): return self.Authrty
+    def set_Authrty(self, Authrty): self.Authrty = Authrty
+    def get_Dtls(self): return self.Dtls
+    def set_Dtls(self, Dtls): self.Dtls = Dtls
+    def add_Dtls(self, value): self.Dtls.append(value)
+    def insert_Dtls_at(self, index, value): self.Dtls.insert(index, value)
+    def replace_Dtls_at(self, index, value): self.Dtls[index] = value
     def validate_RegulatoryReportingType1Code(self, value):
         # Validate type RegulatoryReportingType1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
@@ -13492,20 +9170,16 @@ class RegulatoryReporting3(GeneratedsSuper):
                     enumeration_respectee = True
                     break
             if not enumeration_respectee:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd enumeration restriction on RegulatoryReportingType1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd enumeration restriction on RegulatoryReportingType1Code' % {"value" : value.encode("utf-8")} )
     def hasContent_(self):
         if (
-                            self.DbtCdtRptgInd is not None or
-                            self.Authrty is not None or
-                    self.Dtls
+            self.DbtCdtRptgInd is not None or
+            self.Authrty is not None or
+            self.Dtls
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='RegulatoryReporting3', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -13514,47 +9188,38 @@ class RegulatoryReporting3(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='RegulatoryReporting3')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='RegulatoryReporting3',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='RegulatoryReporting3', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='RegulatoryReporting3'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='RegulatoryReporting3', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='RegulatoryReporting3', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.DbtCdtRptgInd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sDbtCdtRptgInd>%s</%sDbtCdtRptgInd>%s' % (namespace_, self.gds_encode(
-                self.gds_format_string(quote_xml(self.DbtCdtRptgInd), input_name='DbtCdtRptgInd')), namespace_, eol_))
+            outfile.write('<%sDbtCdtRptgInd>%s</%sDbtCdtRptgInd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.DbtCdtRptgInd), input_name='DbtCdtRptgInd')), namespace_, eol_))
         if self.Authrty is not None:
             self.Authrty.export(outfile, level, namespace_, name_='Authrty', pretty_print=pretty_print)
         for Dtls_ in self.Dtls:
             Dtls_.export(outfile, level, namespace_, name_='Dtls', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='RegulatoryReporting3', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.DbtCdtRptgInd is not None:
             DbtCdtRptgInd_ = self.DbtCdtRptgInd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}DbtCdtRptgInd').text = self.gds_format_string(
-                DbtCdtRptgInd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}DbtCdtRptgInd').text = self.gds_format_string(DbtCdtRptgInd_)
         if self.Authrty is not None:
             Authrty_ = self.Authrty
             Authrty_.to_etree(element, name_='Authrty', mapping_=mapping_)
@@ -13563,40 +9228,6 @@ class RegulatoryReporting3(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='RegulatoryReporting3'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.DbtCdtRptgInd is not None:
-            showIndent(outfile, level)
-            outfile.write('DbtCdtRptgInd=%s,\n' % self.gds_encode(quote_python(self.DbtCdtRptgInd)))
-        if self.Authrty is not None:
-            showIndent(outfile, level)
-            outfile.write('Authrty=model_.RegulatoryAuthority2(\n')
-            self.Authrty.exportLiteral(outfile, level, name_='Authrty')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        showIndent(outfile, level)
-        outfile.write('Dtls=[\n')
-        level += 1
-        for Dtls_ in self.Dtls:
-            showIndent(outfile, level)
-            outfile.write('model_.StructuredRegulatoryReporting3(\n')
-            Dtls_.exportLiteral(outfile, level, name_='StructuredRegulatoryReporting3')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -13604,10 +9235,8 @@ class RegulatoryReporting3(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'DbtCdtRptgInd':
             DbtCdtRptgInd_ = child_.text
@@ -13625,8 +9254,6 @@ class RegulatoryReporting3(GeneratedsSuper):
             obj_.build(child_)
             self.Dtls.append(obj_)
             obj_.original_tagname_ = 'Dtls'
-
-
 # end class RegulatoryReporting3
 
 
@@ -13641,9 +9268,7 @@ class RemittanceAmount1(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
-    def __init__(self, DuePyblAmt=None, DscntApldAmt=None, CdtNoteAmt=None, TaxAmt=None, AdjstmntAmtAndRsn=None,
-                 RmtdAmt=None):
+    def __init__(self, DuePyblAmt=None, DscntApldAmt=None, CdtNoteAmt=None, TaxAmt=None, AdjstmntAmtAndRsn=None, RmtdAmt=None):
         self.original_tagname_ = None
         self.DuePyblAmt = DuePyblAmt
         self.DscntApldAmt = DscntApldAmt
@@ -13654,7 +9279,6 @@ class RemittanceAmount1(GeneratedsSuper):
         else:
             self.AdjstmntAmtAndRsn = AdjstmntAmtAndRsn
         self.RmtdAmt = RmtdAmt
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -13665,67 +9289,34 @@ class RemittanceAmount1(GeneratedsSuper):
             return RemittanceAmount1.subclass(*args_, **kwargs_)
         else:
             return RemittanceAmount1(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_DuePyblAmt(self):
-        return self.DuePyblAmt
-
-    def set_DuePyblAmt(self, DuePyblAmt):
-        self.DuePyblAmt = DuePyblAmt
-
-    def get_DscntApldAmt(self):
-        return self.DscntApldAmt
-
-    def set_DscntApldAmt(self, DscntApldAmt):
-        self.DscntApldAmt = DscntApldAmt
-
-    def get_CdtNoteAmt(self):
-        return self.CdtNoteAmt
-
-    def set_CdtNoteAmt(self, CdtNoteAmt):
-        self.CdtNoteAmt = CdtNoteAmt
-
-    def get_TaxAmt(self):
-        return self.TaxAmt
-
-    def set_TaxAmt(self, TaxAmt):
-        self.TaxAmt = TaxAmt
-
-    def get_AdjstmntAmtAndRsn(self):
-        return self.AdjstmntAmtAndRsn
-
-    def set_AdjstmntAmtAndRsn(self, AdjstmntAmtAndRsn):
-        self.AdjstmntAmtAndRsn = AdjstmntAmtAndRsn
-
-    def add_AdjstmntAmtAndRsn(self, value):
-        self.AdjstmntAmtAndRsn.append(value)
-
-    def insert_AdjstmntAmtAndRsn_at(self, index, value):
-        self.AdjstmntAmtAndRsn.insert(index, value)
-
-    def replace_AdjstmntAmtAndRsn_at(self, index, value):
-        self.AdjstmntAmtAndRsn[index] = value
-
-    def get_RmtdAmt(self):
-        return self.RmtdAmt
-
-    def set_RmtdAmt(self, RmtdAmt):
-        self.RmtdAmt = RmtdAmt
-
+    def get_DuePyblAmt(self): return self.DuePyblAmt
+    def set_DuePyblAmt(self, DuePyblAmt): self.DuePyblAmt = DuePyblAmt
+    def get_DscntApldAmt(self): return self.DscntApldAmt
+    def set_DscntApldAmt(self, DscntApldAmt): self.DscntApldAmt = DscntApldAmt
+    def get_CdtNoteAmt(self): return self.CdtNoteAmt
+    def set_CdtNoteAmt(self, CdtNoteAmt): self.CdtNoteAmt = CdtNoteAmt
+    def get_TaxAmt(self): return self.TaxAmt
+    def set_TaxAmt(self, TaxAmt): self.TaxAmt = TaxAmt
+    def get_AdjstmntAmtAndRsn(self): return self.AdjstmntAmtAndRsn
+    def set_AdjstmntAmtAndRsn(self, AdjstmntAmtAndRsn): self.AdjstmntAmtAndRsn = AdjstmntAmtAndRsn
+    def add_AdjstmntAmtAndRsn(self, value): self.AdjstmntAmtAndRsn.append(value)
+    def insert_AdjstmntAmtAndRsn_at(self, index, value): self.AdjstmntAmtAndRsn.insert(index, value)
+    def replace_AdjstmntAmtAndRsn_at(self, index, value): self.AdjstmntAmtAndRsn[index] = value
+    def get_RmtdAmt(self): return self.RmtdAmt
+    def set_RmtdAmt(self, RmtdAmt): self.RmtdAmt = RmtdAmt
     def hasContent_(self):
         if (
-                                        self.DuePyblAmt is not None or
-                                        self.DscntApldAmt is not None or
-                                    self.CdtNoteAmt is not None or
-                                self.TaxAmt is not None or
-                        self.AdjstmntAmtAndRsn or
-                        self.RmtdAmt is not None
+            self.DuePyblAmt is not None or
+            self.DscntApldAmt is not None or
+            self.CdtNoteAmt is not None or
+            self.TaxAmt is not None or
+            self.AdjstmntAmtAndRsn or
+            self.RmtdAmt is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='RemittanceAmount1', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -13734,22 +9325,19 @@ class RemittanceAmount1(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='RemittanceAmount1')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
+            outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='RemittanceAmount1', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='RemittanceAmount1'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='RemittanceAmount1', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='RemittanceAmount1', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -13766,13 +9354,11 @@ class RemittanceAmount1(GeneratedsSuper):
             AdjstmntAmtAndRsn_.export(outfile, level, namespace_, name_='AdjstmntAmtAndRsn', pretty_print=pretty_print)
         if self.RmtdAmt is not None:
             self.RmtdAmt.export(outfile, level, namespace_, name_='RmtdAmt', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='RemittanceAmount1', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.DuePyblAmt is not None:
             DuePyblAmt_ = self.DuePyblAmt
             DuePyblAmt_.to_etree(element, name_='DuePyblAmt', mapping_=mapping_)
@@ -13793,61 +9379,6 @@ class RemittanceAmount1(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='RemittanceAmount1'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.DuePyblAmt is not None:
-            showIndent(outfile, level)
-            outfile.write('DuePyblAmt=model_.ActiveOrHistoricCurrencyAndAmount(\n')
-            self.DuePyblAmt.exportLiteral(outfile, level, name_='DuePyblAmt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.DscntApldAmt is not None:
-            showIndent(outfile, level)
-            outfile.write('DscntApldAmt=model_.ActiveOrHistoricCurrencyAndAmount(\n')
-            self.DscntApldAmt.exportLiteral(outfile, level, name_='DscntApldAmt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CdtNoteAmt is not None:
-            showIndent(outfile, level)
-            outfile.write('CdtNoteAmt=model_.ActiveOrHistoricCurrencyAndAmount(\n')
-            self.CdtNoteAmt.exportLiteral(outfile, level, name_='CdtNoteAmt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.TaxAmt is not None:
-            showIndent(outfile, level)
-            outfile.write('TaxAmt=model_.ActiveOrHistoricCurrencyAndAmount(\n')
-            self.TaxAmt.exportLiteral(outfile, level, name_='TaxAmt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        showIndent(outfile, level)
-        outfile.write('AdjstmntAmtAndRsn=[\n')
-        level += 1
-        for AdjstmntAmtAndRsn_ in self.AdjstmntAmtAndRsn:
-            showIndent(outfile, level)
-            outfile.write('model_.DocumentAdjustment1(\n')
-            AdjstmntAmtAndRsn_.exportLiteral(outfile, level, name_='DocumentAdjustment1')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-        if self.RmtdAmt is not None:
-            showIndent(outfile, level)
-            outfile.write('RmtdAmt=model_.ActiveOrHistoricCurrencyAndAmount(\n')
-            self.RmtdAmt.exportLiteral(outfile, level, name_='RmtdAmt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -13855,10 +9386,8 @@ class RemittanceAmount1(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'DuePyblAmt':
             obj_ = ActiveOrHistoricCurrencyAndAmount.factory()
@@ -13890,8 +9419,6 @@ class RemittanceAmount1(GeneratedsSuper):
             obj_.build(child_)
             self.RmtdAmt = obj_
             obj_.original_tagname_ = 'RmtdAmt'
-
-
 # end class RemittanceAmount1
 
 
@@ -13902,13 +9429,11 @@ class RemittanceInformation5_CH(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Ustrd=None, Strd=None):
         self.original_tagname_ = None
         self.Ustrd = Ustrd
         self.validate_Max140Text(self.Ustrd)
         self.Strd = Strd
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -13919,49 +9444,31 @@ class RemittanceInformation5_CH(GeneratedsSuper):
             return RemittanceInformation5_CH.subclass(*args_, **kwargs_)
         else:
             return RemittanceInformation5_CH(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Ustrd(self):
-        return self.Ustrd
-
-    def set_Ustrd(self, Ustrd):
-        self.Ustrd = Ustrd
-
-    def get_Strd(self):
-        return self.Strd
-
-    def set_Strd(self, Strd):
-        self.Strd = Strd
-
+    def get_Ustrd(self): return self.Ustrd
+    def set_Ustrd(self, Ustrd): self.Ustrd = Ustrd
+    def get_Strd(self): return self.Strd
+    def set_Strd(self, Strd): self.Strd = Strd
     def validate_Max140Text(self, value):
         # Validate type Max140Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 140:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max140Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max140Text_patterns_,))
-
-    validate_Max140Text_patterns_ = [[
-                                         u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max140Text_patterns_, ))
+    validate_Max140Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Ustrd is not None or
-                        self.Strd is not None
+            self.Ustrd is not None or
+            self.Strd is not None
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='RemittanceInformation5-CH', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='RemittanceInformation5-CH', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -13969,23 +9476,19 @@ class RemittanceInformation5_CH(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='RemittanceInformation5-CH')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='RemittanceInformation5-CH',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='RemittanceInformation5-CH', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='RemittanceInformation5-CH'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='RemittanceInformation5-CH', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='RemittanceInformation5-CH', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -13994,13 +9497,11 @@ class RemittanceInformation5_CH(GeneratedsSuper):
             self.Ustrd.export(outfile, level, namespace_, name_='Ustrd', pretty_print=pretty_print)
         if self.Strd is not None:
             self.Strd.export(outfile, level, namespace_, name_='Strd', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='RemittanceInformation5-CH', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Ustrd is not None:
             Ustrd_ = self.Ustrd
             Ustrd_.to_etree(element, name_='Ustrd', mapping_=mapping_)
@@ -14010,31 +9511,6 @@ class RemittanceInformation5_CH(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='RemittanceInformation5-CH'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Ustrd is not None:
-            showIndent(outfile, level)
-            outfile.write('Ustrd=model_.xs_BasicText_CH(\n')
-            self.Ustrd.exportLiteral(outfile, level, name_='Ustrd')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Strd is not None:
-            showIndent(outfile, level)
-            outfile.write('Strd=model_.StructuredRemittanceInformation7(\n')
-            self.Strd.exportLiteral(outfile, level, name_='Strd')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -14042,10 +9518,8 @@ class RemittanceInformation5_CH(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Ustrd':
             obj_ = None
@@ -14058,8 +9532,6 @@ class RemittanceInformation5_CH(GeneratedsSuper):
             obj_.build(child_)
             self.Strd = obj_
             obj_.original_tagname_ = 'Strd'
-
-
 # end class RemittanceInformation5_CH
 
 
@@ -14070,14 +9542,12 @@ class ServiceLevel8Choice(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Cd=None, Prtry=None):
         self.original_tagname_ = None
         self.Cd = Cd
         self.validate_ExternalServiceLevel1Code(self.Cd)
         self.Prtry = Prtry
         self.validate_Max35Text(self.Prtry)
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -14088,59 +9558,37 @@ class ServiceLevel8Choice(GeneratedsSuper):
             return ServiceLevel8Choice.subclass(*args_, **kwargs_)
         else:
             return ServiceLevel8Choice(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Prtry(self):
-        return self.Prtry
-
-    def set_Prtry(self, Prtry):
-        self.Prtry = Prtry
-
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Prtry(self): return self.Prtry
+    def set_Prtry(self, Prtry): self.Prtry = Prtry
     def validate_ExternalServiceLevel1Code(self, value):
         # Validate type ExternalServiceLevel1Code, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if len(value) > 4:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on ExternalServiceLevel1Code' % {
-                        "value": value.encode("utf-8")})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on ExternalServiceLevel1Code' % {"value" : value.encode("utf-8")} )
             if len(value) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on ExternalServiceLevel1Code' % {
-                        "value": value.encode("utf-8")})
-
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on ExternalServiceLevel1Code' % {"value" : value.encode("utf-8")} )
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                        self.Cd is not None or
-                        self.Prtry is not None
+            self.Cd is not None or
+            self.Prtry is not None
         ):
             return True
         else:
             return False
-
     def export(self, outfile, level, namespace_='', name_='ServiceLevel8Choice', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
@@ -14149,73 +9597,42 @@ class ServiceLevel8Choice(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='ServiceLevel8Choice')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='ServiceLevel8Choice',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='ServiceLevel8Choice', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
+            outfile.write('/>%s' % (eol_, ))
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ServiceLevel8Choice'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='ServiceLevel8Choice', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='ServiceLevel8Choice', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
             eol_ = ''
         if self.Cd is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCd>%s</%sCd>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
+            outfile.write('<%sCd>%s</%sCd>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Cd), input_name='Cd')), namespace_, eol_))
         if self.Prtry is not None:
             self.Prtry.export(outfile, level, namespace_, name_='Prtry', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='ServiceLevel8Choice', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Cd is not None:
             Cd_ = self.Cd
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(
-                Cd_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Cd').text = self.gds_format_string(Cd_)
         if self.Prtry is not None:
             Prtry_ = self.Prtry
             Prtry_.to_etree(element, name_='Prtry', mapping_=mapping_)
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='ServiceLevel8Choice'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=%s,\n' % self.gds_encode(quote_python(self.Cd)))
-        if self.Prtry is not None:
-            showIndent(outfile, level)
-            outfile.write('Prtry=model_.xs_BasicText_CH(\n')
-            self.Prtry.exportLiteral(outfile, level, name_='Prtry')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -14223,10 +9640,8 @@ class ServiceLevel8Choice(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Cd':
             Cd_ = child_.text
@@ -14240,8 +9655,6 @@ class ServiceLevel8Choice(GeneratedsSuper):
             obj_.original_tagname_ = 'Prtry'
             # validate type Max35Text
             self.validate_Max35Text(self.Prtry)
-
-
 # end class ServiceLevel8Choice
 
 
@@ -14256,7 +9669,6 @@ class StructuredRegulatoryReporting3(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, Tp=None, Dt=None, Ctry=None, Cd=None, Amt=None, Inf=None):
         self.original_tagname_ = None
         self.Tp = Tp
@@ -14275,7 +9687,6 @@ class StructuredRegulatoryReporting3(GeneratedsSuper):
             self.Inf = []
         else:
             self.Inf = Inf
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -14286,118 +9697,68 @@ class StructuredRegulatoryReporting3(GeneratedsSuper):
             return StructuredRegulatoryReporting3.subclass(*args_, **kwargs_)
         else:
             return StructuredRegulatoryReporting3(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_Tp(self):
-        return self.Tp
-
-    def set_Tp(self, Tp):
-        self.Tp = Tp
-
-    def get_Dt(self):
-        return self.Dt
-
-    def set_Dt(self, Dt):
-        self.Dt = Dt
-
-    def get_Ctry(self):
-        return self.Ctry
-
-    def set_Ctry(self, Ctry):
-        self.Ctry = Ctry
-
-    def get_Cd(self):
-        return self.Cd
-
-    def set_Cd(self, Cd):
-        self.Cd = Cd
-
-    def get_Amt(self):
-        return self.Amt
-
-    def set_Amt(self, Amt):
-        self.Amt = Amt
-
-    def get_Inf(self):
-        return self.Inf
-
-    def set_Inf(self, Inf):
-        self.Inf = Inf
-
-    def add_Inf(self, value):
-        self.Inf.append(value)
-
-    def insert_Inf_at(self, index, value):
-        self.Inf.insert(index, value)
-
-    def replace_Inf_at(self, index, value):
-        self.Inf[index] = value
-
+    def get_Tp(self): return self.Tp
+    def set_Tp(self, Tp): self.Tp = Tp
+    def get_Dt(self): return self.Dt
+    def set_Dt(self, Dt): self.Dt = Dt
+    def get_Ctry(self): return self.Ctry
+    def set_Ctry(self, Ctry): self.Ctry = Ctry
+    def get_Cd(self): return self.Cd
+    def set_Cd(self, Cd): self.Cd = Cd
+    def get_Amt(self): return self.Amt
+    def set_Amt(self, Amt): self.Amt = Amt
+    def get_Inf(self): return self.Inf
+    def set_Inf(self, Inf): self.Inf = Inf
+    def add_Inf(self, value): self.Inf.append(value)
+    def insert_Inf_at(self, index, value): self.Inf.insert(index, value)
+    def replace_Inf_at(self, index, value): self.Inf[index] = value
     def validate_Max35Text(self, value):
         # Validate type Max35Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 35:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max35Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max35Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max35Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max35Text_patterns_,))
-
-    validate_Max35Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max35Text_patterns_, ))
+    validate_Max35Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def validate_ISODate(self, value):
         # Validate type ISODate, a restriction on xs:date.
         if value is not None and Validate_simpletypes_:
             pass
-
     def validate_CountryCode(self, value):
         # Validate type CountryCode, a restriction on xs:string.
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_CountryCode_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_CountryCode_patterns_,))
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_CountryCode_patterns_, ))
     validate_CountryCode_patterns_ = [['^[A-Z]{2,2}$']]
-
     def validate_Max10Text(self, value):
         # Validate type Max10Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 10:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max10Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max10Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max10Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max10Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max10Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max10Text_patterns_,))
-
-    validate_Max10Text_patterns_ = [[
-                                        u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max10Text_patterns_, ))
+    validate_Max10Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                                        self.Tp is not None or
-                                        self.Dt is not None or
-                                    self.Ctry is not None or
-                                self.Cd is not None or
-                            self.Amt is not None or
-                    self.Inf
+            self.Tp is not None or
+            self.Dt is not None or
+            self.Ctry is not None or
+            self.Cd is not None or
+            self.Amt is not None or
+            self.Inf
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='StructuredRegulatoryReporting3', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='StructuredRegulatoryReporting3', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -14405,24 +9766,19 @@ class StructuredRegulatoryReporting3(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='StructuredRegulatoryReporting3')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='StructuredRegulatoryReporting3',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='StructuredRegulatoryReporting3', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='StructuredRegulatoryReporting3'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='StructuredRegulatoryReporting3'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='StructuredRegulatoryReporting3', fromsubclass_=False,
-                       pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='StructuredRegulatoryReporting3', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -14431,39 +9787,30 @@ class StructuredRegulatoryReporting3(GeneratedsSuper):
             self.Tp.export(outfile, level, namespace_, name_='Tp', pretty_print=pretty_print)
         if self.Dt is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write(
-                '<%sDt>%s</%sDt>%s' % (namespace_, self.gds_format_date(self.Dt, input_name='Dt'), namespace_, eol_))
+            outfile.write('<%sDt>%s</%sDt>%s' % (namespace_, self.gds_format_date(self.Dt, input_name='Dt'), namespace_, eol_))
         if self.Ctry is not None:
             showIndent(outfile, level, pretty_print)
-            outfile.write('<%sCtry>%s</%sCtry>%s' % (
-            namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ctry), input_name='Ctry')), namespace_,
-            eol_))
+            outfile.write('<%sCtry>%s</%sCtry>%s' % (namespace_, self.gds_encode(self.gds_format_string(quote_xml(self.Ctry), input_name='Ctry')), namespace_, eol_))
         if self.Cd is not None:
             self.Cd.export(outfile, level, namespace_, name_='Cd', pretty_print=pretty_print)
         if self.Amt is not None:
             self.Amt.export(outfile, level, namespace_, name_='Amt', pretty_print=pretty_print)
         for Inf_ in self.Inf:
             Inf_.export(outfile, level, namespace_, name_='Inf', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='StructuredRegulatoryReporting3', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         if self.Tp is not None:
             Tp_ = self.Tp
             Tp_.to_etree(element, name_='Tp', mapping_=mapping_)
         if self.Dt is not None:
             Dt_ = self.Dt
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Dt').text = self.gds_format_date(
-                Dt_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Dt').text = self.gds_format_date(Dt_)
         if self.Ctry is not None:
             Ctry_ = self.Ctry
-            etree_.SubElement(element,
-                              '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ctry').text = self.gds_format_string(
-                Ctry_)
+            etree_.SubElement(element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}Ctry').text = self.gds_format_string(Ctry_)
         if self.Cd is not None:
             Cd_ = self.Cd
             Cd_.to_etree(element, name_='Cd', mapping_=mapping_)
@@ -14475,56 +9822,6 @@ class StructuredRegulatoryReporting3(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='StructuredRegulatoryReporting3'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        if self.Tp is not None:
-            showIndent(outfile, level)
-            outfile.write('Tp=model_.xs_BasicText_CH(\n')
-            self.Tp.exportLiteral(outfile, level, name_='Tp')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Dt is not None:
-            showIndent(outfile, level)
-            outfile.write(
-                'Dt=model_.GeneratedsSuper.gds_parse_date("%s"),\n' % self.gds_format_date(self.Dt, input_name='Dt'))
-        if self.Ctry is not None:
-            showIndent(outfile, level)
-            outfile.write('Ctry=%s,\n' % self.gds_encode(quote_python(self.Ctry)))
-        if self.Cd is not None:
-            showIndent(outfile, level)
-            outfile.write('Cd=model_.xs_BasicText_CH(\n')
-            self.Cd.exportLiteral(outfile, level, name_='Cd')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Amt is not None:
-            showIndent(outfile, level)
-            outfile.write('Amt=model_.ActiveOrHistoricCurrencyAndAmount(\n')
-            self.Amt.exportLiteral(outfile, level, name_='Amt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        showIndent(outfile, level)
-        outfile.write('Inf=[\n')
-        level += 1
-        for Inf_ in self.Inf:
-            showIndent(outfile, level)
-            outfile.write('model_.xs_BasicText_CH(\n')
-            Inf_.exportLiteral(outfile, level, name_='xs:BasicText-CH')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -14532,10 +9829,8 @@ class StructuredRegulatoryReporting3(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'Tp':
             obj_ = None
@@ -14572,8 +9867,6 @@ class StructuredRegulatoryReporting3(GeneratedsSuper):
             obj_.original_tagname_ = 'Inf'
             # validate type Max35Text
             self.validate_Max35Text(self.Inf[-1])
-
-
 # end class StructuredRegulatoryReporting3
 
 
@@ -14588,7 +9881,6 @@ class StructuredRemittanceInformation7(GeneratedsSuper):
     }
     subclass = None
     superclass = None
-
     def __init__(self, RfrdDocInf=None, RfrdDocAmt=None, CdtrRefInf=None, Invcr=None, Invcee=None, AddtlRmtInf=None):
         self.original_tagname_ = None
         if RfrdDocInf is None:
@@ -14603,7 +9895,6 @@ class StructuredRemittanceInformation7(GeneratedsSuper):
             self.AddtlRmtInf = []
         else:
             self.AddtlRmtInf = AddtlRmtInf
-
     def factory(*args_, **kwargs_):
         if CurrentSubclassModule_ is not None:
             subclass = getSubclassFromModule_(
@@ -14614,95 +9905,49 @@ class StructuredRemittanceInformation7(GeneratedsSuper):
             return StructuredRemittanceInformation7.subclass(*args_, **kwargs_)
         else:
             return StructuredRemittanceInformation7(*args_, **kwargs_)
-
     factory = staticmethod(factory)
-
-    def get_RfrdDocInf(self):
-        return self.RfrdDocInf
-
-    def set_RfrdDocInf(self, RfrdDocInf):
-        self.RfrdDocInf = RfrdDocInf
-
-    def add_RfrdDocInf(self, value):
-        self.RfrdDocInf.append(value)
-
-    def insert_RfrdDocInf_at(self, index, value):
-        self.RfrdDocInf.insert(index, value)
-
-    def replace_RfrdDocInf_at(self, index, value):
-        self.RfrdDocInf[index] = value
-
-    def get_RfrdDocAmt(self):
-        return self.RfrdDocAmt
-
-    def set_RfrdDocAmt(self, RfrdDocAmt):
-        self.RfrdDocAmt = RfrdDocAmt
-
-    def get_CdtrRefInf(self):
-        return self.CdtrRefInf
-
-    def set_CdtrRefInf(self, CdtrRefInf):
-        self.CdtrRefInf = CdtrRefInf
-
-    def get_Invcr(self):
-        return self.Invcr
-
-    def set_Invcr(self, Invcr):
-        self.Invcr = Invcr
-
-    def get_Invcee(self):
-        return self.Invcee
-
-    def set_Invcee(self, Invcee):
-        self.Invcee = Invcee
-
-    def get_AddtlRmtInf(self):
-        return self.AddtlRmtInf
-
-    def set_AddtlRmtInf(self, AddtlRmtInf):
-        self.AddtlRmtInf = AddtlRmtInf
-
-    def add_AddtlRmtInf(self, value):
-        self.AddtlRmtInf.append(value)
-
-    def insert_AddtlRmtInf_at(self, index, value):
-        self.AddtlRmtInf.insert(index, value)
-
-    def replace_AddtlRmtInf_at(self, index, value):
-        self.AddtlRmtInf[index] = value
-
+    def get_RfrdDocInf(self): return self.RfrdDocInf
+    def set_RfrdDocInf(self, RfrdDocInf): self.RfrdDocInf = RfrdDocInf
+    def add_RfrdDocInf(self, value): self.RfrdDocInf.append(value)
+    def insert_RfrdDocInf_at(self, index, value): self.RfrdDocInf.insert(index, value)
+    def replace_RfrdDocInf_at(self, index, value): self.RfrdDocInf[index] = value
+    def get_RfrdDocAmt(self): return self.RfrdDocAmt
+    def set_RfrdDocAmt(self, RfrdDocAmt): self.RfrdDocAmt = RfrdDocAmt
+    def get_CdtrRefInf(self): return self.CdtrRefInf
+    def set_CdtrRefInf(self, CdtrRefInf): self.CdtrRefInf = CdtrRefInf
+    def get_Invcr(self): return self.Invcr
+    def set_Invcr(self, Invcr): self.Invcr = Invcr
+    def get_Invcee(self): return self.Invcee
+    def set_Invcee(self, Invcee): self.Invcee = Invcee
+    def get_AddtlRmtInf(self): return self.AddtlRmtInf
+    def set_AddtlRmtInf(self, AddtlRmtInf): self.AddtlRmtInf = AddtlRmtInf
+    def add_AddtlRmtInf(self, value): self.AddtlRmtInf.append(value)
+    def insert_AddtlRmtInf_at(self, index, value): self.AddtlRmtInf.insert(index, value)
+    def replace_AddtlRmtInf_at(self, index, value): self.AddtlRmtInf[index] = value
     def validate_Max140Text(self, value):
         # Validate type Max140Text, a restriction on BasicText-CH.
         if value is not None and Validate_simpletypes_:
             if len(str(value)) > 140:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on Max140Text' % {"value" : value} )
             if len(str(value)) < 1:
-                warnings_.warn(
-                    'Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value": value})
+                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on Max140Text' % {"value" : value} )
             if not self.gds_validate_simple_patterns(
                     self.validate_Max140Text_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (
-                value.encode('utf-8'), self.validate_Max140Text_patterns_,))
-
-    validate_Max140Text_patterns_ = [[
-                                         u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
-
+                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_Max140Text_patterns_, ))
+    validate_Max140Text_patterns_ = [[u'^([a-zA-Z0-9\\.,;:\'\\+\\-/\\(\\)?\\*\\[\\]\\{\\}\\\\`\xb4~ ]|[!"#%&<>\xf7=@_$\xa3]|[\xe0\xe1\xe2\xe4\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf6\xf9\xfa\xfb\xfc\xfd\xdf\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd2\xd3\xd4\xd6\xd9\xda\xdb\xdc\xd1])*$']]
     def hasContent_(self):
         if (
-                                    self.RfrdDocInf or
-                                        self.RfrdDocAmt is not None or
-                                    self.CdtrRefInf is not None or
-                                self.Invcr is not None or
-                            self.Invcee is not None or
-                    self.AddtlRmtInf
+            self.RfrdDocInf or
+            self.RfrdDocAmt is not None or
+            self.CdtrRefInf is not None or
+            self.Invcr is not None or
+            self.Invcee is not None or
+            self.AddtlRmtInf
         ):
             return True
         else:
             return False
-
-    def export(self, outfile, level, namespace_='', name_='StructuredRemittanceInformation7', namespacedef_='',
-               pretty_print=True):
+    def export(self, outfile, level, namespace_='', name_='StructuredRemittanceInformation7', namespacedef_='', pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -14710,24 +9955,19 @@ class StructuredRemittanceInformation7(GeneratedsSuper):
         if self.original_tagname_ is not None:
             name_ = self.original_tagname_
         showIndent(outfile, level, pretty_print)
-        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '',))
+        outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='StructuredRemittanceInformation7')
         if self.hasContent_():
-            outfile.write('>%s' % (eol_,))
-            self.exportChildren(outfile, level + 1, namespace_='', name_='StructuredRemittanceInformation7',
-                                pretty_print=pretty_print)
+            outfile.write('>%s' % (eol_, ))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='StructuredRemittanceInformation7', pretty_print=pretty_print)
             showIndent(outfile, level, pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
-            outfile.write('/>%s' % (eol_,))
-
-    def exportAttributes(self, outfile, level, already_processed, namespace_='',
-                         name_='StructuredRemittanceInformation7'):
+            outfile.write('/>%s' % (eol_, ))
+    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='StructuredRemittanceInformation7'):
         pass
-
-    def exportChildren(self, outfile, level, namespace_='', name_='StructuredRemittanceInformation7',
-                       fromsubclass_=False, pretty_print=True):
+    def exportChildren(self, outfile, level, namespace_='', name_='StructuredRemittanceInformation7', fromsubclass_=False, pretty_print=True):
         if pretty_print:
             eol_ = '\n'
         else:
@@ -14744,13 +9984,11 @@ class StructuredRemittanceInformation7(GeneratedsSuper):
             self.Invcee.export(outfile, level, namespace_, name_='Invcee', pretty_print=pretty_print)
         for AddtlRmtInf_ in self.AddtlRmtInf:
             AddtlRmtInf_.export(outfile, level, namespace_, name_='AddtlRmtInf', pretty_print=pretty_print)
-
     def to_etree(self, parent_element=None, name_='StructuredRemittanceInformation7', mapping_=None):
         if parent_element is None:
             element = etree_.Element('{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         else:
-            element = etree_.SubElement(parent_element,
-                                        '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
+            element = etree_.SubElement(parent_element, '{http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd}' + name_)
         for RfrdDocInf_ in self.RfrdDocInf:
             RfrdDocInf_.to_etree(element, name_='RfrdDocInf', mapping_=mapping_)
         if self.RfrdDocAmt is not None:
@@ -14770,67 +10008,6 @@ class StructuredRemittanceInformation7(GeneratedsSuper):
         if mapping_ is not None:
             mapping_[self] = element
         return element
-
-    def exportLiteral(self, outfile, level, name_='StructuredRemittanceInformation7'):
-        level += 1
-        already_processed = set()
-        self.exportLiteralAttributes(outfile, level, already_processed, name_)
-        if self.hasContent_():
-            self.exportLiteralChildren(outfile, level, name_)
-
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        pass
-
-    def exportLiteralChildren(self, outfile, level, name_):
-        showIndent(outfile, level)
-        outfile.write('RfrdDocInf=[\n')
-        level += 1
-        for RfrdDocInf_ in self.RfrdDocInf:
-            showIndent(outfile, level)
-            outfile.write('model_.ReferredDocumentInformation3(\n')
-            RfrdDocInf_.exportLiteral(outfile, level, name_='ReferredDocumentInformation3')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-        if self.RfrdDocAmt is not None:
-            showIndent(outfile, level)
-            outfile.write('RfrdDocAmt=model_.RemittanceAmount1(\n')
-            self.RfrdDocAmt.exportLiteral(outfile, level, name_='RfrdDocAmt')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.CdtrRefInf is not None:
-            showIndent(outfile, level)
-            outfile.write('CdtrRefInf=model_.CreditorReferenceInformation2(\n')
-            self.CdtrRefInf.exportLiteral(outfile, level, name_='CdtrRefInf')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Invcr is not None:
-            showIndent(outfile, level)
-            outfile.write('Invcr=model_.PartyIdentification32(\n')
-            self.Invcr.exportLiteral(outfile, level, name_='Invcr')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        if self.Invcee is not None:
-            showIndent(outfile, level)
-            outfile.write('Invcee=model_.PartyIdentification32(\n')
-            self.Invcee.exportLiteral(outfile, level, name_='Invcee')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        showIndent(outfile, level)
-        outfile.write('AddtlRmtInf=[\n')
-        level += 1
-        for AddtlRmtInf_ in self.AddtlRmtInf:
-            showIndent(outfile, level)
-            outfile.write('model_.xs_BasicText_CH(\n')
-            AddtlRmtInf_.exportLiteral(outfile, level, name_='xs:BasicText-CH')
-            showIndent(outfile, level)
-            outfile.write('),\n')
-        level -= 1
-        showIndent(outfile, level)
-        outfile.write('],\n')
-
     def build(self, node):
         already_processed = set()
         self.buildAttributes(node, node.attrib, already_processed)
@@ -14838,10 +10015,8 @@ class StructuredRemittanceInformation7(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
         return self
-
     def buildAttributes(self, node, attrs, already_processed):
         pass
-
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'RfrdDocInf':
             obj_ = ReferredDocumentInformation3.factory()
@@ -14874,8 +10049,6 @@ class StructuredRemittanceInformation7(GeneratedsSuper):
             obj_.original_tagname_ = 'AddtlRmtInf'
             # validate type Max140Text
             self.validate_Max140Text(self.AddtlRmtInf[-1])
-
-
 # end class StructuredRemittanceInformation7
 
 
@@ -14940,6 +10113,7 @@ GDSClassesMapping = {
     'UltmtDbtr': PartyIdentification32_CH,
     'XchgRateInf': ExchangeRateInformation1,
 }
+
 
 USAGE_TEXT = """
 Usage: python <Parser>.py [ -s ] <in_xml_file>
@@ -15038,8 +10212,8 @@ def parseLiteral(inFileName, silence=False):
     # Enable Python to collect the space used by the DOM.
     doc = None
     if not silence:
-        sys.stdout.write('#from pain001_new import *\n\n')
-        sys.stdout.write('import pain001_new as model_\n\n')
+        sys.stdout.write('#from pain001_mod import *\n\n')
+        sys.stdout.write('import pain001_mod as model_\n\n')
         sys.stdout.write('rootObj = model_.rootClass(\n')
         rootObj.exportLiteral(sys.stdout, 0, name_=rootTag)
         sys.stdout.write(')\n')
@@ -15055,8 +10229,9 @@ def main():
 
 
 if __name__ == '__main__':
-    # import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     main()
+
 
 __all__ = [
     "AccountIdentification4Choice_CH",

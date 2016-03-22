@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 
 #
-# Generated Mon Mar 21 22:01:05 2016 by generateDS.py version 2.20a.
+# Generated Tue Mar 22 09:09:26 2016 by generateDS.py version 2.20a.
 #
 # Command line options:
-#   ('-o', 'pain001_new.py')
-#   ('-s', 'pain001_newSub.py')
-#   ('--super', 'pain001_new')
+#   ('-o', 'pain001_mod.py')
+#   ('-s', 'pain001_modSub.py')
+#   ('--super', 'pain001_mod')
 #   ('--member-specs', 'dict')
-#   ('--export', 'write etree literal')
+#   ('--export', 'write etree')
 #
 # Command line arguments:
-#   pain.001.001.03.ch.02.xsd
+#   pain.001.001.03.ch.02_mod.xsd
 #
 # Command line:
-#   /usr/local/bin/generateDS.py -o "pain001_new.py" -s "pain001_newSub.py" --super="pain001_new" --member-specs="dict" --export="write etree literal" pain.001.001.03.ch.02.xsd
+#   c:\Python27\Scripts\generateDS.py -o "pain001_mod.py" -s "pain001_modSub.py" --super="pain001_mod" --member-specs="dict" --export="write etree" pain.001.001.03.ch.02_mod.xsd
 #
 # Current working directory (os.getcwd()):
 #   xsd
@@ -23,7 +23,7 @@
 import sys
 from lxml import etree as etree_
 
-import pain001_new as supermod
+import pain001_mod as supermod
 
 def parsexml_(infile, parser=None, **kwargs):
     if parser is None:
@@ -608,8 +608,8 @@ def parseLiteral(inFilename, silence=False):
     # Enable Python to collect the space used by the DOM.
     doc = None
     if not silence:
-        sys.stdout.write('#from pain001_new import *\n\n')
-        sys.stdout.write('import pain001_new as model_\n\n')
+        sys.stdout.write('#from pain001_mod import *\n\n')
+        sys.stdout.write('import pain001_mod as model_\n\n')
         sys.stdout.write('rootObj = model_.rootClass(\n')
         rootObj.exportLiteral(sys.stdout, 0, name_=rootTag)
         sys.stdout.write(')\n')

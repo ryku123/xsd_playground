@@ -5,7 +5,7 @@
 # Generated Mon Mar 21 16:46:10 2016 by generateDS.py version 2.20a.
 #
 # Command line options:
-#   ('-o', 'pain001.py')
+#   ('-o', 'pain001_basic.py')
 #   ('-s', 'pain001_sub.py')
 #   ('--super', 'pain001')
 #
@@ -13,7 +13,7 @@
 #   pain.001.001.03.ch.02.xsd
 #
 # Command line:
-#   c:\Python27\Scripts\generateDS.py -o "pain001.py" -s "pain001_sub.py" --super="pain001" pain.001.001.03.ch.02.xsd
+#   c:\Python27\Scripts\generateDS.py -o "pain001_basic.py" -s "pain001_basicSub.py" --super="pain001_basic" pain.001.001.03.ch.02.xsd
 #
 # Current working directory (os.getcwd()):
 #   xsd
